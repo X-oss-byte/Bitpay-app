@@ -26,6 +26,7 @@ const LinkCardContainer = styled.TouchableOpacity`
   margin-right: 20px;
   position: relative;
   left: ${ScreenGutter};
+  cursor: pointer;
 `;
 
 const LinkCardText = styled(BaseText)`

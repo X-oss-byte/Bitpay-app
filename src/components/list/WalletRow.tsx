@@ -12,7 +12,6 @@ import styled from 'styled-components/native';
 import {CurrencyImage} from '../currency-image/CurrencyImage';
 import {Network} from '../../constants';
 import {TransactionProposal} from '../../store/wallet/wallet.models';
-import {CoinbaseAccountProps} from '../../api/coinbase/coinbase.types';
 import NestedArrowIcon from '../nested-arrow/NestedArrow';
 import {getProtocolName} from '../../utils/helper-methods';
 import {Platform} from 'react-native';
@@ -56,7 +55,6 @@ export interface WalletRowProps {
   hideWallet?: boolean;
   hideBalance?: boolean;
   pendingTxps: TransactionProposal[];
-  coinbaseAccount?: CoinbaseAccountProps;
   multisig?: string;
 }
 

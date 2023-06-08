@@ -104,10 +104,11 @@ const WalletListHeader = styled.View`
 `;
 
 const WalletListFooter = styled.TouchableOpacity`
-  padding: 10px 10px 100px 10px;
-  margin-top: 15px;
+  padding: 10px;
+  margin: 15px 0 100px 0;
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 const WalletListFooterText = styled(BaseText)`
@@ -366,12 +367,14 @@ const KeyOverview = () => {
       return;
     }
 
+    //TODO: disabled={!hasMultipleKeys}
+    // TODO: arrow {hasMultipleKeys && <ChevronDownSvg style={{marginLeft: 10}} />}
     navigation.setOptions({
       headerTitle: () => {
         return (
           <KeyToggle
             activeOpacity={ActiveOpacity}
-            disabled={!hasMultipleKeys}
+            disabled={true}
             onPress={() => setShowKeyDropdown(true)}>
             {key.methods?.isPrivKeyEncrypted() ? (
               theme.dark ? (
@@ -384,7 +387,6 @@ const KeyOverview = () => {
               <HeaderTitle style={{textAlign: 'center'}}>
                 {key?.keyName}
               </HeaderTitle>
-              {hasMultipleKeys && <ChevronDownSvg style={{marginLeft: 10}} />}
             </HeaderTitleContainer>
           </KeyToggle>
         );

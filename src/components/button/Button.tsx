@@ -75,6 +75,7 @@ const ButtonContainer = styled.TouchableOpacity<ButtonProps>`
       : BUTTON_RADIUS}px;
   position: relative;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 const ButtonContent = styled.View<ButtonOptionProps>`

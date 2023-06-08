@@ -71,11 +71,9 @@ const showLossGainOrNeutralArrow = (average: number | undefined) => {
 
 const ExchangeRateItem = ({
   item,
-  onPress,
   defaultAltCurrencyIsoCode,
 }: {
   item: ExchangeRateItemProps;
-  onPress: () => void;
   defaultAltCurrencyIsoCode: string;
 }) => {
   const allRates = useAppSelector(({RATE}) => RATE.rates);
@@ -117,7 +115,7 @@ const ExchangeRateItem = ({
   );
 
   return (
-    <RowContainer activeOpacity={ActiveOpacity} onPress={onPress}>
+    <RowContainer activeOpacity={ActiveOpacity}>
       <CurrencyImageContainer style={{width: 40, height: 40}}>
         <CurrencyImage img={img} size={40} />
       </CurrencyImageContainer>

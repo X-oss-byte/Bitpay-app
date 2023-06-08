@@ -9,6 +9,7 @@ interface Props {
 const ToggleSwitch = ({onChange, isEnabled}: Props) => {
   return (
     <Switch
+      focusable={true}
       onValueChange={onChange}
       value={isEnabled}
       trackColor={{true: Action, false: NeutralSlate}}

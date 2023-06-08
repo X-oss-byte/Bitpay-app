@@ -4,6 +4,7 @@ import {debounce} from 'lodash';
 import {Platform, Linking, Share} from 'react-native';
 import {AppActions} from '.';
 import {OnGoingProcessMessages} from '../../components/modal/ongoing-process/OngoingProcess';
+import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';
 // import {Network} from '../../constants';
 // import {TabsScreens} from '../../navigation/tabs/TabsStack';
 // import {WalletScreens} from '../../navigation/wallet/WalletStack';
@@ -22,6 +23,7 @@ import {
 import {createWalletAddress} from '../wallet/effects/address/address';
 import {APP_NAME, DOWNLOAD_BITPAY_URL} from '../../constants/config';
 import {updatePortfolioBalance} from '../wallet/wallet.actions';
+import {setUserFeedback} from './app.actions';
 // import {getStateFromPath, NavigationProp} from '@react-navigation/native';
 // import {
 //   getAvailableGiftCards,
@@ -30,7 +32,7 @@ import {updatePortfolioBalance} from '../wallet/wallet.actions';
 // import {SettingsScreens} from '../../navigation/tabs/settings/SettingsStack';
 // import {ShortcutList} from '../../constants/shortcuts';
 // import {receiveCrypto, sendCrypto} from '../wallet/effects/send/send';
-// import moment from 'moment';
+import moment from 'moment';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {
   try {
@@ -297,28 +299,6 @@ export const resetAllSettings = (): Effect => dispatch => {
   dispatch(LogActions.info('Reset all settings'));
 };
 
-export const shareApp = (): Effect<Promise<void>> => async dispatch => {
-  try {
-    let message = t(
-      'Spend and control your cryptocurrency by downloading the app.',
-      {APP_NAME},
-    );
-
-    if (Platform.OS !== 'ios') {
-      message = `${message} ${DOWNLOAD_BITPAY_URL}`;
-    }
-    await Share.share({message, url: DOWNLOAD_BITPAY_URL});
-  } catch (err) {
-    let errorStr;
-    if (err instanceof Error) {
-      errorStr = err.message;
-    } else {
-      errorStr = JSON.stringify(err);
-    }
-    dispatch(LogActions.error(`failed [shareApp]: ${errorStr}`));
-  }
-};
-
 export const isVersionUpdated = (
   currentVersion: string,
   savedVersion: string,
@@ -364,7 +344,7 @@ export const isVersionUpdated = (
  * @returns
  */
 export const openUrlWithInAppBrowser =
-  (url: string): Effect =>
+  (url: string): Effect<any> =>
   async dispatch => {
     const handler = 'external app'; //in app browser not available
     try {
@@ -380,4 +360,17 @@ export const openUrlWithInAppBrowser =
 
       dispatch(LogActions.error(logMsg));
     }
+  };
+
+export const saveUserFeedback =
+  (rate: FeedbackRateType, version: string, sent: boolean): Effect<any> =>
+  dispatch => {
+    dispatch(
+      setUserFeedback({
+        time: moment().unix(),
+        version,
+        sent,
+        rate,
+      }),
+    );
   };

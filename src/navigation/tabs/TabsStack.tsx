@@ -40,10 +40,11 @@ const TabsStack = () => {
         headerShown: false,
         tabBarStyle: {
           backgroundColor: theme.colors.background,
-          minHeight: 68,
+          minHeight: 58,
         },
         tabBarItemStyle: {
-          minHeight: 68,
+          minHeight: 58,
+          cursor: 'pointer',
         },
         tabBarShowLabel: false,
         lazy: false,

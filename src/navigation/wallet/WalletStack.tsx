@@ -58,7 +58,6 @@ import AllAddresses, {
 import PayProConfirm, {
   PayProConfirmParamList,
 } from './screens/send/confirm/PayProConfirm';
-import PriceCharts, {PriceChartsParamList} from './screens/PriceCharts';
 import ClearEncryptPassword, {
   ClearEncryptPasswordParamList,
 } from './screens/ClearEncryptPassword';
@@ -134,7 +133,6 @@ export type WalletStackParamList = {
   };
   Addresses: {wallet: WalletModel};
   AllAddresses: AllAddressesParamList;
-  PriceCharts: PriceChartsParamList;
   ClearEncryptPassword: ClearEncryptPasswordParamList;
   SendToOptions: SendToOptionsParamList;
   SelectInputs: SelectInputsParamList;
@@ -183,7 +181,6 @@ export enum WalletScreens {
   EXPORT_WALLET = 'ExportWallet',
   ADDRESSES = 'Addresses',
   ALL_ADDRESSES = 'AllAddresses',
-  PRICE_CHARTS = 'PriceCharts',
   CLEAR_ENCRYPT_PASSWORD = 'ClearEncryptPassword',
   SEND_TO_OPTIONS = 'SendToOptions',
   SELECT_INPUTS = 'SelectInputs',

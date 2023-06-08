@@ -1,18 +1,13 @@
-import {
-  useNavigation,
-  useScrollToTop,
-  useTheme,
-} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import {each} from 'lodash';
-import React, {useMemo, useRef, useState} from 'react';
+import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
-import {RefreshControl, ScrollView} from 'react-native';
+import {ScrollView} from 'react-native';
 import {SupportedCoinsOptions} from '../../../constants/SupportedCurrencyOptions';
 import {showBottomNotificationModal} from '../../../store/app/app.actions';
 import {getPriceHistory, startGetRates} from '../../../store/wallet/effects';
 import {startUpdateAllKeyAndWalletStatus} from '../../../store/wallet/effects/status/status';
 import {updatePortfolioBalance} from '../../../store/wallet/wallet.actions';
-import {SlateDark, White} from '../../../styles/colors';
 import {sleep} from '../../../utils/helper-methods';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {BalanceUpdateError} from '../../wallet/components/ErrorMessages';
@@ -30,8 +25,6 @@ const HomeRoot = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const theme = useTheme();
-  const [refreshing, setRefreshing] = useState(false);
   const keys = useAppSelector(({WALLET}) => WALLET.keys);
   const wallets = Object.values(keys).flatMap(k => k.wallets);
   let pendingTxps: any = [];
@@ -73,8 +66,8 @@ const HomeRoot = () => {
     [priceHistory],
   );
 
+  // TODO: click to refresh balance
   const onRefresh = async () => {
-    setRefreshing(true);
     try {
       dispatch(getPriceHistory(defaultAltCurrency.isoCode));
       await dispatch(startGetRates({force: true}));
@@ -86,7 +79,6 @@ const HomeRoot = () => {
     } catch (err) {
       dispatch(showBottomNotificationModal(BalanceUpdateError()));
     }
-    setRefreshing(false);
   };
 
   const onPressTxpBadge = useMemo(
@@ -99,32 +91,21 @@ const HomeRoot = () => {
     [],
   );
 
-  const scrollViewRef = useRef<ScrollView>(null);
-  useScrollToTop(scrollViewRef);
-
   return (
     <HomeContainer>
       {appIsLoading ? null : (
-        <ScrollView
-          ref={scrollViewRef}
-          refreshControl={
-            <RefreshControl
-              tintColor={theme.dark ? White : SlateDark}
-              refreshing={refreshing}
-              onRefresh={onRefresh}
-            />
-          }>
-          <HeaderContainer>
-            {pendingTxps.length ? (
+        <ScrollView>
+          {pendingTxps.length ? (
+            <HeaderContainer>
               <ProposalBadgeContainer onPress={onPressTxpBadge}>
                 <ProposalBadge>{pendingTxps.length}</ProposalBadge>
               </ProposalBadgeContainer>
-            ) : null}
-          </HeaderContainer>
+            </HeaderContainer>
+          ) : null}
 
           {/* ////////////////////////////// PORTFOLIO BALANCE */}
           {showPortfolioValue ? (
-            <HomeSection style={{marginTop: 5}} slimContainer={true}>
+            <HomeSection slimContainer={true}>
               <PortfolioBalance />
             </HomeSection>
           ) : null}

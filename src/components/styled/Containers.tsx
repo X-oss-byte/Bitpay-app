@@ -21,6 +21,7 @@ export const ActiveOpacity = 0.75;
 export const HeaderRightContainer = styled.View`
   height: 40px;
   margin-right: 10px;
+  cursor: pointer;
 `;
 
 export const ImageContainer = styled.View<{justifyContent?: string}>`
@@ -104,6 +105,7 @@ export const RowContainer = styled.TouchableOpacity<RowContainerProps>`
   margin: 0 6px;
   border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : '#ECEFFD')};
   border-bottom-width: ${({isLast}) => (isLast ? 0 : 1)}px;
+  cursor: pointer;
 `;
 
 export const CurrencyColumn = styled(Column)`
@@ -150,6 +152,7 @@ export const Setting = styled.TouchableOpacity`
   flex-direction: row;
   flex-wrap: nowrap;
   height: 58px;
+  cursor: pointer;
 `;
 
 export const SettingTitle = styled(BaseText)`

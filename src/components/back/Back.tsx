@@ -1,7 +1,6 @@
 import React from 'react';
-import {Platform} from 'react-native';
 import {Circle, Color, G, Path, Svg} from 'react-native-svg';
-import styled, {css, useTheme} from 'styled-components/native';
+import styled, {useTheme} from 'styled-components/native';
 import {LightBlack, NeutralSlate, White} from '../../styles/colors';
 
 interface BackSvgProps {
@@ -62,14 +61,11 @@ const BackSvg: React.FC<BackSvgProps> = ({color, background, opacity}) => {
   );
 };
 
-const BackContainer = styled.View<{platform: string}>`
+const BackContainer = styled.View`
   padding-top: 10px;
   transform: scale(1.1);
-  ${({platform}) =>
-    platform === 'ios' &&
-    css`
-      padding-left: 15px;
-    `}
+  padding-left: 5px;
+  cursor: pointer;
 `;
 
 const Back = ({color, background, opacity}: Props) => {
@@ -78,7 +74,7 @@ const Back = ({color, background, opacity}: Props) => {
   const themedBackground = theme.dark ? LightBlack : NeutralSlate;
 
   return (
-    <BackContainer platform={Platform.OS}>
+    <BackContainer>
       <BackSvg
         color={color || themedColor}
         background={background || themedBackground}

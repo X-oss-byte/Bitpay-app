@@ -1,8 +1,6 @@
-import {useNavigation} from '@react-navigation/native';
 import React, {ReactElement} from 'react';
 import styled from 'styled-components/native';
 import {ScreenGutter} from '../../../../../components/styled/Containers';
-import {useAppDispatch} from '../../../../../utils/hooks';
 import ExchangeRateItem from './ExchangeRateItem';
 
 export interface ExchangeRateItemProps {
@@ -26,8 +24,6 @@ interface ExchangeRateProps {
 
 const ExchangeRatesList: React.FC<ExchangeRateProps> = props => {
   const {items, defaultAltCurrencyIsoCode} = props;
-  const navigation = useNavigation();
-  const dispatch = useAppDispatch();
 
   return (
     <ExchangeRateListContainer>
@@ -35,12 +31,6 @@ const ExchangeRatesList: React.FC<ExchangeRateProps> = props => {
         <ExchangeRateItem
           item={item}
           key={item.id}
-          onPress={() => {
-            navigation.navigate('Wallet', {
-              screen: 'PriceCharts',
-              params: {item},
-            });
-          }}
           defaultAltCurrencyIsoCode={defaultAltCurrencyIsoCode}
         />
       ))}

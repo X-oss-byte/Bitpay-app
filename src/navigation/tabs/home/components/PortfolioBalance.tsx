@@ -16,6 +16,7 @@ import {useTranslation} from 'react-i18next';
 const PortfolioContainer = styled.View`
   justify-content: center;
   align-items: center;
+  margin-top: 35px;
 `;
 
 const PortfolioBalanceHeader = styled.View`

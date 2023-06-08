@@ -56,6 +56,7 @@ export const ListCard = styled.TouchableOpacity<{outlineStyle?: boolean}>`
   justify-content: space-between;
   padding: 15px;
   height: 75px;
+  cursor: pointer;
 `;
 
 export const Img = styled.View<{isFirst: boolean}>`

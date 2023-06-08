@@ -4,7 +4,6 @@ import LinkCard from './LinkCard';
 import {Path, Svg} from 'react-native-svg';
 import {White} from '../../../../../styles/colors';
 import {useTranslation} from 'react-i18next';
-import {useAppDispatch} from '../../../../../utils/hooks';
 
 const image = (theme: Theme) => {
   return (
@@ -22,7 +21,6 @@ const image = (theme: Theme) => {
 const CreateWallet = () => {
   const {t} = useTranslation();
   const navigation = useNavigation();
-  const dispatch = useAppDispatch();
 
   return (
     <LinkCard

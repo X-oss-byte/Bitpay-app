@@ -13,12 +13,10 @@ import {APP_VERSION} from '../../../../constants/config';
 import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
 import {useDispatch} from 'react-redux';
-import {
-  openUrlWithInAppBrowser,
-  shareApp,
-} from '../../../../store/app/app.effects';
+import {openUrlWithInAppBrowser} from '../../../../store/app/app.effects';
 import AngleRight from '../../../../../assets/img/angle-right.svg';
 import {GIT_COMMIT_HASH} from '@env';
+import LinkSvg from '../../../../../assets/img/link.svg';
 
 interface LinkSetting {
   key: string;
@@ -98,24 +96,16 @@ const About = () => {
 
       <Hr />
 
-      <Setting onPress={() => dispatch(shareApp())}>
-        <SettingTitle>{t('Share with Friends')}</SettingTitle>
-      </Setting>
-
-      <Hr />
       {LINKS.map(({key, title, link}, index) => {
         return (
           <View key={key}>
             <Setting
               activeOpacity={ActiveOpacity}
               onPress={() => {
-                const segmentEvent =
-                  key === 'HelpAndSupport'
-                    ? 'Clicked Support'
-                    : 'Clicked About BitPay Link';
                 dispatch(openUrlWithInAppBrowser(link));
               }}>
               <SettingTitle>{title}</SettingTitle>
+              <LinkSvg />
             </Setting>
             {LINKS.length - 1 !== index && <Hr />}
           </View>
