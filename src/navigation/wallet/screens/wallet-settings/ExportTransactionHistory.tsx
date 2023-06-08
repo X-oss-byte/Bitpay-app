@@ -29,7 +29,6 @@ import {startOnGoingProcessModal} from '../../../../store/app/app.effects';
 import {LogActions} from '../../../../store/log';
 import {Paragraph} from '../../../../components/styled/Text';
 import {SlateDark, White} from '../../../../styles/colors';
-import Mailer from 'react-native-mail';
 
 const ExportTransactionHistoryContainer = styled.SafeAreaView`
   flex: 1;
@@ -199,6 +198,7 @@ const ExportTransactionHistory = () => {
   };
 
   const handleEmail = (subject: string, filePath: string) => {
+    /*
     Mailer.mail(
       {
         subject,
@@ -229,6 +229,7 @@ const ExportTransactionHistory = () => {
         }
       },
     );
+     */
   };
 
   const shareFile = async (csv: any, option: string) => {
@@ -257,7 +258,8 @@ const ExportTransactionHistory = () => {
       if (option === 'download') {
         await Share.open(opts);
       } else {
-        handleEmail(opts.subject!, filePath);
+        // TODO: unsupported Mail on Dekstop app
+        //  handleEmail(opts.subject!, filePath);
       }
     } catch (err: any) {
       dispatch(LogActions.debug(`[shareFile]: ${err.message}`));

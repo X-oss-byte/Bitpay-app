@@ -1,6 +1,5 @@
 import React from 'react';
-import {Alert} from 'react-native';
-import Mailer from 'react-native-mail';
+import {Alert, Linking} from 'react-native';
 import {StackScreenProps} from '@react-navigation/stack';
 import {useAppSelector} from '../utils/hooks';
 import {LogLevel} from '../store/log/log.models';
@@ -10,6 +9,7 @@ import {BaseText} from '../components/styled/Text';
 import styled from 'styled-components/native';
 import {Caution, SlateDark, White} from '../styles/colors';
 import Button from '../components/button/Button';
+import {APP_VERSION} from '../constants/config';
 
 export type DebugScreenParamList =
   | {
@@ -68,30 +68,11 @@ const DebugScreen: React.FC<StackScreenProps<RootStackParamList, 'Debug'>> = ({
     });
 
   const handleEmail = (data: string) => {
-    Mailer.mail(
-      {
-        subject: 'BitPay Log',
-        body: data,
-        isHTML: false,
-      },
-      (error, event) => {
-        Alert.alert(
-          error,
-          event,
-          [
-            {
-              text: 'Ok',
-              onPress: () => console.log('OK: Email Error Response'),
-            },
-            {
-              text: 'Cancel',
-              onPress: () => console.log('CANCEL: Email Error Response'),
-            },
-          ],
-          {cancelable: true},
-        );
-      },
-    );
+    Linking.openURL(
+      `mailto:?subject=BitPay v${APP_VERSION} Logs&body=${data}`,
+    ).catch(error => {
+      console.error('Error sending email: ' + error);
+    });
   };
 
   const showDisclaimer = (data: string) => {

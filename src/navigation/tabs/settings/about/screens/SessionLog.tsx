@@ -2,16 +2,13 @@ import {useNavigation} from '@react-navigation/native';
 import {StackNavigationProp} from '@react-navigation/stack';
 import React, {memo, useLayoutEffect, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {Alert, SectionList} from 'react-native';
-import Mailer from 'react-native-mail';
+import {Alert, SectionList, Linking} from 'react-native';
 import styled, {useTheme} from 'styled-components/native';
 import {
-  WIDTH,
   SheetContainer,
   SheetParams,
 } from '../../../../../components/styled/Containers';
 import {BaseText} from '../../../../../components/styled/Text';
-import {IS_ANDROID, IS_IOS} from '../../../../../constants';
 import {APP_VERSION} from '../../../../../constants/config';
 import {LogActions} from '../../../../../store/log';
 import {LogEntry, LogLevel} from '../../../../../store/log/log.models';
@@ -24,6 +21,8 @@ import {
   White,
   Slate,
   Black,
+  NeutralSlate,
+  LightBlack,
 } from '../../../../../styles/colors';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
 import {AboutStackParamList} from '../AboutStack';
@@ -57,7 +56,8 @@ const LogsMessage = styled.Text`
 
 const FilterLabelsContainer = styled.View`
   flex-direction: row;
-  margin-top: 16px;
+  border-top-width: 1px;
+  border-top-color: ${({theme: {dark}}) => (dark ? LightBlack : NeutralSlate)};
 `;
 
 const FilterLabel = styled(BaseText)<{
@@ -107,11 +107,6 @@ const OptionIconContainer = styled.View`
 
 const MIN_LOG_LEVEL = LogLevel.Error;
 const MAX_LOG_LEVEL = LogLevel.Debug;
-const TOTAL_LOG_LEVELS = MAX_LOG_LEVEL - MIN_LOG_LEVEL + 1;
-
-const THUMB_WIDTH = IS_IOS || IS_ANDROID ? 30 : 0;
-const SLIDER_WIDTH =
-  ((TOTAL_LOG_LEVELS - 1) / TOTAL_LOG_LEVELS) * WIDTH + THUMB_WIDTH;
 
 const LogColorMap: Partial<{[key in LogLevel]: string | null}> = {
   [LogLevel.Error]: Caution,
@@ -184,21 +179,11 @@ const SessionLogs: React.VFC<SessionLogsScreenProps> = () => {
   };
 
   const handleEmail = (data: string) => {
-    Mailer.mail(
-      {
-        subject: `BitPay v${APP_VERSION} Logs`,
-        body: data,
-        isHTML: false,
-      },
-      (error, event) => {
-        if (error) {
-          dispatch(LogActions.error('Error sending email: ' + error));
-        }
-        if (event) {
-          dispatch(LogActions.debug('Email Logs: ' + event));
-        }
-      },
-    );
+    Linking.openURL(
+      `mailto:?subject=BitPay v${APP_VERSION} Logs&body=${data}`,
+    ).catch(error => {
+      dispatch(LogActions.error('Error sending email: ' + error));
+    });
   };
 
   const showDisclaimer = () => {
@@ -240,7 +225,11 @@ const SessionLogs: React.VFC<SessionLogsScreenProps> = () => {
   return (
     <LogsContainer>
       <SectionList
-        contentContainerStyle={{paddingBottom: 150, marginTop: 5}}
+        contentContainerStyle={{
+          paddingBottom: 20,
+          marginTop: 15,
+          paddingHorizontal: 15,
+        }}
         sections={[
           {title: t('Previous Sessions'), data: filteredPersistedLogs},
           {title: t('Current Session'), data: filteredLogs},
