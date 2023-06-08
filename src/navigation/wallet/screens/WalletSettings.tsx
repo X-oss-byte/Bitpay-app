@@ -19,7 +19,7 @@ import ChevronRightSvg from '../../../../assets/img/angle-right.svg';
 
 import {SlateDark, White} from '../../../styles/colors';
 import ToggleSwitch from '../../../components/toggle-switch/ToggleSwitch';
-import {useAppSelector} from '../../../utils/hooks';
+import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {findWalletById} from '../../../store/wallet/utils/wallet';
 import {Wallet} from '../../../store/wallet/wallet.models';
 import {AppActions} from '../../../store/app';
@@ -30,7 +30,6 @@ import {
   toggleHideAllBalances,
 } from '../../../store/app/app.actions';
 import {WrongPasswordError} from '../components/ErrorMessages';
-import {useDispatch} from 'react-redux';
 import {
   toggleHideWallet,
   updatePortfolioBalance,
@@ -43,8 +42,7 @@ const WalletSettingsContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin: 20px ${ScreenGutter} 0px;
 `;
 
 const Title = styled(BaseText)`
@@ -90,7 +88,7 @@ const WalletSettings = () => {
     hideWallet,
   } = wallet;
 
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const buildEncryptModalConfig = (
     cta: (decryptedKey: {
@@ -214,7 +212,7 @@ const WalletSettings = () => {
           </Setting>
           <Hr />
 
-          <Setting
+          {/* <Setting
             activeOpacity={ActiveOpacity}
             onPress={() => {
               navigation.navigate('Wallet', {
@@ -226,7 +224,7 @@ const WalletSettings = () => {
               {t('Export Transaction History')}
             </WalletSettingsTitle>
           </Setting>
-          <Hr />
+          <Hr /> */}
 
           {!key.isReadOnly ? (
             <>

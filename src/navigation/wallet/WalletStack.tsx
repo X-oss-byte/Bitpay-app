@@ -245,11 +245,11 @@ const WalletStack = () => {
         {/*<Wallet.Screen
           name={WalletScreens.WALLET_DETAILS}
           component={WalletDetails}
-        />
+        />*/}
         <Wallet.Screen
           name={WalletScreens.WALLET_SETTINGS}
           component={WalletSettings}
-        />*/}
+        />
         <Wallet.Screen name={WalletScreens.IMPORT} component={Import} />
         {/*<Wallet.Screen
           name={WalletScreens.CREATION_OPTIONS}
@@ -410,7 +410,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.KEY_GLOBAL_SELECT}
           component={KeyGlobalSelect}
-        />
+        />*/}
         <Wallet.Screen
           name={WalletScreens.WALLET_INFORMATION}
           component={WalletInformation}
@@ -427,7 +427,7 @@ const WalletStack = () => {
           name={WalletScreens.ALL_ADDRESSES}
           component={AllAddresses}
         />
-        <Wallet.Screen
+        {/*<Wallet.Screen
           options={{
             ...TransitionPresets.DefaultTransition,
           }}
@@ -450,7 +450,7 @@ const WalletStack = () => {
         <Wallet.Screen
           name={WalletScreens.SELECT_INPUTS}
           component={SelectInputs}
-        />
+        />*/}
         <Wallet.Screen
           options={{
             headerTitle: () => (
@@ -459,7 +459,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.CLEAR_TRANSACTION_HISTORY_CACHE}
           component={ClearTransactionHistoryCache}
-        />*/}
+        />
       </Wallet.Navigator>
     </>
   );

@@ -1,4 +1,4 @@
-import {CommonActions} from '@react-navigation/native';
+import {CommonActions, StackActions} from '@react-navigation/native';
 import React, {useCallback, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import styled from 'styled-components/native';
@@ -22,8 +22,7 @@ const ClearTransactionHistoryCacheContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin: 20px ${ScreenGutter} 0px;
 `;
 
 const ClearTransactionHistoryCacheDescription = styled(Paragraph)`
@@ -80,27 +79,7 @@ const ClearTransactionHistoryCache: React.FC<
             },
           }),
         );
-        navigation.dispatch(
-          CommonActions.reset({
-            index: 1,
-            routes: [
-              {
-                name: 'KeyOverview',
-                params: {
-                  id: key.id,
-                },
-              },
-              {
-                name: 'WalletDetails',
-                params: {
-                  walletId: wallet.id,
-                  key,
-                  skipInitializeHistory: false,
-                },
-              },
-            ],
-          }),
-        );
+        navigation.goBack();
       }
     });
   };

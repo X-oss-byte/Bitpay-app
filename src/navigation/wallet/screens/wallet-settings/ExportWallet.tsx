@@ -38,8 +38,7 @@ const ExportWalletContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled(KeyboardAwareScrollView)`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin: 20px ${ScreenGutter} 0px;
 `;
 
 const PasswordFormContainer = styled.View`
@@ -160,6 +159,7 @@ const ExportWallet = () => {
 
   const onCopyToClipboard = async ({password}: {password: string}) => {
     setCopyButtonState('loading');
+    await sleep(1000);
     try {
       const _copyWallet = walletExport(password);
       Clipboard.setString(_copyWallet);
@@ -313,14 +313,14 @@ const ExportWallet = () => {
             </Button>
           </PasswordActionContainer>
 
-          <PasswordActionContainer>
+          {/* <PasswordActionContainer>
             <Button
               onPress={handleSubmit(onSendByEmail)}
               state={sendButtonState}
               buttonStyle={'secondary'}>
               {t('Send by Email')}
             </Button>
-          </PasswordActionContainer>
+          </PasswordActionContainer> */}
         </PasswordFormContainer>
       </ScrollView>
     </ExportWalletContainer>
