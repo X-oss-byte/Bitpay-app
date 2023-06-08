@@ -238,11 +238,11 @@ const WalletStack = () => {
           name={WalletScreens.KEY_SETTINGS}
           component={KeySettings}
         />
-        {/*<Wallet.Screen
+        <Wallet.Screen
           name={WalletScreens.UPDATE_KEY_OR_WALLET_NAME}
           component={UpdateKeyOrWalletName}
         />
-        <Wallet.Screen
+        {/*<Wallet.Screen
           name={WalletScreens.WALLET_DETAILS}
           component={WalletDetails}
         />
@@ -254,7 +254,7 @@ const WalletStack = () => {
         {/*<Wallet.Screen
           name={WalletScreens.CREATION_OPTIONS}
           component={CreationOptions}
-        />
+        />*/}
         <Wallet.Screen
           name={WalletScreens.CREATE_ENCRYPT_PASSWORD}
           component={CreateEncryptionPassword}
@@ -262,10 +262,10 @@ const WalletStack = () => {
         <Wallet.Screen
           name={WalletScreens.EXTENDED_PRIVATE_KEY}
           component={ExtendedPrivateKey}
-      />*/}
+        />
         <Wallet.Screen name={WalletScreens.DELETE_KEY} component={DeleteKey} />
-        {/*<Wallet.Screen name={WalletScreens.EXPORT_KEY} component={ExportKey} />
-        <Wallet.Screen
+        <Wallet.Screen name={WalletScreens.EXPORT_KEY} component={ExportKey} />
+        {/*<Wallet.Screen
           name={WalletScreens.TERMS_OF_USE}
           component={TermsOfUse}
         />
@@ -433,7 +433,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.PRICE_CHARTS}
           component={PriceCharts}
-        />
+        />*/}
         <Wallet.Screen
           options={{
             headerTitle: () => (
@@ -443,7 +443,7 @@ const WalletStack = () => {
           name={WalletScreens.CLEAR_ENCRYPT_PASSWORD}
           component={ClearEncryptPassword}
         />
-        <Wallet.Screen
+        {/*<Wallet.Screen
           name={WalletScreens.SEND_TO_OPTIONS}
           component={SendToOptions}
         />

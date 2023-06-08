@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react';
-import Modal from 'react-native-modal';
 import {useDispatch, useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import styled from 'styled-components/native';
 import {AppActions} from '../../../store/app';
 import {
   ActionContainer,
+  HEIGHT,
   ScreenGutter,
   WIDTH,
 } from '../../../components/styled/Containers';
@@ -19,13 +19,14 @@ import {HeaderTitle, Paragraph} from '../../../components/styled/Text';
 import {Keyboard} from 'react-native';
 import {sleep} from '../../../utils/helper-methods';
 import {useTranslation} from 'react-i18next';
+import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 
 const DecryptFormContainer = styled.View`
-  justify-content: center;
-  width: ${WIDTH - 16}px;
-  background-color: ${({theme: {dark}}) => (dark ? LightBlack : White)};
-  border-radius: 10px;
-  padding: ${ScreenGutter};
+  background: ${({theme: {dark}}) => (dark ? LightBlack : White)};
+  padding: 25px;
+  border-top-left-radius: 10px;
+  border-top-right-radius: 10px;
+  max-height: ${HEIGHT - 100}px;
 `;
 
 const schema = yup.object().shape({
@@ -99,9 +100,8 @@ const DecryptEnterPasswordModal = () => {
   };
 
   return (
-    <Modal
+    <SheetModal
       isVisible={isVisible}
-      backdropOpacity={0.4}
       animationIn={'fadeInUp'}
       animationOut={'fadeOutDown'}
       backdropTransitionOutTiming={0}
@@ -147,7 +147,7 @@ const DecryptEnterPasswordModal = () => {
           </ActionContainer>
         </PasswordFormContainer>
       </DecryptFormContainer>
-    </Modal>
+    </SheetModal>
   );
 };
 

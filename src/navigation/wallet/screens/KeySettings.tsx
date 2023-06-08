@@ -70,8 +70,7 @@ const WalletSettingsContainer = styled.View`
 `;
 
 const ScrollContainer = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin: 20px ${ScreenGutter} 0px;
 `;
 
 const Title = styled(BaseText)`
@@ -418,7 +417,7 @@ const KeySettings = () => {
                 {t('Request Encrypt Password')}
               </WalletSettingsTitle>
 
-              <RequestEncryptPasswordToggle currentKey={key} />
+              <RequestEncryptPasswordToggle currentKey={_key} />
             </SettingView>
 
             <Info>

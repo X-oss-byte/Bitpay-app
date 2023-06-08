@@ -14,8 +14,7 @@ const ExtendedPrivateKeyContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin: 20px ${ScreenGutter} 0px;
 `;
 
 const Title = styled(H5)`
