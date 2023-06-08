@@ -105,7 +105,7 @@ const WalletListHeader = styled.View`
 
 const WalletListFooter = styled.TouchableOpacity`
   padding: 10px;
-  margin: 15px 0 100px 0;
+  margin: 15px 0 50px 0;
   flex-direction: row;
   align-items: center;
   cursor: pointer;

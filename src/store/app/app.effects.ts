@@ -60,6 +60,7 @@ export const startAppInit = (): Effect => async (dispatch, getState) => {
     //dispatch(showBlur(pinLockActive || biometricLockActive));
 
     dispatch(AppActions.successAppInit());
+    dispatch(AppActions.appInitCompleted());
 
     //await sleep(500);
     dispatch(LogActions.info('Initialized app successfully.'));

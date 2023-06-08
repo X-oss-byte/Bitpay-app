@@ -1,10 +1,8 @@
 import React from 'react';
-import {ActivityIndicator} from 'react-native';
-import styled from 'styled-components/native';
-import {LightBlack, SlateDark, White} from '../../../styles/colors';
+import {ActivityIndicator, Text, TouchableOpacity} from 'react-native';
+import {useTheme} from 'styled-components/native';
+import {Air, NeutralSlate, SlateDark} from '../../../styles/colors';
 import {useAppSelector} from '../../../utils/hooks';
-import {BaseText} from '../../styled/Text';
-import BaseModal from '../base/BaseModal';
 
 export type OnGoingProcessMessages =
   | 'GENERAL_AWAITING'
@@ -38,60 +36,52 @@ export type OnGoingProcessMessages =
   | 'REDIRECTING'
   | 'BROADCASTING_TXP';
 
-const OnGoingProcessContainer = styled.View`
-  max-width: 60%;
-  justify-content: center;
-  align-items: center;
-`;
-
-const Row = styled.View`
-  background-color: ${({theme}) => (theme.dark ? LightBlack : White)};
-  border-radius: 10px;
-  flex-direction: row;
-  padding: 20px;
-`;
-
-const ActivityIndicatorContainer = styled.View`
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  margin-right: 15px;
-  transform: scale(1.1);
-`;
-
-const Message = styled(BaseText)`
-  font-weight: 700;
-  flex-wrap: wrap;
-`;
-
 const OnGoingProcessModal: React.FC = () => {
+  const {dark} = useTheme();
   const message = useAppSelector(({APP}) => APP.onGoingProcessModalMessage);
   const isVisible = useAppSelector(({APP}) => APP.showOnGoingProcessModal);
   const appWasInit = useAppSelector(({APP}) => APP.appWasInit);
 
   return (
-    <BaseModal
-      id={'ongoingProcess'}
-      isVisible={appWasInit && isVisible}
-      backdropOpacity={0.4}
-      animationIn={'fadeInRight'}
-      animationOut={'fadeOutLeft'}
-      backdropTransitionOutTiming={0}
-      hideModalContentWhileAnimating={true}
-      useNativeDriverForBackdrop={true}
-      useNativeDriver={true}
-      style={{
-        alignItems: 'center',
-      }}>
-      <OnGoingProcessContainer>
-        <Row>
-          <ActivityIndicatorContainer>
-            <ActivityIndicator color={SlateDark} />
-          </ActivityIndicatorContainer>
-          <Message>{message}</Message>
-        </Row>
-      </OnGoingProcessContainer>
-    </BaseModal>
+    <>
+      {appWasInit && isVisible ? (
+        <TouchableOpacity
+          activeOpacity={1}
+          style={{
+            position: 'absolute',
+            height: '100%',
+            width: '100%',
+            top: 0,
+            left: 0,
+            backgroundColor: 'rgba(0,0,0,0.5)',
+          }}>
+          <TouchableOpacity
+            activeOpacity={1}
+            style={{
+              position: 'absolute',
+              bottom: '50%',
+              alignSelf: 'center',
+              zIndex: true ? 1000000 : undefined,
+              backgroundColor: dark ? SlateDark : Air,
+              paddingHorizontal: 10,
+              paddingVertical: 20,
+              display: 'flex',
+              flexDirection: 'row',
+              borderRadius: 10,
+              shadowRadius: 3,
+              shadowColor: dark ? Air : SlateDark,
+              shadowOpacity: 1,
+            }}>
+            <ActivityIndicator
+              color={dark ? NeutralSlate : SlateDark}
+              style={{marginRight: 10}}></ActivityIndicator>
+            <Text style={{color: dark ? NeutralSlate : SlateDark}}>
+              {message}
+            </Text>
+          </TouchableOpacity>
+        </TouchableOpacity>
+      ) : null}
+    </>
   );
 };
 
