@@ -20,12 +20,7 @@ const BackSvg: React.FC<BackSvgProps> = ({color, background, opacity}) => {
   const backgroundFill = background;
   const circleOpacity = opacity || 0.100000001;
   return (
-    <Svg
-      title="Button/Back"
-      width="40px"
-      height="40px"
-      viewBox="0 0 41 41"
-      style={{marginBottom: 5}}>
+    <Svg title="Button/Back" width="40px" height="40px" viewBox="0 0 41 41">
       <G
         id="Symbols"
         stroke="none"
@@ -62,9 +57,6 @@ const BackSvg: React.FC<BackSvgProps> = ({color, background, opacity}) => {
 };
 
 const BackContainer = styled.View`
-  padding-top: 10px;
-  transform: scale(1.1);
-  padding-left: 5px;
   cursor: pointer;
 `;
 

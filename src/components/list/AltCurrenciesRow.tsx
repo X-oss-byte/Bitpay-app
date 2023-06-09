@@ -19,6 +19,7 @@ const AltCurrencyContainer = styled.TouchableHighlight<{selected?: boolean}>`
       background: ${({theme: {dark}}) => (dark ? LightBlack : '#FBFBFF')};
     `};
   padding: 13px 15px;
+  cursor: pointer;
 `;
 
 const AltCurrencyName = styled(BaseText)<{selected?: boolean}>`

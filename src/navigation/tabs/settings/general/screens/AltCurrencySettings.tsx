@@ -164,7 +164,7 @@ const AltCurrencySettings = () => {
             selected={selected}
             onPress={async () => {
               Keyboard.dismiss();
-              dispatch(startOnGoingProcessModal('LOADING'));
+              await dispatch(startOnGoingProcessModal('LOADING'));
               await sleep(500);
               InteractionManager.runAfterInteractions(() => {
                 dispatch(setDefaultAltCurrency(item));
@@ -187,16 +187,16 @@ const AltCurrencySettings = () => {
   return (
     <AltCurrencySettingsContainer>
       <Header>
-        <Label>{t('Search Currency')}</Label>
+        <Label>{t('Search')}</Label>
         <SearchContainer>
           <SearchInput
-            placeholder={''}
+            placeholder={'Enter currency name or code'}
             onChangeText={(text: string) => {
               updateSearchResults(text);
             }}
           />
           <SearchIconContainer>
-            <SearchSvg height={25} width={25} />
+            <SearchSvg height={15} width={15} />
           </SearchIconContainer>
         </SearchContainer>
       </Header>
@@ -225,7 +225,7 @@ const AltCurrencySettings = () => {
       <HideableView show={!searchVal}>
         <SearchResults>
           <SectionList
-            contentContainerStyle={{paddingBottom: 150, marginTop: 5}}
+            contentContainerStyle={{paddingBottom: 50, marginTop: 5}}
             sections={altCurrencyList}
             renderItem={renderItem}
             keyExtractor={keyExtractor}

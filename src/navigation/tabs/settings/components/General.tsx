@@ -63,21 +63,23 @@ const General = () => {
       </Setting>
       <Hr />
       {/*----------------------------------------------------------------------*/}
-      <Setting activeOpacity={1}>
+      <Setting
+        activeOpacity={1}
+        onPress={() =>
+          dispatch(AppActions.showPortfolioValue(!showPortfolioValue))
+        }>
         <SettingTitle>{t('Show Portfolio')}</SettingTitle>
-        <ToggleSwitch
-          onChange={value => dispatch(AppActions.showPortfolioValue(value))}
-          isEnabled={showPortfolioValue}
-        />
+        <ToggleSwitch onChange={() => null} isEnabled={showPortfolioValue} />
       </Setting>
       <Hr />
       {/*----------------------------------------------------------------------*/}
-      <Setting activeOpacity={1}>
+      <Setting
+        activeOpacity={1}
+        onPress={() =>
+          dispatch(AppActions.toggleHideAllBalances(!hideAllBalances))
+        }>
         <SettingTitle>{t('Hide All Balances')}</SettingTitle>
-        <ToggleSwitch
-          onChange={value => dispatch(AppActions.toggleHideAllBalances(value))}
-          isEnabled={hideAllBalances}
-        />
+        <ToggleSwitch onChange={() => null} isEnabled={hideAllBalances} />
       </Setting>
       <Hr />
       {/*----------------------------------------------------------------------*/}

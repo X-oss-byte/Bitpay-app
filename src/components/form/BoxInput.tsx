@@ -18,7 +18,6 @@ import {BaseText} from '../styled/Text';
 
 type InputType = 'password' | 'phone' | 'search' | 'number';
 
-const INPUT_HEIGHT = 55;
 const SEPARATOR_HEIGHT = 37;
 
 interface InputProps {
@@ -78,7 +77,6 @@ const Separator = styled.View`
 const Input = styled(TextInput)<InputProps>`
   background-color: transparent;
   color: ${({theme}) => theme.colors.text};
-  height: ${INPUT_HEIGHT}px;
   padding: 10px;
   flex: 1 1 auto;
   font-weight: 500;
@@ -115,9 +113,8 @@ export const IconContainer = styled.TouchableOpacity.attrs(() => ({
   activeOpacity: ActiveOpacity,
 }))`
   align-items: center;
-  height: ${INPUT_HEIGHT}px;
-  min-width: ${INPUT_HEIGHT}px;
   justify-content: center;
+  padding: 0 10px;
 `;
 
 const Prefix: React.FC = ({children}) => {

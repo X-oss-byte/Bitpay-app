@@ -320,16 +320,14 @@ export const SearchContainer = styled.View`
   align-items: center;
   border-top-right-radius: 4px;
   border-top-left-radius: 4px;
-  padding: 4px 0;
   margin-bottom: 20px;
 `;
 
 export const SearchInput = styled.TextInput`
   flex: 1;
-  padding: 0 10px;
+  padding: 10px;
   border-right-width: 1px;
   border-right-color: ${({theme: {dark}}) => (dark ? '#45484E' : '#ECEFFD')};
-  height: 32px;
   color: ${({theme}) => theme.colors.text};
   background-color: transparent;
 `;

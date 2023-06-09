@@ -6,7 +6,7 @@ import {
 import {createStackNavigator} from '@react-navigation/stack';
 import debounce from 'lodash.debounce';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Appearance, AppState, AppStateStatus, StatusBar} from 'react-native';
+import {Appearance, AppState, AppStateStatus} from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
 import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
@@ -293,13 +293,6 @@ export default () => {
 
   return (
     <SafeAreaProvider>
-      <StatusBar
-        animated={true}
-        barStyle={theme.dark ? 'light-content' : 'dark-content'}
-        backgroundColor={'transparent'}
-        translucent={true}
-      />
-
       <ThemeProvider theme={theme}>
         <NavigationContainer ref={navigationRef} theme={theme}>
           <Root.Navigator

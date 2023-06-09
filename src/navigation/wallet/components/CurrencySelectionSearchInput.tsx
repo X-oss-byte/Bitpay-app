@@ -66,7 +66,7 @@ const CurrencySelectionSearchInput: React.VFC<
 
   return (
     <BoxInput
-      placeholder={t('Search Currency')}
+      placeholder={t('Enter currency name or code')}
       placeholderTextColor={placeHolderTextColor}
       value={query}
       onChangeText={onChangeText}

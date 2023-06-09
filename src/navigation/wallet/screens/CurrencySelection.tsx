@@ -27,7 +27,7 @@ import {
 } from 'react-native';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {useNavigation} from '@react-navigation/native';
-import {HeaderTitle, Link} from '../../../components/styled/Text';
+import {BaseText, HeaderTitle, Link} from '../../../components/styled/Text';
 import {
   SupportedCoinsOptions,
   SupportedCurrencyOption,
@@ -49,6 +49,7 @@ import {useTranslation} from 'react-i18next';
 import CurrencySelectionSearchInput from '../components/CurrencySelectionSearchInput';
 import CurrencySelectionNoResults from '../components/CurrencySelectionNoResults';
 import {orderBy} from 'lodash';
+import {LightBlack, White} from '../../../styles/colors';
 
 type CurrencySelectionScreenProps = StackScreenProps<
   WalletStackParamList,
@@ -110,9 +111,17 @@ const LinkContainer = styled.View`
 `;
 
 export const SearchContainer = styled.View`
-  align-items: center;
-  padding: 4px 0;
   margin: 20px ${ScreenGutter} 20px;
+`;
+
+const Label = styled(BaseText)`
+  color: ${({theme}) => (theme.dark ? White : LightBlack)};
+  font-weight: 500;
+  font-size: 13px;
+  line-height: 18px;
+  text-transform: uppercase;
+  opacity: 0.75;
+  margin-bottom: 6px;
 `;
 
 const SupportedMultisigCurrencyOptions: SupportedCurrencyOption[] =
@@ -746,6 +755,7 @@ const CurrencySelection: React.FC<CurrencySelectionScreenProps> = ({route}) => {
   return (
     <CurrencySelectionContainer accessibilityLabel="currency-selection-container">
       <SearchContainer>
+        <Label>{t('Search')}</Label>
         <CurrencySelectionSearchInput
           onSearch={setSearchFilter}
           debounceWait={300}
