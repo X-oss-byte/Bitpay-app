@@ -60,12 +60,16 @@ const FilterLabelsContainer = styled.View`
   border-top-color: ${({theme: {dark}}) => (dark ? LightBlack : NeutralSlate)};
 `;
 
+const FilterLabelContainer = styled.TouchableOpacity`
+  flex: 1 1 100%;
+  padding: 20px 0px;
+  cursor: pointer;
+`;
+
 const FilterLabel = styled(BaseText)<{
   color?: string | null;
   isSelected: boolean;
 }>`
-  flex: 1 1 100%;
-  padding: 20px 0px;
   text-align: center;
   color: ${({theme: {dark}, color, isSelected}) =>
     color && isSelected ? color : dark ? White : SlateDark};
@@ -74,7 +78,6 @@ const FilterLabel = styled(BaseText)<{
 const OptionContainer = styled.TouchableOpacity<SheetParams>`
   flex-direction: row;
   align-items: stretch;
-  padding-${({placement}) => placement}: 31px;
 `;
 
 const OptionTextContainer = styled.View`
@@ -134,13 +137,15 @@ const FilterLabels: React.VFC<{
   return (
     <FilterLabelsContainer>
       {levels.map(level => (
-        <FilterLabel
-          isSelected={props.selectedLabel === level}
-          color={LogLabelColorMap[level]}
+        <FilterLabelContainer
           onPress={() => props.onPress?.(level)}
           key={level}>
-          {LogLevel[level]}
-        </FilterLabel>
+          <FilterLabel
+            isSelected={props.selectedLabel === level}
+            color={LogLabelColorMap[level]}>
+            {LogLevel[level]}
+          </FilterLabel>
+        </FilterLabelContainer>
       ))}
     </FilterLabelsContainer>
   );

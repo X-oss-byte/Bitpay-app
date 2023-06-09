@@ -11,14 +11,15 @@ type ModalProps = {
   onModalWillShow?: () => void;
   onBackdropPress?: () => void;
   children: React.ReactNode;
-  style: any;
+  placement: 'top' | 'bottom' | undefined;
 };
 
 const BaseModal: React.FC<ModalProps> = props => {
   const dispatch = useAppDispatch();
   const activeModalId = useAppSelector(({APP}) => APP.activeModalId);
   const [isVisibleSafe, setVisibleSafe] = useState(false);
-  const {id, isVisible, onModalHide, onModalWillShow} = props as ModalProps;
+  const {id, isVisible, onModalHide, onModalWillShow, placement} =
+    props as ModalProps;
 
   useEffect(() => {
     if (isVisible) {
@@ -37,35 +38,31 @@ const BaseModal: React.FC<ModalProps> = props => {
       onModalHide?.();
     }
   }, [activeModalId, id, isVisible]);
-  return (
-    <>
-      {isVisibleSafe ? (
-        <TouchableOpacity
-          activeOpacity={1}
-          style={{
-            position: 'absolute',
-            height: '100%',
-            width: '100%',
-            top: 0,
-            left: 0,
-            backgroundColor: 'rgba(0,0,0,0.5)',
-          }}
-          onPress={props.onBackdropPress}>
-          <TouchableOpacity
-            activeOpacity={1}
-            style={{
-              position: 'absolute',
-              bottom: 0,
-              left: 0,
-              width: '100%',
-              zIndex: isVisibleSafe ? 1000000 : undefined,
-            }}>
-            {props.children}
-          </TouchableOpacity>
-        </TouchableOpacity>
-      ) : null}
-    </>
-  );
+  return isVisibleSafe ? (
+    <TouchableOpacity
+      activeOpacity={1}
+      style={{
+        position: 'absolute',
+        height: '100%',
+        width: '100%',
+        top: 0,
+        left: 0,
+        backgroundColor: 'rgba(0,0,0,0.5)',
+      }}
+      onPress={props.onBackdropPress}>
+      <TouchableOpacity
+        activeOpacity={1}
+        style={{
+          position: 'absolute',
+          top: placement === 'top' ? 0 : undefined,
+          bottom: placement === 'bottom' ? 0 : undefined,
+          width: '100%',
+          zIndex: isVisibleSafe ? 1000000 : undefined,
+        }}>
+        {props.children}
+      </TouchableOpacity>
+    </TouchableOpacity>
+  ) : null;
 };
 
 export default BaseModal;

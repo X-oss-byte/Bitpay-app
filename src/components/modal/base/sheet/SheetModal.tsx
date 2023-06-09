@@ -1,6 +1,7 @@
 import React from 'react';
 import {SheetParams} from '../../../styled/Containers';
 import BaseModal from '../BaseModal';
+import {View} from 'react-native';
 
 interface Props extends SheetParams {
   isVisible: boolean;
@@ -19,12 +20,8 @@ const SheetModal: React.FC<Props> = ({
       id={'sheetModal'}
       isVisible={isVisible}
       onBackdropPress={onBackdropPress}
-      style={{
-        position: 'relative',
-        justifyContent: placement === 'top' ? 'flex-start' : 'flex-end',
-        margin: 0,
-      }}>
-      <>{children}</>
+      placement={placement}>
+      <View>{children}</View>
     </BaseModal>
   );
 };

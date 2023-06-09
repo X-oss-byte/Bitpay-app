@@ -237,6 +237,7 @@ export const AdvancedOptionsButton = styled.TouchableOpacity`
   justify-content: space-between;
   align-items: center;
   border-radius: 6px;
+  cursor: pointer;
 `;
 
 export const AdvancedOptionsButtonText = styled(BaseText)`
@@ -304,6 +305,7 @@ export const OptionList = styled.TouchableOpacity`
   margin-bottom: ${ScreenGutter};
   flex-direction: row;
   overflow: hidden;
+  cursor: pointer;
 `;
 
 export const OptionInfoContainer = styled.View`

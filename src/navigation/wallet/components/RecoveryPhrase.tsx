@@ -79,7 +79,6 @@ import {
   isSingleAddressCoin,
 } from '../../../store/wallet/utils/currency';
 import {useTranslation} from 'react-i18next';
-import {IS_ANDROID, IS_IOS} from '../../../constants';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 
 const ContentView = styled(ScrollView)`
@@ -567,8 +566,6 @@ const RecoveryPhrase = () => {
             autoCorrect={false}
             spellCheck={false}
             autoComplete="off"
-            textContentType={IS_IOS ? 'password' : undefined}
-            keyboardType={IS_ANDROID ? 'visible-password' : undefined}
           />
         )}
         name="text"

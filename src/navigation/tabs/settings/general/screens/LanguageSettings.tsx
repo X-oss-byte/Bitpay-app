@@ -1,6 +1,6 @@
 import i18n from 'i18next';
 import React, {useEffect, useState} from 'react';
-import {View, ActivityIndicator} from 'react-native';
+import {View} from 'react-native';
 import Checkbox from '../../../../../components/checkbox/Checkbox';
 import {
   Hr,
@@ -11,52 +11,40 @@ import {AppActions} from '../../../../../store/app';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
 import {Settings, SettingsContainer} from '../../SettingsRoot';
 import {LanguageList} from '../../../../../constants/LanguageSelectionList';
-import {useTheme} from 'styled-components/native';
-import {SlateDark} from '../../../../../styles/colors';
+import {useNavigation} from '@react-navigation/native';
 
 const LanguageSettingsScreen: React.VFC = () => {
   const dispatch = useAppDispatch();
-  const theme = useTheme();
+  const navigation = useNavigation();
   const appLanguage = useAppSelector(({APP}) => APP.defaultLanguage);
   const [selected, setSelected] = useState(appLanguage);
-  const [loading, setLoading] = useState(null);
 
-  const setLng = (isoCode: string, index: any) => {
+  const setLng = (isoCode: string) => {
     setSelected(isoCode);
-    setLoading(index);
   };
 
   useEffect(() => {
     if (selected !== appLanguage) {
-      i18n.changeLanguage(selected);
       dispatch(AppActions.setDefaultLanguage(selected));
-      setLoading(null);
+      i18n.changeLanguage(selected).then(() => {
+        navigation.goBack();
+      });
     }
-  }, [dispatch, selected, appLanguage]);
+  }, [dispatch, selected, appLanguage, navigation]);
 
   return (
     <SettingsContainer>
       <Settings>
-        <Hr />
-
-        {LanguageList.map(({name, isoCode}, index) => {
+        {LanguageList.map(({name, isoCode}) => {
           return (
             <View key={isoCode}>
-              <Setting onPress={() => setLng(isoCode, index)}>
+              <Setting onPress={() => setLng(isoCode)}>
                 <SettingTitle>{name}</SettingTitle>
-                {loading == index ? (
-                  <ActivityIndicator
-                    size="small"
-                    color={theme.dark ? '#E1E4E7' : SlateDark}
-                    style={{marginEnd: 8}}
-                  />
-                ) : (
-                  <Checkbox
-                    radio={true}
-                    onPress={() => setLng(isoCode, index)}
-                    checked={selected === isoCode}
-                  />
-                )}
+                <Checkbox
+                  radio={true}
+                  onPress={() => setLng(isoCode)}
+                  checked={selected === isoCode}
+                />
               </Setting>
               <Hr />
             </View>

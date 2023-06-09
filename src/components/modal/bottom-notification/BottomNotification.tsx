@@ -140,6 +140,7 @@ const BottomNotification = () => {
 
   return (
     <SheetModal
+      placement={'bottom'}
       isVisible={isVisible}
       onBackdropPress={() => {
         if (enableBackdropDismiss) {
@@ -180,7 +181,6 @@ const BottomNotification = () => {
                 primary={primary}
                 onPress={async () => {
                   dispatch(AppActions.dismissBottomNotificationModal());
-                  await sleep(0);
                   action(rootState);
                 }}>
                 {text.toUpperCase()}
