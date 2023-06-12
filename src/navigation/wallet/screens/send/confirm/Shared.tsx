@@ -65,7 +65,7 @@ export const ConfirmContainer = styled.SafeAreaView`
 `;
 
 export const ConfirmScrollView = styled(KeyboardAwareScrollView)`
-  margin-top: 20px;
+  margin: 20px ${ScreenGutter};
 `;
 
 export const HeaderTitle = styled(H6)`

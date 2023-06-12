@@ -107,9 +107,8 @@ const SafeAreaView = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  flex: 1;
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const PasteClipboardContainer = styled.TouchableOpacity`

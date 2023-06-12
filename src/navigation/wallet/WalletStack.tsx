@@ -228,11 +228,11 @@ const WalletStack = () => {
         <Wallet.Screen name={WalletScreens.EXPORT_KEY} component={ExportKey} />
         <Wallet.Screen name={WalletScreens.AMOUNT} component={AmountScreen} />
         <Wallet.Screen name={WalletScreens.SEND_TO} component={SendTo} />
-        {/* <Wallet.Screen
+        <Wallet.Screen
           options={{gestureEnabled: false}}
           name={WalletScreens.CONFIRM}
           component={Confirm}
-        />*/}
+        />
         {/* <Wallet.Screen
           options={{
             headerTitle: () => (
