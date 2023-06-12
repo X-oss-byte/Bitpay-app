@@ -74,7 +74,8 @@ const OnGoingProcessModal: React.FC = () => {
             }}>
             <ActivityIndicator
               color={dark ? NeutralSlate : SlateDark}
-              style={{marginRight: 10}}></ActivityIndicator>
+              style={{marginRight: 10}}
+            />
             <Text style={{color: dark ? NeutralSlate : SlateDark}}>
               {message}
             </Text>

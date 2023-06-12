@@ -5,7 +5,7 @@ import Clipboard from '@react-native-community/clipboard';
 import {RouteProp, useRoute} from '@react-navigation/native';
 import QRCode from 'react-native-qrcode-svg';
 import styled, {useTheme} from 'styled-components/native';
-import {Image, ScrollView, RefreshControl, Share} from 'react-native';
+import {Image, ScrollView, RefreshControl} from 'react-native';
 import {
   Paragraph,
   BaseText,
@@ -123,12 +123,6 @@ const Copayers: React.FC<CopayersProps> = props => {
     }
   };
 
-  const shareInvitation = async () => {
-    await Share.share({
-      message: walletStatus.secret,
-    });
-  };
-
   return (
     <ScrollView
       refreshControl={
@@ -166,12 +160,6 @@ const Copayers: React.FC<CopayersProps> = props => {
             </CopayersContainer>
           );
         })}
-
-        <ActionContainer>
-          <Button onPress={shareInvitation}>
-            {t('Share this Invitation')}
-          </Button>
-        </ActionContainer>
       </JoinCopayersContainer>
     </ScrollView>
   );

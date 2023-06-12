@@ -1,7 +1,7 @@
 // import BitAuth from 'bitauth';
 import i18n, {t} from 'i18next';
 import {debounce} from 'lodash';
-import {Platform, Linking, Share} from 'react-native';
+import {Platform, Linking} from 'react-native';
 import {AppActions} from '.';
 import {OnGoingProcessMessages} from '../../components/modal/ongoing-process/OngoingProcess';
 import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';

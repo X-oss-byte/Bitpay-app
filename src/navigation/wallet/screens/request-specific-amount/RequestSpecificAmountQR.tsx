@@ -17,7 +17,6 @@ import Clipboard from '@react-native-community/clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import {LightBlack, White} from '../../../../styles/colors';
 import ShareIcon from '../../../../components/icons/share/Share';
-import {Share} from 'react-native';
 import GhostSvg from '../../../../../assets/img/ghost-straight-face.svg';
 import {createWalletAddress} from '../../../../store/wallet/effects/address/address';
 import {
@@ -120,18 +119,10 @@ const RequestSpecificAmountQR = () => {
   const [qrValue, setQrValue] = useState<string>();
 
   useLayoutEffect(() => {
-    const onPressShare = async () => {
-      if (qrValue) {
-        await Share.share({
-          message: qrValue,
-        });
-      }
-    };
-
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{walletName}</HeaderTitle>,
       headerRight: () => (
-        <ShareIconContainer activeOpacity={0.75} onPress={onPressShare}>
+        <ShareIconContainer activeOpacity={0.75}>
           <ShareIcon />
         </ShareIconContainer>
       ),

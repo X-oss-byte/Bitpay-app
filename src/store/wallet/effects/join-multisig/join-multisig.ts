@@ -9,10 +9,6 @@ import {
 import {successCreateKey, successAddWallet} from '../../wallet.actions';
 import API from 'bitcore-wallet-client/ts_build';
 import {Key, KeyMethods, KeyOptions, Wallet} from '../../wallet.models';
-import {
-  subscribePushNotifications,
-  subscribeEmailNotifications,
-} from '../../../app/app.effects';
 import {t} from 'i18next';
 
 const BWC = BwcProvider.getInstance();
@@ -23,7 +19,6 @@ export const startJoinMultisig =
     return new Promise(async (resolve, reject) => {
       try {
         const {
-          APP: {emailNotifications, defaultLanguage},
           WALLET: {keys},
         } = getState();
         const walletData = BWC.parseSecret(opts.invitationCode as string);
@@ -42,19 +37,6 @@ export const startJoinMultisig =
 
         const _wallet = await joinMultisigWallet({key: _key, opts});
 
-        // subscribe new wallet to email notifications
-        if (
-          emailNotifications &&
-          emailNotifications.accepted &&
-          emailNotifications.email
-        ) {
-          const prefs = {
-            email: emailNotifications.email,
-            language: defaultLanguage,
-            unit: 'btc', // deprecated
-          };
-          dispatch(subscribeEmailNotifications(_wallet, prefs));
-        }
         const {currencyAbbreviation, currencyName} = dispatch(
           mapAbbreviationAndName(
             _wallet.credentials.coin,
@@ -94,10 +76,6 @@ export const addWalletJoinMultisig =
   async (dispatch, getState): Promise<Wallet> => {
     return new Promise(async (resolve, reject) => {
       try {
-        const {
-          APP: {notificationsAccepted, emailNotifications, defaultLanguage},
-        } = getState();
-
         const walletData = BWC.parseSecret(opts.invitationCode as string);
         opts.networkName = walletData.network;
         opts.coin = walletData.coin;
@@ -109,20 +87,6 @@ export const addWalletJoinMultisig =
           key: key.methods!,
           opts,
         })) as Wallet;
-
-        // subscribe new wallet to email notifications
-        if (
-          emailNotifications &&
-          emailNotifications.accepted &&
-          emailNotifications.email
-        ) {
-          const prefs = {
-            email: emailNotifications.email,
-            language: defaultLanguage,
-            unit: 'btc', // deprecated
-          };
-          dispatch(subscribeEmailNotifications(newWallet, prefs));
-        }
 
         const {currencyAbbreviation, currencyName} = dispatch(
           mapAbbreviationAndName(
