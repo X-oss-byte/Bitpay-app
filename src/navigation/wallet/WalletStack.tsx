@@ -13,7 +13,6 @@ import CurrencySelection, {
   CurrencySelectionParamList,
 } from './screens/CurrencySelection';
 import KeyOverview from './screens/KeyOverview';
-import KeyExplanation from './screens/KeyExplanation';
 import KeySettings from './screens/KeySettings';
 import WalletDetails, {
   WalletDetailsScreenParamList,
@@ -199,26 +198,26 @@ const WalletStack = () => {
         {/*<Wallet.Screen
           name={WalletScreens.CURRENCY_SELECTION}
           component={CurrencySelection}
-        />
-        <Wallet.Screen
+        />*/}
+        {/*<Wallet.Screen
           name={WalletScreens.CURRENCY_TOKEN_SELECTION}
           component={CurrencyTokenSelectionScreen}
-        />
-        <Wallet.Screen
+        />*/}
+        {/*<Wallet.Screen
           options={{
             ...TransitionPresets.DefaultTransition,
           }}
           name={WalletScreens.ADD_WALLET}
           component={AddWallet}
-        />
-        <Wallet.Screen
+        />*/}
+        {/*<Wallet.Screen
           options={{
             gestureEnabled: false,
             headerLeft: () => null,
           }}
           name={WalletScreens.BACKUP_KEY}
           component={Backup}
-        />
+        />*/}
         <Wallet.Screen
           name={WalletScreens.RECOVERY_PHRASE}
           component={RecoveryPhrase}
@@ -226,11 +225,7 @@ const WalletStack = () => {
         <Wallet.Screen
           name={WalletScreens.VERIFY_PHRASE}
           component={VerifyPhrase}
-        />*/}
-        {/*<Wallet.Screen
-          name={WalletScreens.KEY_EXPLANATION}
-          component={KeyExplanation}
-      />*/}
+        />
         <Wallet.Screen
           name={WalletScreens.KEY_SETTINGS}
           component={KeySettings}
@@ -248,10 +243,10 @@ const WalletStack = () => {
           component={WalletSettings}
         />
         <Wallet.Screen name={WalletScreens.IMPORT} component={Import} />
-        {/*<Wallet.Screen
+        <Wallet.Screen
           name={WalletScreens.CREATION_OPTIONS}
           component={CreationOptions}
-        />*/}
+        />
         <Wallet.Screen
           name={WalletScreens.CREATE_ENCRYPT_PASSWORD}
           component={CreateEncryptionPassword}
@@ -265,15 +260,15 @@ const WalletStack = () => {
         {/*<Wallet.Screen
           name={WalletScreens.TERMS_OF_USE}
           component={TermsOfUse}
-        />
-        <Wallet.Screen name={WalletScreens.AMOUNT} component={AmountScreen} />
-        <Wallet.Screen name={WalletScreens.SEND_TO} component={SendTo} />
-        <Wallet.Screen
+        />*/}
+        {/* <Wallet.Screen name={WalletScreens.AMOUNT} component={AmountScreen} />*/}
+        {/* <Wallet.Screen name={WalletScreens.SEND_TO} component={SendTo} />*/}
+        {/* <Wallet.Screen
           options={{gestureEnabled: false}}
           name={WalletScreens.CONFIRM}
           component={Confirm}
-        />
-        <Wallet.Screen
+        />*/}
+        {/* <Wallet.Screen
           options={{
             headerTitle: () => (
               <HeaderTitle>{t('Confirm Payment')}</HeaderTitle>
@@ -281,8 +276,8 @@ const WalletStack = () => {
           }}
           name={WalletScreens.PAY_PRO_CONFIRM}
           component={PayProConfirm}
-        />
-        <Wallet.Screen
+        />*/}
+        {/*<Wallet.Screen
           options={{
             headerTitle: () => (
               <HeaderTitle>{t('Two-Step Verification')}</HeaderTitle>
@@ -355,7 +350,7 @@ const WalletStack = () => {
           name={WalletScreens.TERMS_OF_USE}
           component={TermsOfUse}
         />
-        {/*<Wallet.Screen
+        <Wallet.Screen
           options={{
             ...TransitionPresets.DefaultTransition,
           }}
@@ -385,13 +380,13 @@ const WalletStack = () => {
           name={WalletScreens.TRANSACTION_PROPOSAL_DETAILS}
           component={TransactionProposalDetails}
         />
-        <Wallet.Screen
+        {/* <Wallet.Screen
           options={{
             ...TransitionPresets.DefaultTransition,
           }}
           name={WalletScreens.TRANSACTION_PROPOSAL_NOTIFICATIONS}
           component={TransactionProposalNotifications}
-        />
+        />*/}
         <Wallet.Screen
           options={{
             headerTitle: () => (
@@ -407,7 +402,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.KEY_GLOBAL_SELECT}
           component={KeyGlobalSelect}
-        />*/}
+        />
         <Wallet.Screen
           name={WalletScreens.WALLET_INFORMATION}
           component={WalletInformation}
@@ -440,14 +435,14 @@ const WalletStack = () => {
           name={WalletScreens.CLEAR_ENCRYPT_PASSWORD}
           component={ClearEncryptPassword}
         />
-        {/*<Wallet.Screen
+        <Wallet.Screen
           name={WalletScreens.SEND_TO_OPTIONS}
           component={SendToOptions}
         />
         <Wallet.Screen
           name={WalletScreens.SELECT_INPUTS}
           component={SelectInputs}
-        />*/}
+        />
         <Wallet.Screen
           options={{
             headerTitle: () => (

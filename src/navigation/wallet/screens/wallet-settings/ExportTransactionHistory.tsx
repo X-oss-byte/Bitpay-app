@@ -233,42 +233,38 @@ const ExportTransactionHistory = () => {
   };
 
   const shareFile = async (csv: any, option: string) => {
-    try {
-      if (Platform.OS === 'android') {
-        await isAndroidStoragePermissionGranted();
-      }
-      const rootPath =
-        Platform.OS === 'ios'
-          ? RNFS.LibraryDirectoryPath
-          : RNFS.TemporaryDirectoryPath;
-      const csvFilename = `${APP_NAME_UPPERCASE}-${walletName}`;
-      let filePath = `${rootPath}/${csvFilename}`;
-
-      await RNFS.mkdir(filePath);
-
-      filePath += '.csv';
-      const opts: ShareOptions = {
-        title: csvFilename,
-        url: `file://${filePath}`,
-        subject: `${walletName} Transaction History`,
-      };
-
-      await RNFS.writeFile(filePath, csv, 'utf8');
-
-      if (option === 'download') {
-        await Share.open(opts);
-      } else {
-        // TODO: unsupported Mail on Dekstop app
-        //  handleEmail(opts.subject!, filePath);
-      }
-    } catch (err: any) {
-      dispatch(LogActions.debug(`[shareFile]: ${err.message}`));
-      if (err && err.message === 'User did not share') {
-        return;
-      } else {
-        throw err;
-      }
-    }
+    //   try {
+    //     if (Platform.OS === 'android') {
+    //       await isAndroidStoragePermissionGranted();
+    //     }
+    //     const rootPath =
+    //       Platform.OS === 'ios'
+    //         ? RNFS.LibraryDirectoryPath
+    //         : RNFS.TemporaryDirectoryPath;
+    //     const csvFilename = `${APP_NAME_UPPERCASE}-${walletName}`;
+    //     let filePath = `${rootPath}/${csvFilename}`;
+    //     await RNFS.mkdir(filePath);
+    //     filePath += '.csv';
+    //     const opts: ShareOptions = {
+    //       title: csvFilename,
+    //       url: `file://${filePath}`,
+    //       subject: `${walletName} Transaction History`,
+    //     };
+    //     await RNFS.writeFile(filePath, csv, 'utf8');
+    //     if (option === 'download') {
+    //       await Share.open(opts);
+    //     } else {
+    //       // TODO: unsupported Mail on Dekstop app
+    //       //  handleEmail(opts.subject!, filePath);
+    //     }
+    //   } catch (err: any) {
+    //     dispatch(LogActions.debug(`[shareFile]: ${err.message}`));
+    //     if (err && err.message === 'User did not share') {
+    //       return;
+    //     } else {
+    //       throw err;
+    //     }
+    //   }
   };
 
   const onSubmit = async (option: string) => {

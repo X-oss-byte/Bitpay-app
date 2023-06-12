@@ -395,7 +395,7 @@ const TransactionDetails = () => {
 
   return (
     <TxsDetailsContainer>
-      {isLoading &&  (
+      {isLoading && (
         <ScrollView
           keyboardShouldPersistTaps={'handled'}
           extraScrollHeight={80}>
@@ -611,7 +611,7 @@ const TransactionDetails = () => {
             </Button>
           </VerticalSpace>
         </ScrollView>
-      ) : null}
+      )}
     </TxsDetailsContainer>
   );
 };

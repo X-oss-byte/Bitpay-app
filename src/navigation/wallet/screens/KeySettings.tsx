@@ -312,14 +312,6 @@ const KeySettings = () => {
 
         <WalletHeaderContainer>
           <Title>{t('Wallets')}</Title>
-          <InfoImageContainer infoMargin={'0 0 0 8px'}>
-            <TouchableOpacity
-              onPress={() => {
-                navigation.navigate('Wallet', {screen: 'KeyExplanation'});
-              }}>
-              <InfoSvg />
-            </TouchableOpacity>
-          </InfoImageContainer>
         </WalletHeaderContainer>
 
         {wallets.map(

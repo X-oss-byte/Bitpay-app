@@ -52,8 +52,6 @@ type AmountModalProps = AmountProps & {
   onSendMaxPressed?: () => any;
 };
 
-<StyledAmountModalContainer>{props.children}</StyledAmountModalContainer>;
-
 const AmountModal: React.VFC<AmountModalProps> = props => {
   const {onClose, onSendMaxPressed, isVisible, modalTitle, ...amountProps} =
     props;
