@@ -1,6 +1,6 @@
 import React, {ReactElement} from 'react';
 import styled from 'styled-components/native';
-import {View} from 'react-native';
+import {ScrollView, View} from 'react-native';
 import {BaseText} from '../styled/Text';
 import KeySvg from '../../../assets/img/key.svg';
 import {LightBlack, SlateDark, White} from '../../styles/colors';
@@ -8,12 +8,14 @@ import {Wallet} from '../../store/wallet/wallet.models';
 import {WalletRowProps} from './WalletRow';
 import WalletRow from './WalletRow';
 import {SvgProps} from 'react-native-svg';
+import {ScreenGutter} from '../styled/Containers';
 
 interface KeyWalletsRowContainerProps {
   isLast?: boolean;
 }
 
 const KeyWalletsRowContainer = styled.View<KeyWalletsRowContainerProps>`
+  padding: 0 ${ScreenGutter};
   margin-bottom: 0px;
   border-bottom-width: ${({isLast}) => (isLast ? 0 : 1)}px;
   border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : '#ECEFFD')};
@@ -72,7 +74,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
   hideBalance,
 }: KeyWalletProps<T>) => {
   return (
-    <View>
+    <ScrollView>
       {keyWallets.map((key, keyIndex) => (
         <KeyWalletsRowContainer
           key={key.key}
@@ -103,7 +105,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
           ))}
         </KeyWalletsRowContainer>
       ))}
-    </View>
+    </ScrollView>
   );
 };
 

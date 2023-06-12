@@ -7,8 +7,9 @@ import AngleRight from '../../../assets/img/angle-right.svg';
 import ContactIcon from '../../navigation/tabs/contacts/components/ContactIcon';
 import {getCurrencyAbbreviation} from '../../utils/helper-methods';
 
-const ContactContainer = styled.TouchableHighlight`
+const ContactContainer = styled.TouchableOpacity`
   padding: 10px 0px;
+  cursor: pointer;
 `;
 
 const ContactColumn = styled(Column)`

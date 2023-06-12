@@ -2,7 +2,9 @@ import React, {useEffect, useState} from 'react';
 import {AppActions} from '../../../store/app';
 import {ModalId} from '../../../store/app/app.reducer';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
-import {TouchableOpacity} from 'react-native';
+import {View, Pressable} from 'react-native';
+import {useTheme} from '@react-navigation/native';
+import {Black, White} from '../../../styles/colors';
 
 type ModalProps = {
   id: ModalId;
@@ -15,6 +17,7 @@ type ModalProps = {
 };
 
 const BaseModal: React.FC<ModalProps> = props => {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const activeModalId = useAppSelector(({APP}) => APP.activeModalId);
   const [isVisibleSafe, setVisibleSafe] = useState(false);
@@ -39,19 +42,22 @@ const BaseModal: React.FC<ModalProps> = props => {
     }
   }, [activeModalId, id, isVisible]);
   return isVisibleSafe ? (
-    <TouchableOpacity
-      activeOpacity={1}
-      style={{
-        position: 'absolute',
-        height: '100%',
-        width: '100%',
-        top: 0,
-        left: 0,
-        backgroundColor: 'rgba(0,0,0,0.5)',
-      }}
-      onPress={props.onBackdropPress}>
-      <TouchableOpacity
-        activeOpacity={1}
+    <>
+      <Pressable
+        style={{
+          position: 'absolute',
+          height: '100%',
+          width: '100%',
+          top: 0,
+          left: 0,
+          opacity: 0.3,
+          zIndex: 1,
+          backgroundColor: theme.dark ? White : Black,
+        }}
+        onPress={props.onBackdropPress}>
+        <View />
+      </Pressable>
+      <View
         style={{
           position: 'absolute',
           top: placement === 'top' ? 0 : undefined,
@@ -60,8 +66,8 @@ const BaseModal: React.FC<ModalProps> = props => {
           zIndex: isVisibleSafe ? 1000000 : undefined,
         }}>
         {props.children}
-      </TouchableOpacity>
-    </TouchableOpacity>
+      </View>
+    </>
   ) : null;
 };
 

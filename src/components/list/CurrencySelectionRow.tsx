@@ -2,7 +2,6 @@ import React, {memo, ReactElement, useCallback} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ImageRequireSource, View} from 'react-native';
 import styled from 'styled-components/native';
-import {IS_ANDROID} from '../../constants';
 import {SupportedCurrencyOption} from '../../constants/SupportedCurrencyOptions';
 import {CurrencySelectionMode} from '../../navigation/wallet/screens/CurrencySelection';
 import {

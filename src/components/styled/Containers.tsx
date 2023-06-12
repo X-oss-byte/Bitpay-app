@@ -10,6 +10,8 @@ import {
   Slate,
   NotificationPrimary,
   Action,
+  Slate30,
+  OledBlack,
 } from '../../styles/colors';
 import {BaseText} from './Text';
 
@@ -103,7 +105,7 @@ export const RowContainer = styled.TouchableOpacity<RowContainerProps>`
   align-items: center;
   padding: 10px 4px;
   margin: 0 6px;
-  border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : '#ECEFFD')};
+  border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : Slate30)};
   border-bottom-width: ${({isLast}) => (isLast ? 0 : 1)}px;
   cursor: pointer;
 `;
@@ -136,7 +138,7 @@ export interface SheetParams {
 
 export const SheetContainer = styled.View<SheetParams>`
   padding: 30px;
-  background-color: ${({theme}) => (theme.dark ? LightBlack : White)};
+  background-color: ${({theme}) => (theme.dark ? OledBlack : White)};
   justify-content: center;
   align-content: center;
   border-${({placement}: SheetParams) =>

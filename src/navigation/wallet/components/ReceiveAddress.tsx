@@ -106,7 +106,6 @@ const LoadingText = styled(H4)`
 
 const ReceiveAddressContainer = styled(SheetContainer)`
   background-color: ${({theme: {dark}}) => (dark ? LightBlack : White)};
-  min-height: 500px;
 `;
 
 const CloseButton = styled.TouchableOpacity`
@@ -309,7 +308,10 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
   };
 
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={_closeModal}>
+    <SheetModal
+      isVisible={isVisible}
+      onBackdropPress={_closeModal}
+      placement={'bottom'}>
       <ReceiveAddressContainer>
         {!singleAddress ? (
           <ReceiveAddressHeader

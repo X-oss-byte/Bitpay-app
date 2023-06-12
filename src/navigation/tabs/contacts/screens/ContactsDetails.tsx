@@ -8,7 +8,7 @@ import {useDispatch} from 'react-redux';
 import {ContactsStackParamList} from '../ContactsStack';
 import {getCurrencyAbbreviation, sleep} from '../../../../utils/helper-methods';
 import {BaseText, TextAlign} from '../../../../components/styled/Text';
-import {Hr} from '../../../../components/styled/Containers';
+import {Hr, ScreenGutter} from '../../../../components/styled/Containers';
 import {
   NeutralSlate,
   SlateDark,
@@ -37,12 +37,8 @@ const ContactsDetailsContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const DetailsScrollContainer = styled.ScrollView`
-  padding: 0 15px;
-`;
-
-const Details = styled.View`
-  margin-top: 20px;
+const DetailsScrollContainer = styled.View`
+  padding: 20px ${ScreenGutter};
 `;
 
 const Detail = styled.View`
@@ -293,77 +289,75 @@ const ContactsDetails = ({
             chain={contact.chain}
           />
         </ContactImageHeader>
-        <Details>
-          {contact.email ? (
-            <>
-              <Detail>
-                <Title>{t('Email')}</Title>
-                <DetailInfo align="right">{contact.email}</DetailInfo>
-              </Detail>
-              <Hr />
-            </>
-          ) : null}
-          <Detail>
-            <Title>{t('Name')}</Title>
-            <DetailInfo align="right">{contact.name}</DetailInfo>
-          </Detail>
-          <Hr />
-          <Detail>
-            <Title>{t('Address')}</Title>
-            <DetailInfo align="right">
-              <AddressContainer onPress={copyToClipboard} activeOpacity={0.7}>
-                <CopyImgContainer>
-                  {copied ? <CopiedSvg width={17} /> : null}
-                </CopyImgContainer>
-                <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
-                  {contact.address}
-                </AddressText>
-              </AddressContainer>
-            </DetailInfo>
-          </Detail>
-          {contact.network !== 'livenet' ? (
-            <>
-              <Hr />
-              <Detail>
-                <Title>{t('Network')}</Title>
-                <DetailInfo align="right">{contact.network}</DetailInfo>
-              </Detail>
-            </>
-          ) : null}
-          {contact.coin ? (
-            <>
-              <Hr />
-              <Detail>
-                <Title>{t('Coin')}</Title>
-                <DetailInfo align="right">
-                  {contact.coin.toUpperCase()}
-                </DetailInfo>
-              </Detail>
-            </>
-          ) : null}
-          {contact.chain && IsERCToken(contact.coin, contact.chain) ? (
-            <>
-              <Hr />
-              <Detail>
-                <Title>{t('Chain')}</Title>
-                <DetailInfo align="right">
-                  {contact.chain.toUpperCase()}
-                </DetailInfo>
-              </Detail>
-            </>
-          ) : null}
-          {contact.tag || contact.destinationTag ? (
-            <>
-              <Hr />
-              <Detail>
-                <Title>{t('Tag')}</Title>
-                <DetailInfo align="right">
-                  {contact.tag || contact.destinationTag}
-                </DetailInfo>
-              </Detail>
-            </>
-          ) : null}
-        </Details>
+        {contact.email ? (
+          <>
+            <Detail>
+              <Title>{t('Email')}</Title>
+              <DetailInfo align="right">{contact.email}</DetailInfo>
+            </Detail>
+            <Hr />
+          </>
+        ) : null}
+        <Detail>
+          <Title>{t('Name')}</Title>
+          <DetailInfo align="right">{contact.name}</DetailInfo>
+        </Detail>
+        <Hr />
+        <Detail>
+          <Title>{t('Address')}</Title>
+          <DetailInfo align="right">
+            <AddressContainer onPress={copyToClipboard} activeOpacity={0.7}>
+              <CopyImgContainer>
+                {copied ? <CopiedSvg width={17} /> : null}
+              </CopyImgContainer>
+              <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
+                {contact.address}
+              </AddressText>
+            </AddressContainer>
+          </DetailInfo>
+        </Detail>
+        {contact.network !== 'livenet' ? (
+          <>
+            <Hr />
+            <Detail>
+              <Title>{t('Network')}</Title>
+              <DetailInfo align="right">{contact.network}</DetailInfo>
+            </Detail>
+          </>
+        ) : null}
+        {contact.coin ? (
+          <>
+            <Hr />
+            <Detail>
+              <Title>{t('Coin')}</Title>
+              <DetailInfo align="right">
+                {contact.coin.toUpperCase()}
+              </DetailInfo>
+            </Detail>
+          </>
+        ) : null}
+        {contact.chain && IsERCToken(contact.coin, contact.chain) ? (
+          <>
+            <Hr />
+            <Detail>
+              <Title>{t('Chain')}</Title>
+              <DetailInfo align="right">
+                {contact.chain.toUpperCase()}
+              </DetailInfo>
+            </Detail>
+          </>
+        ) : null}
+        {contact.tag || contact.destinationTag ? (
+          <>
+            <Hr />
+            <Detail>
+              <Title>{t('Tag')}</Title>
+              <DetailInfo align="right">
+                {contact.tag || contact.destinationTag}
+              </DetailInfo>
+            </Detail>
+          </>
+        ) : null}
       </DetailsScrollContainer>
 
       <SheetModal

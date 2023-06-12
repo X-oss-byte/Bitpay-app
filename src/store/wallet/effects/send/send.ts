@@ -67,7 +67,7 @@ import {Rates} from '../../../rate/rate.models';
 import {getCoinAndChainFromCurrencyCode} from '../../../../navigation/bitpay-id/utils/bitpay-id-utils';
 import {navigationRef} from '../../../../Root';
 import {WalletScreens} from '../../../../navigation/wallet/WalletStack';
-// import {keyBackupRequired} from '../../../../navigation/tabs/home/components/Crypto';
+import {keyBackupRequired} from '../../../../navigation/tabs/home/components/Crypto';
 
 export const createProposalAndBuildTxDetails =
   (

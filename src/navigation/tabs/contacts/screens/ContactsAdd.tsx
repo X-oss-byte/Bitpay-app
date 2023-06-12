@@ -25,6 +25,7 @@ import {
   SearchContainer,
   SearchInput,
   Column,
+  ScreenGutter,
 } from '../../../../components/styled/Containers';
 import {ValidateCoinAddress} from '../../../../store/wallet/utils/validations';
 import {GetCoinAndNetwork} from '../../../../store/wallet/effects/address/address';
@@ -37,7 +38,6 @@ import {
 } from '../../../../store/contact/contact.actions';
 import SuccessIcon from '../../../../../assets/img/success.svg';
 import SearchSvg from '../../../../../assets/img/search.svg';
-import ScanSvg from '../../../../../assets/img/onboarding/scan.svg';
 import SheetModal from '../../../../components/modal/base/sheet/SheetModal';
 import {
   keyExtractor,
@@ -77,10 +77,14 @@ const ActionContainer = styled.View`
   margin-top: 30px;
 `;
 
-const Container = styled.ScrollView`
+const Container = styled.SafeAreaView`
   flex: 1;
-  padding: 0 20px;
-  margin-top: 20px;
+`;
+
+const ContainerScroll = styled.View`
+  width: 100%;
+  height: 100%;
+  padding: 20px ${ScreenGutter};
 `;
 
 const AddressBadge = styled.View`
@@ -90,15 +94,8 @@ const AddressBadge = styled.View`
   top: 50%;
 `;
 
-const ScanButtonContainer = styled.TouchableOpacity`
-  position: absolute;
-  right: 5px;
-  top: 32px;
-`;
-
 const CurrencySelectionModalContainer = styled(SheetContainer)`
   padding: 15px;
-  min-height: 200px;
 `;
 
 const CurrencySelectorContainer = styled.View<{hideSelector?: boolean}>`
@@ -502,18 +499,6 @@ const ContactsAdd = ({
     [],
   );
 
-  const goToScan = () => {
-    navigation.navigate('Scan', {
-      screen: 'Root',
-      params: {
-        onScanComplete: address => {
-          setValue('address', address, {shouldDirty: true});
-          processAddress(address);
-        },
-      },
-    });
-  };
-
   useEffect(() => {
     if (contact) {
       processAddress(
@@ -531,133 +516,195 @@ const ContactsAdd = ({
   }, [contact]);
 
   return (
-    <Container keyboardShouldPersistTaps="handled">
-      <InputContainer>
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BoxInput
-              placeholder={'Satoshi Nakamoto'}
-              label={t('NAME')}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              error={errors.name?.message}
-              value={value}
-              autoCorrect={false}
-            />
-          )}
-          name="name"
-          defaultValue=""
-        />
-      </InputContainer>
-      <InputContainer>
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BoxInput
-              placeholder={'satoshi@example.com'}
-              label={t('EMAIL (OPTIONAL)')}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              error={errors.email?.message}
-              value={value}
-            />
-          )}
-          name="email"
-          defaultValue=""
-        />
-      </InputContainer>
-      {!contact ? (
+    <Container>
+      <ContainerScroll>
         <InputContainer>
           <Controller
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <BoxInput
-                placeholder={'Crypto address'}
-                label={t('ADDRESS')}
+                placeholder={'Satoshi Nakamoto'}
+                label={t('NAME')}
                 onBlur={onBlur}
-                onChangeText={(newValue: string) => {
-                  onChange(newValue);
-                  processAddress(newValue);
-                }}
-                error={errors.address?.message}
+                onChangeText={onChange}
+                error={errors.name?.message}
                 value={value}
+                autoCorrect={false}
               />
             )}
-            name="address"
+            name="name"
             defaultValue=""
           />
-          {addressValue && dirtyFields.address ? (
-            <AddressBadge>
-              <SuccessIcon />
-            </AddressBadge>
-          ) : (
-            <ScanButtonContainer onPress={goToScan}>
-              <ScanSvg />
-            </ScanButtonContainer>
-          )}
         </InputContainer>
-      ) : (
         <InputContainer>
           <Controller
             control={control}
-            render={({field: {value}}) => (
-              <BoxInput disabled={true} label={t('ADDRESS')} value={value} />
+            render={({field: {onChange, onBlur, value}}) => (
+              <BoxInput
+                placeholder={'satoshi@example.com'}
+                label={t('EMAIL (OPTIONAL)')}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                error={errors.email?.message}
+                value={value}
+              />
             )}
-            name="address"
+            name="email"
             defaultValue=""
           />
         </InputContainer>
-      )}
+        {!contact ? (
+          <InputContainer>
+            <Controller
+              control={control}
+              render={({field: {onChange, onBlur, value}}) => (
+                <BoxInput
+                  placeholder={'Crypto address'}
+                  label={t('ADDRESS')}
+                  onBlur={onBlur}
+                  onChangeText={(newValue: string) => {
+                    onChange(newValue);
+                    processAddress(newValue);
+                  }}
+                  error={errors.address?.message}
+                  value={value}
+                />
+              )}
+              name="address"
+              defaultValue=""
+            />
+            {addressValue && dirtyFields.address ? (
+              <AddressBadge>
+                <SuccessIcon />
+              </AddressBadge>
+            ) : null}
+          </InputContainer>
+        ) : (
+          <InputContainer>
+            <Controller
+              control={control}
+              render={({field: {value}}) => (
+                <BoxInput disabled={true} label={t('ADDRESS')} value={value} />
+              )}
+              name="address"
+              defaultValue=""
+            />
+          </InputContainer>
+        )}
 
-      {!contact && evmValidAddress ? (
-        <IsTokenAddressContainer
-          onPress={() => {
-            _setIsTokenAddress();
-          }}>
-          <Column>
-            <IsTokenAddressTitle>
-              {t('Is this a token address?')}
-            </IsTokenAddressTitle>
-          </Column>
-          <CheckBoxContainer>
-            <Checkbox
-              checked={isTokenAddress}
+        {!contact && evmValidAddress ? (
+          <IsTokenAddressContainer
+            onPress={() => {
+              _setIsTokenAddress();
+            }}>
+            <Column>
+              <IsTokenAddressTitle>
+                {t('Is this a token address?')}
+              </IsTokenAddressTitle>
+            </Column>
+            <CheckBoxContainer>
+              <Checkbox
+                checked={isTokenAddress}
+                onPress={() => {
+                  _setIsTokenAddress();
+                }}
+              />
+            </CheckBoxContainer>
+          </IsTokenAddressContainer>
+        ) : null}
+
+        <InputContainer hideInput={!xrpValidAddress}>
+          <Controller
+            control={control}
+            render={({field: {onChange, onBlur, value}}) => (
+              <BoxInput
+                placeholder={'Tag'}
+                label={t('TAG')}
+                onBlur={onBlur}
+                onChangeText={onChange}
+                error={errors.destinationTag?.message}
+                keyboardType={'number-pad'}
+                type={'number'}
+                maxLength={9}
+                value={value?.toString()}
+              />
+            )}
+            name="destinationTag"
+          />
+        </InputContainer>
+
+        {!contact ? (
+          <CurrencySelectorContainer hideSelector={!evmValidAddress}>
+            <Label>{isTokenAddress ? t('CHAIN') : t('CURRENCY')}</Label>
+            <CurrencyContainer
+              activeOpacity={ActiveOpacity}
               onPress={() => {
-                _setIsTokenAddress();
-              }}
-            />
-          </CheckBoxContainer>
-        </IsTokenAddressContainer>
-      ) : null}
+                setCurrencyModalVisible(true);
+              }}>
+              <Row
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <Row style={{alignItems: 'center'}}>
+                  {selectedCurrency ? (
+                    <View>
+                      <CurrencyImage img={selectedCurrency.img} size={30} />
+                    </View>
+                  ) : null}
+                  <CurrencyName>
+                    {selectedCurrency?.currencyAbbreviation.toUpperCase()}
+                  </CurrencyName>
+                </Row>
+                <WalletIcons.DownToggle />
+              </Row>
+            </CurrencyContainer>
+          </CurrencySelectorContainer>
+        ) : null}
 
-      <InputContainer hideInput={!xrpValidAddress}>
-        <Controller
-          control={control}
-          render={({field: {onChange, onBlur, value}}) => (
-            <BoxInput
-              placeholder={'Tag'}
-              label={t('TAG')}
-              onBlur={onBlur}
-              onChangeText={onChange}
-              error={errors.destinationTag?.message}
-              keyboardType={'number-pad'}
-              type={'number'}
-              maxLength={9}
-              value={value?.toString()}
-            />
-          )}
-          name="destinationTag"
-        />
-      </InputContainer>
+        {isTokenAddress ? (
+          <CurrencySelectorContainer hideSelector={!evmValidAddress}>
+            <Label>{t('TOKEN')}</Label>
+            <CurrencyContainer
+              activeOpacity={ActiveOpacity}
+              onPress={() => {
+                setTokenModalVisible(true);
+              }}>
+              <Row
+                style={{
+                  alignItems: 'center',
+                  justifyContent: 'space-between',
+                }}>
+                <Row style={{alignItems: 'center'}}>
+                  {selectedToken ? (
+                    <View>
+                      <CurrencyImage
+                        img={selectedToken?.img}
+                        imgSrc={
+                          typeof selectedToken?.imgSrc === 'number'
+                            ? selectedToken?.imgSrc
+                            : undefined
+                        }
+                        size={30}
+                        badgeUri={selectedToken?.badgeUri}
+                      />
+                    </View>
+                  ) : null}
+                  <CurrencyName>{selectedToken?.currencyName}</CurrencyName>
+                </Row>
+                <WalletIcons.DownToggle />
+              </Row>
+            </CurrencyContainer>
+          </CurrencySelectorContainer>
+        ) : null}
 
-      {!contact ? (
-        <CurrencySelectorContainer hideSelector={!evmValidAddress}>
-          <Label>{isTokenAddress ? t('CHAIN') : t('CURRENCY')}</Label>
+        <CurrencySelectorContainer
+          hideSelector={!isDev || !(xrpValidAddress || evmValidAddress)}>
+          <Label>{t('NETWORK')}</Label>
           <CurrencyContainer
             activeOpacity={ActiveOpacity}
             onPress={() => {
-              setCurrencyModalVisible(true);
+              setNetworkModalVisible(true);
             }}>
             <Row
               style={{
@@ -665,84 +712,21 @@ const ContactsAdd = ({
                 justifyContent: 'space-between',
               }}>
               <Row style={{alignItems: 'center'}}>
-                {selectedCurrency ? (
-                  <View>
-                    <CurrencyImage img={selectedCurrency.img} size={30} />
-                  </View>
-                ) : null}
-                <CurrencyName>
-                  {selectedCurrency?.currencyAbbreviation.toUpperCase()}
-                </CurrencyName>
+                <NetworkName>{networkValue}</NetworkName>
               </Row>
               <WalletIcons.DownToggle />
             </Row>
           </CurrencyContainer>
         </CurrencySelectorContainer>
-      ) : null}
 
-      {isTokenAddress ? (
-        <CurrencySelectorContainer hideSelector={!evmValidAddress}>
-          <Label>{t('TOKEN')}</Label>
-          <CurrencyContainer
-            activeOpacity={ActiveOpacity}
-            onPress={() => {
-              setTokenModalVisible(true);
-            }}>
-            <Row
-              style={{
-                alignItems: 'center',
-                justifyContent: 'space-between',
-              }}>
-              <Row style={{alignItems: 'center'}}>
-                {selectedToken ? (
-                  <View>
-                    <CurrencyImage
-                      img={selectedToken?.img}
-                      imgSrc={
-                        typeof selectedToken?.imgSrc === 'number'
-                          ? selectedToken?.imgSrc
-                          : undefined
-                      }
-                      size={30}
-                      badgeUri={selectedToken?.badgeUri}
-                    />
-                  </View>
-                ) : null}
-                <CurrencyName>{selectedToken?.currencyName}</CurrencyName>
-              </Row>
-              <WalletIcons.DownToggle />
-            </Row>
-          </CurrencyContainer>
-        </CurrencySelectorContainer>
-      ) : null}
-
-      <CurrencySelectorContainer
-        hideSelector={!isDev || !(xrpValidAddress || evmValidAddress)}>
-        <Label>{t('NETWORK')}</Label>
-        <CurrencyContainer
-          activeOpacity={ActiveOpacity}
-          onPress={() => {
-            setNetworkModalVisible(true);
-          }}>
-          <Row
-            style={{
-              alignItems: 'center',
-              justifyContent: 'space-between',
-            }}>
-            <Row style={{alignItems: 'center'}}>
-              <NetworkName>{networkValue}</NetworkName>
-            </Row>
-            <WalletIcons.DownToggle />
-          </Row>
-        </CurrencyContainer>
-      </CurrencySelectorContainer>
-
-      <ActionContainer>
-        <Button onPress={onSubmit}>
-          {contact ? t('Save Contact') : t('Add Contact')}
-        </Button>
-      </ActionContainer>
+        <ActionContainer>
+          <Button onPress={onSubmit}>
+            {contact ? t('Save Contact') : t('Add Contact')}
+          </Button>
+        </ActionContainer>
+      </ContainerScroll>
       <SheetModal
+        placement={'bottom'}
         isVisible={currencyModalVisible}
         onBackdropPress={() => setCurrencyModalVisible(false)}>
         <CurrencySelectionModalContainer>
@@ -750,7 +734,6 @@ const ContactsAdd = ({
             <H4>{isTokenAddress ? t('Select a Chain') : t('Select a Coin')}</H4>
           </TextAlign>
           <FlatList
-            contentContainerStyle={{minHeight: '100%'}}
             data={SupportedEvmCurrencyOptions}
             keyExtractor={keyExtractor}
             renderItem={renderItem}
@@ -758,6 +741,7 @@ const ContactsAdd = ({
         </CurrencySelectionModalContainer>
       </SheetModal>
       <SheetModal
+        placement={'bottom'}
         isVisible={tokenModalVisible}
         onBackdropPress={() => setTokenModalVisible(false)}>
         <CurrencySelectionModalContainer>
@@ -798,6 +782,7 @@ const ContactsAdd = ({
         </CurrencySelectionModalContainer>
       </SheetModal>
       <SheetModal
+        placement={'bottom'}
         isVisible={networkModalVisible}
         onBackdropPress={() => setNetworkModalVisible(false)}>
         <CurrencySelectionModalContainer>

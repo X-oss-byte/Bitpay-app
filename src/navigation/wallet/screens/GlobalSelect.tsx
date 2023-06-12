@@ -16,7 +16,7 @@ import {
   keyExtractor,
   sleep,
 } from '../../../utils/helper-methods';
-import {FlatList, TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import GlobalSelectRow from '../../../components/list/GlobalSelectRow';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 import {ScreenGutter} from '../../../components/styled/Containers';
@@ -89,16 +89,10 @@ const SafeAreaView = styled.SafeAreaView`
   flex: 1;
 `;
 
-const GlobalSelectContainer = styled.View`
-  padding: ${ScreenGutter};
-`;
-
 export const WalletSelectMenuContainer = styled.View`
   background: ${({theme: {dark}}) => (dark ? LightBlack : White)};
   border-top-left-radius: 12px;
   border-top-right-radius: 12px;
-  max-height: 75%;
-  padding-bottom: 20px;
 `;
 
 export interface WalletSelectMenuHeaderContainerParams {
@@ -599,7 +593,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           )}
         </ModalHeader>
       )}
-      <GlobalSelectContainer>
+      <View>
         {data.length > 0 && (
           <FlatList
             contentContainerStyle={{paddingBottom: 100}}
@@ -616,6 +610,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           </NoWalletsMsg>
         )}
         <SheetModal
+          placement={'bottom'}
           isVisible={walletSelectModalVisible}
           onBackdropPress={() => setWalletSelectModalVisible(false)}>
           <WalletSelectMenuContainer>
@@ -649,7 +644,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
             wallet={receiveWallet}
           />
         )}
-      </GlobalSelectContainer>
+      </View>
     </SafeAreaView>
   );
 };
