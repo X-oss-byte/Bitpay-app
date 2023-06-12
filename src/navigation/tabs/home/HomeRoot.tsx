@@ -20,6 +20,11 @@ import PortfolioBalance from './components/PortfolioBalance';
 import {HeaderContainer, HomeContainer} from './components/Styled';
 import {ProposalBadgeContainer} from '../../../components/styled/Containers';
 import {ProposalBadge} from '../../../components/styled/Text';
+import LinkingButtons from './components/LinkingButtons';
+import {
+  receiveCrypto,
+  sendCrypto,
+} from '../../../store/wallet/effects/send/send';
 
 const HomeRoot = () => {
   const {t} = useTranslation();
@@ -36,6 +41,7 @@ const HomeRoot = () => {
   const {appIsLoading, defaultAltCurrency, showPortfolioValue} = useAppSelector(
     ({APP}) => APP,
   );
+  const hasKeys = Object.values(keys).length;
 
   // Exchange Rates
   const priceHistory = useAppSelector(({RATE}) => RATE.priceHistory);
@@ -107,6 +113,20 @@ const HomeRoot = () => {
           {showPortfolioValue ? (
             <HomeSection slimContainer={true}>
               <PortfolioBalance />
+            </HomeSection>
+          ) : null}
+
+          {/* ////////////////////////////// CTA BUY SWAP RECEIVE SEND BUTTONS */}
+          {hasKeys ? (
+            <HomeSection style={{marginBottom: 25}}>
+              <LinkingButtons
+                receive={{
+                  cta: () => dispatch(receiveCrypto(navigation, 'HomeRoot')),
+                }}
+                send={{
+                  cta: () => dispatch(sendCrypto('HomeRoot')),
+                }}
+              />
             </HomeSection>
           ) : null}
 

@@ -59,6 +59,7 @@ import {
   shouldScale,
   sleep,
 } from '../../../utils/helper-methods';
+import LinkingButtons from '../../tabs/home/components/LinkingButtons';
 import {
   BalanceUpdateError,
   CustomErrorMessage,
@@ -331,7 +332,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
       // const address = (await dispatch<any>(
       //   createWalletAddress({wallet: fullWalletObj, newAddress: false}),
       // )) as string;
-
       // Share.share(
       //   {
       //     message: address,
@@ -986,6 +986,24 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
                     ) : null}
                   </Row>
                 </BalanceContainer>
+                {fullWalletObj ? (
+                  <LinkingButtons
+                    receive={{
+                      cta: () => {
+                        setShowReceiveAddressBottomModal(true);
+                      },
+                    }}
+                    send={{
+                      hide: !fullWalletObj.balance.sat,
+                      cta: () => {
+                        navigation.navigate('Wallet', {
+                          screen: 'SendTo',
+                          params: {wallet: fullWalletObj},
+                        });
+                      },
+                    }}
+                  />
+                ) : null}
               </HeaderContainer>
               {pendingTxps && pendingTxps[0] ? (
                 <>
