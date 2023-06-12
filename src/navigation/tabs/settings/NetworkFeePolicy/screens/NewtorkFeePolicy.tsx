@@ -15,12 +15,6 @@ import {
 } from '../../../../../store/wallet/utils/currency';
 import {
   evmAvgTime,
-  FeeLevelStep,
-  FeeLevelStepCircle,
-  FeeLevelStepContainer,
-  FeeLevelStepLine,
-  FeeLevelStepBottomLabel,
-  FeeLevelStepTopLabel,
   FeeLevelStepsHeader,
   FeeLevelStepsHeaderSubTitle,
 } from '../../../../wallet/screens/send/TransactionLevel';
@@ -34,13 +28,9 @@ import {useTranslation} from 'react-i18next';
 import i18next from 'i18next';
 import {SUPPORTED_EVM_COINS} from '../../../../../constants/currencies';
 
-const NetworkFeePolicyContainer = styled.SafeAreaView`
+const Container = styled.SafeAreaView`
   flex: 1;
-`;
-
-const ScrollView = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  padding: 20px ${ScreenGutter};
 `;
 
 const NetworkFeePolicyParagraph = styled(Paragraph)`
@@ -56,23 +46,26 @@ const CurrencyImageContainer = styled.View`
   margin-right: 10px;
 `;
 
-const StepsContainer = styled.View`
-  flex-direction: row;
-  margin: 0 0 ${ScreenGutter} 0;
-  padding: 0 3px;
-`;
-
-const BottomLabelContainer = styled.View`
-  justify-content: space-between;
-  flex-direction: row;
-`;
-
 const FeeOptionsContainer = styled.View`
   margin-bottom: 35px;
 `;
 
-const TopLabelContainer = styled.View`
-  min-height: 30px;
+const _Container = styled.View`
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-end;
+`;
+
+const _Element = styled.TouchableOpacity<{
+  backgroundColor: string;
+}>`
+  background: ${({backgroundColor}) => backgroundColor};
+  padding: 5px 10px;
+  cursor: pointer;
+`;
+
+const _Text = styled.Text`
+  color: ${({theme}) => theme.colors.text};
 `;
 
 const FeeOptions = ({
@@ -109,14 +102,6 @@ const FeeOptions = ({
     return '#E1E7E4';
   };
 
-  const isFirst = (index: number): boolean => {
-    return index === 0;
-  };
-
-  const isLast = (index: number, length: number): boolean => {
-    return index === length - 1;
-  };
-
   return (
     <FeeOptionsContainer>
       <StepsHeaderContainer>
@@ -139,64 +124,25 @@ const FeeOptions = ({
         </FeeLevelStepsHeaderSubTitle>
       </StepsHeaderContainer>
 
-      <StepsContainer>
-        {feeOptions.map((fee, i, {length}) => (
-          <FeeLevelStepContainer key={i} length={length - 1}>
-            <TopLabelContainer>
-              {!isFirst(i) &&
-              !isLast(i, length) &&
-              selectedLevel === fee.level ? (
-                <View style={{flexShrink: 1}}>
-                  <FeeLevelStepTopLabel length={length - 1} medium={true}>
-                    {fee.uiLevel}
-                  </FeeLevelStepTopLabel>
-                </View>
-              ) : null}
-            </TopLabelContainer>
-
-            <FeeLevelStep isLast={isLast(i, length)}>
-              <FeeLevelStepCircle
-                isActive={selectedLevel === fee.level}
-                onPress={() => {
-                  if (selectedLevel !== fee.level) {
-                    setSelectedLevel(fee.level);
-                    dispatch(
-                      updateCacheFeeLevel({
-                        currency: currencyAbbreviation,
-                        feeLevel: fee.level,
-                      }),
-                    );
-                  }
-                }}
-                backgroundColor={getBackgroundColor(i)}
-                style={[
-                  {
-                    shadowColor: '#000',
-                    shadowOffset: {width: -2, height: 4},
-                    shadowOpacity: selectedLevel === fee.level ? 0.1 : 0,
-                    shadowRadius: 5,
-                    borderRadius: 12,
-                    elevation: 3,
-                  },
-                ]}
-              />
-
-              {!isLast(i, length) ? (
-                <FeeLevelStepLine backgroundColor={getBackgroundColor(i + 1)} />
-              ) : null}
-            </FeeLevelStep>
-          </FeeLevelStepContainer>
+      <_Container>
+        {feeOptions.map((fee, i) => (
+          <_Element
+            backgroundColor={getBackgroundColor(i)}
+            onPress={() => {
+              if (selectedLevel !== fee.level) {
+                setSelectedLevel(fee.level);
+                dispatch(
+                  updateCacheFeeLevel({
+                    currency: currencyAbbreviation,
+                    feeLevel: fee.level,
+                  }),
+                );
+              }
+            }}>
+            <_Text>{fee.uiLevel}</_Text>
+          </_Element>
         ))}
-      </StepsContainer>
-
-      <BottomLabelContainer>
-        <FeeLevelStepBottomLabel>
-          {feeOptions[0].uiLevel}
-        </FeeLevelStepBottomLabel>
-        <FeeLevelStepBottomLabel>
-          {feeOptions[feeOptions.length - 1].uiLevel}
-        </FeeLevelStepBottomLabel>
-      </BottomLabelContainer>
+      </_Container>
     </FeeOptionsContainer>
   );
 };
@@ -279,49 +225,47 @@ const NetworkFeePolicy = () => {
   }, []);
 
   return (
-    <NetworkFeePolicyContainer>
-      <ScrollView>
-        <NetworkFeePolicyParagraph>
-          {t(
-            'The higher the fee, the greater the incentive a miner has to include that transaction in a block. Current fees are determined based on network load and the selected policy.',
-          )}
-        </NetworkFeePolicyParagraph>
-
-        {!isLoading && (
-          <>
-            <View>
-              {btcFeeOptions && btcFeeOptions.length > 0 ? (
-                <FeeOptions
-                  feeOptions={btcFeeOptions}
-                  currencyAbbreviation={'btc'}
-                  currencyName={'Bitcoin'}
-                />
-              ) : null}
-            </View>
-
-            <View>
-              {ethFeeOptions && ethFeeOptions.length > 0 ? (
-                <FeeOptions
-                  feeOptions={ethFeeOptions}
-                  currencyAbbreviation={'eth'}
-                  currencyName={'Ethereum'}
-                />
-              ) : null}
-            </View>
-
-            <View>
-              {maticFeeOptions && maticFeeOptions.length > 0 ? (
-                <FeeOptions
-                  feeOptions={maticFeeOptions}
-                  currencyAbbreviation={'matic'}
-                  currencyName={'Polygon'}
-                />
-              ) : null}
-            </View>
-          </>
+    <Container>
+      <NetworkFeePolicyParagraph>
+        {t(
+          'The higher the fee, the greater the incentive a miner has to include that transaction in a block. Current fees are determined based on network load and the selected policy.',
         )}
-      </ScrollView>
-    </NetworkFeePolicyContainer>
+      </NetworkFeePolicyParagraph>
+
+      {!isLoading && (
+        <>
+          <View>
+            {btcFeeOptions && btcFeeOptions.length > 0 ? (
+              <FeeOptions
+                feeOptions={btcFeeOptions}
+                currencyAbbreviation={'btc'}
+                currencyName={'Bitcoin'}
+              />
+            ) : null}
+          </View>
+
+          <View>
+            {ethFeeOptions && ethFeeOptions.length > 0 ? (
+              <FeeOptions
+                feeOptions={ethFeeOptions}
+                currencyAbbreviation={'eth'}
+                currencyName={'Ethereum'}
+              />
+            ) : null}
+          </View>
+
+          <View>
+            {maticFeeOptions && maticFeeOptions.length > 0 ? (
+              <FeeOptions
+                feeOptions={maticFeeOptions}
+                currencyAbbreviation={'matic'}
+                currencyName={'Polygon'}
+              />
+            ) : null}
+          </View>
+        </>
+      )}
+    </Container>
   );
 };
 
