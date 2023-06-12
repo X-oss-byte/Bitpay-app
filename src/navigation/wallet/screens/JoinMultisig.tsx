@@ -17,6 +17,7 @@ import {
   CtaContainer as _CtaContainer,
   HeaderContainer,
   ScanContainer,
+  ScreenGutter,
 } from '../../../components/styled/Containers';
 import {
   startJoinMultisig,
@@ -49,8 +50,8 @@ export const JoinContainer = styled.View`
 `;
 
 const ScrollViewContainer = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 15px;
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const CtaContainer = styled(_CtaContainer)`

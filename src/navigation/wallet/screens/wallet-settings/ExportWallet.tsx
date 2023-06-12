@@ -38,7 +38,8 @@ const ExportWalletContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled(KeyboardAwareScrollView)`
-  margin: 20px ${ScreenGutter} 0px;
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const PasswordFormContainer = styled.View`

@@ -26,7 +26,8 @@ const ClearEncryptPasswordContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin: 20px ${ScreenGutter} 0px;
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const ClearEncryptPasswordParagraph = styled(Paragraph)`

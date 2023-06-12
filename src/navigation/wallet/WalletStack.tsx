@@ -290,7 +290,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.PAY_PRO_CONFIRM_TWO_FACTOR}
           component={PayProConfirmTwoFactor}
-        />
+        />*/}
         <Wallet.Screen
           options={{
             headerTitle: () => (
@@ -315,7 +315,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.COPAYERS}
           component={Copayers}
-        />*/}
+        />
         <Wallet.Screen
           name={WalletScreens.CREATION_OPTIONS}
           component={CreationOptions}
