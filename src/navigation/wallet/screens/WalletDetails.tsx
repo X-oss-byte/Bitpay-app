@@ -20,8 +20,6 @@ import {
   RefreshControl,
   SectionList,
   Share,
-  Text,
-  View,
 } from 'react-native';
 import styled from 'styled-components/native';
 import Settings from '../../../components/settings/Settings';
@@ -329,31 +327,31 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
 
   const ShareAddress = async () => {
     try {
-      await sleep(1000);
-      const address = (await dispatch<any>(
-        createWalletAddress({wallet: fullWalletObj, newAddress: false}),
-      )) as string;
+      // await sleep(1000);
+      // const address = (await dispatch<any>(
+      //   createWalletAddress({wallet: fullWalletObj, newAddress: false}),
+      // )) as string;
 
-      Share.share(
-        {
-          message: address,
-          title: t('Share Address'),
-        },
-        {
-          dialogTitle: t('Share Address'),
-          subject: t('Share Address'),
-          excludedActivityTypes: [
-            'print',
-            'addToReadingList',
-            'markupAsPDF',
-            'openInIbooks',
-            'postToFacebook',
-            'postToTwitter',
-            'saveToCameraRoll',
-            'sharePlay',
-          ],
-        },
-      );
+      // Share.share(
+      //   {
+      //     message: address,
+      //     title: t('Share Address'),
+      //   },
+      //   {
+      //     dialogTitle: t('Share Address'),
+      //     subject: t('Share Address'),
+      //     excludedActivityTypes: [
+      //       'print',
+      //       'addToReadingList',
+      //       'markupAsPDF',
+      //       'openInIbooks',
+      //       'postToFacebook',
+      //       'postToTwitter',
+      //       'saveToCameraRoll',
+      //       'sharePlay',
+      //     ],
+      //   },
+      // );
     } catch (e) {}
   };
 
@@ -860,7 +858,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
             TransactionIcons[item.uiIcon]
           )
         }
-        iconURI={getGiftCardIcons(supportedCardMap)[item.uiIconURI]}
         description={item.uiDescription}
         time={item.uiTime}
         value={item.uiValue}

@@ -2,7 +2,7 @@ import React, {ReactElement, memo} from 'react';
 import {BaseText, ListItemSubText} from '../styled/Text';
 import styled from 'styled-components/native';
 import {ScreenGutter} from '../styled/Containers';
-import RemoteImage from '../../navigation/tabs/shop/components/RemoteImage';
+// import RemoteImage from '../../navigation/tabs/shop/components/RemoteImage';
 import {TRANSACTION_ICON_SIZE} from '../../constants/TransactionIcons';
 import {Action} from '../../styles/colors';
 export const TRANSACTION_ROW_HEIGHT = 75;
@@ -86,12 +86,12 @@ const TransactionRow = ({
     <TransactionContainer onPress={onPressTransaction}>
       {iconURI ? (
         <IconContainer>
-          <RemoteImage
+          {/* <RemoteImage
             borderRadius={50}
             fallbackComponent={() => icon as JSX.Element}
             height={TRANSACTION_ICON_SIZE}
             uri={iconURI}
-          />
+          /> */}
         </IconContainer>
       ) : (
         icon && <IconContainer>{icon}</IconContainer>

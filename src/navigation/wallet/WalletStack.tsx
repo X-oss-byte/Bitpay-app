@@ -194,37 +194,10 @@ const WalletStack = () => {
     <>
       <Wallet.Navigator
         screenOptions={{...baseNavigatorOptions, ...baseScreenOptions}}
-        initialRouteName={WalletScreens.CREATION_OPTIONS}>
-        {/*<Wallet.Screen
-          name={WalletScreens.CURRENCY_SELECTION}
-          component={CurrencySelection}
-        />*/}
-        {/*<Wallet.Screen
+        initialRouteName={WalletScreens.BACKUP_KEY}>
+        <Wallet.Screen
           name={WalletScreens.CURRENCY_TOKEN_SELECTION}
           component={CurrencyTokenSelectionScreen}
-        />*/}
-        {/*<Wallet.Screen
-          options={{
-            ...TransitionPresets.DefaultTransition,
-          }}
-          name={WalletScreens.ADD_WALLET}
-          component={AddWallet}
-        />*/}
-        {/*<Wallet.Screen
-          options={{
-            gestureEnabled: false,
-            headerLeft: () => null,
-          }}
-          name={WalletScreens.BACKUP_KEY}
-          component={Backup}
-        />*/}
-        <Wallet.Screen
-          name={WalletScreens.RECOVERY_PHRASE}
-          component={RecoveryPhrase}
-        />
-        <Wallet.Screen
-          name={WalletScreens.VERIFY_PHRASE}
-          component={VerifyPhrase}
         />
         <Wallet.Screen
           name={WalletScreens.KEY_SETTINGS}
@@ -234,19 +207,15 @@ const WalletStack = () => {
           name={WalletScreens.UPDATE_KEY_OR_WALLET_NAME}
           component={UpdateKeyOrWalletName}
         />
-        {/*<Wallet.Screen
+        <Wallet.Screen
           name={WalletScreens.WALLET_DETAILS}
           component={WalletDetails}
-        />*/}
+        />
         <Wallet.Screen
           name={WalletScreens.WALLET_SETTINGS}
           component={WalletSettings}
         />
         <Wallet.Screen name={WalletScreens.IMPORT} component={Import} />
-        <Wallet.Screen
-          name={WalletScreens.CREATION_OPTIONS}
-          component={CreationOptions}
-        />
         <Wallet.Screen
           name={WalletScreens.CREATE_ENCRYPT_PASSWORD}
           component={CreateEncryptionPassword}
@@ -257,11 +226,7 @@ const WalletStack = () => {
         />
         <Wallet.Screen name={WalletScreens.DELETE_KEY} component={DeleteKey} />
         <Wallet.Screen name={WalletScreens.EXPORT_KEY} component={ExportKey} />
-        {/*<Wallet.Screen
-          name={WalletScreens.TERMS_OF_USE}
-          component={TermsOfUse}
-        />*/}
-        {/* <Wallet.Screen name={WalletScreens.AMOUNT} component={AmountScreen} />*/}
+        <Wallet.Screen name={WalletScreens.AMOUNT} component={AmountScreen} />
         {/* <Wallet.Screen name={WalletScreens.SEND_TO} component={SendTo} />*/}
         {/* <Wallet.Screen
           options={{gestureEnabled: false}}
@@ -419,13 +384,6 @@ const WalletStack = () => {
           name={WalletScreens.ALL_ADDRESSES}
           component={AllAddresses}
         />
-        {/*<Wallet.Screen
-          options={{
-            ...TransitionPresets.DefaultTransition,
-          }}
-          name={WalletScreens.PRICE_CHARTS}
-          component={PriceCharts}
-        />*/}
         <Wallet.Screen
           options={{
             headerTitle: () => (
