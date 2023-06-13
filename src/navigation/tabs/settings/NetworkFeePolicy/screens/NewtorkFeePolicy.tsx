@@ -25,13 +25,11 @@ import {sleep} from '../../../../../utils/helper-methods';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
 import {updateCacheFeeLevel} from '../../../../../store/wallet/wallet.actions';
 import {useTranslation} from 'react-i18next';
-import i18next from 'i18next';
 import {SUPPORTED_EVM_COINS} from '../../../../../constants/currencies';
-
-const Container = styled.SafeAreaView`
-  flex: 1;
-  padding: 20px ${ScreenGutter};
-`;
+import {SettingsContainer, Settings} from '../../SettingsRoot';
+import Checkbox from '../../../../../components/checkbox/Checkbox';
+import {SettingTitle} from '../../../../../components/styled/Containers';
+import {Setting} from '../../../../../components/styled/Containers';
 
 const NetworkFeePolicyParagraph = styled(Paragraph)`
   color: ${({theme: {dark}}) => (dark ? White : SlateDark)};
@@ -50,24 +48,6 @@ const FeeOptionsContainer = styled.View`
   margin-bottom: 35px;
 `;
 
-const _Container = styled.View`
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: flex-end;
-`;
-
-const _Element = styled.TouchableOpacity<{
-  backgroundColor: string;
-}>`
-  background: ${({backgroundColor}) => backgroundColor};
-  padding: 5px 10px;
-  cursor: pointer;
-`;
-
-const _Text = styled.Text`
-  color: ${({theme}) => theme.colors.text};
-`;
-
 const FeeOptions = ({
   feeOptions,
   currencyAbbreviation,
@@ -78,6 +58,7 @@ const FeeOptions = ({
   currencyName: string;
 }) => {
   const dispatch = useAppDispatch();
+  const {t} = useTranslation();
   const cachedFeeLevels = useAppSelector(({WALLET}) => WALLET.feeLevel);
   const [selectedLevel, setSelectedLevel] = useState(
     cachedFeeLevels[currencyAbbreviation],
@@ -85,21 +66,6 @@ const FeeOptions = ({
 
   const getSelectedFeeOption = () => {
     return feeOptions?.find(({level}) => level === selectedLevel);
-  };
-
-  const getBackgroundColor = (index?: number) => {
-    const {coinColor: backgroundColor} = GetTheme(currencyAbbreviation)!;
-
-    if (index !== undefined) {
-      const selectedIndex =
-        feeOptions?.findIndex(({level}) => level === selectedLevel) || 0;
-
-      if (!(selectedIndex + 1 <= index)) {
-        return backgroundColor;
-      }
-    }
-
-    return '#E1E7E4';
   };
 
   return (
@@ -113,7 +79,7 @@ const FeeOptions = ({
             />
           </CurrencyImageContainer>
           <H4>
-            {currencyName} {i18next.t('Network Fee Policy')}
+            {currencyName} {t('Network Fee Policy')}
           </H4>
         </FeeLevelStepsHeader>
 
@@ -124,10 +90,11 @@ const FeeOptions = ({
         </FeeLevelStepsHeaderSubTitle>
       </StepsHeaderContainer>
 
-      <_Container>
-        {feeOptions.map((fee, i) => (
-          <_Element
-            backgroundColor={getBackgroundColor(i)}
+      {feeOptions.map((fee, i) => (
+        <Setting>
+          <SettingTitle>{fee.uiLevel}</SettingTitle>
+          <Checkbox
+            radio={true}
             onPress={() => {
               if (selectedLevel !== fee.level) {
                 setSelectedLevel(fee.level);
@@ -138,11 +105,11 @@ const FeeOptions = ({
                   }),
                 );
               }
-            }}>
-            <_Text>{fee.uiLevel}</_Text>
-          </_Element>
-        ))}
-      </_Container>
+            }}
+            checked={fee.level === selectedLevel}
+          />
+        </Setting>
+      ))}
     </FeeOptionsContainer>
   );
 };
@@ -225,47 +192,49 @@ const NetworkFeePolicy = () => {
   }, []);
 
   return (
-    <Container>
-      <NetworkFeePolicyParagraph>
-        {t(
-          'The higher the fee, the greater the incentive a miner has to include that transaction in a block. Current fees are determined based on network load and the selected policy.',
+    <SettingsContainer>
+      <Settings>
+        <NetworkFeePolicyParagraph>
+          {t(
+            'The higher the fee, the greater the incentive a miner has to include that transaction in a block. Current fees are determined based on network load and the selected policy.',
+          )}
+        </NetworkFeePolicyParagraph>
+
+        {!isLoading && (
+          <>
+            <View>
+              {btcFeeOptions && btcFeeOptions.length > 0 ? (
+                <FeeOptions
+                  feeOptions={btcFeeOptions}
+                  currencyAbbreviation={'btc'}
+                  currencyName={'Bitcoin'}
+                />
+              ) : null}
+            </View>
+
+            <View>
+              {ethFeeOptions && ethFeeOptions.length > 0 ? (
+                <FeeOptions
+                  feeOptions={ethFeeOptions}
+                  currencyAbbreviation={'eth'}
+                  currencyName={'Ethereum'}
+                />
+              ) : null}
+            </View>
+
+            <View>
+              {maticFeeOptions && maticFeeOptions.length > 0 ? (
+                <FeeOptions
+                  feeOptions={maticFeeOptions}
+                  currencyAbbreviation={'matic'}
+                  currencyName={'Polygon'}
+                />
+              ) : null}
+            </View>
+          </>
         )}
-      </NetworkFeePolicyParagraph>
-
-      {!isLoading && (
-        <>
-          <View>
-            {btcFeeOptions && btcFeeOptions.length > 0 ? (
-              <FeeOptions
-                feeOptions={btcFeeOptions}
-                currencyAbbreviation={'btc'}
-                currencyName={'Bitcoin'}
-              />
-            ) : null}
-          </View>
-
-          <View>
-            {ethFeeOptions && ethFeeOptions.length > 0 ? (
-              <FeeOptions
-                feeOptions={ethFeeOptions}
-                currencyAbbreviation={'eth'}
-                currencyName={'Ethereum'}
-              />
-            ) : null}
-          </View>
-
-          <View>
-            {maticFeeOptions && maticFeeOptions.length > 0 ? (
-              <FeeOptions
-                feeOptions={maticFeeOptions}
-                currencyAbbreviation={'matic'}
-                currencyName={'Polygon'}
-              />
-            ) : null}
-          </View>
-        </>
-      )}
-    </Container>
+      </Settings>
+    </SettingsContainer>
   );
 };
 

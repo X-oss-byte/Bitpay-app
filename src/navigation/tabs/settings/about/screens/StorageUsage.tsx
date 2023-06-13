@@ -3,7 +3,11 @@ import styled from 'styled-components/native';
 import {Platform} from 'react-native';
 import RNFS from 'react-native-fs';
 import {forEach} from 'lodash';
-import {SettingsComponent, SettingsContainer} from '../../SettingsRoot';
+import {
+  SettingsHome,
+  SettingsComponent,
+  SettingsContainer,
+} from '../../SettingsRoot';
 import {
   Hr,
   ScreenGutter,
@@ -15,7 +19,6 @@ import {useTranslation} from 'react-i18next';
 import {LogActions} from '../../../../../store/log';
 import {Black, Feather, LightBlack, White} from '../../../../../styles/colors';
 import {useAppSelector} from '../../../../../utils/hooks';
-import {APP_NETWORK} from '../../../../../constants/config';
 
 const HeaderTitle = styled(Setting)`
   margin-top: 20px;
@@ -32,7 +35,6 @@ const StorageUsage: React.VFC = () => {
   const {t} = useTranslation();
 
   const [walletsCount, setWalletsCount] = useState<number>(0);
-  const [giftCount, setGiftCount] = useState<number>(0);
   const [contactCount, setContactCount] = useState<number>(0);
   const [customTokenCount, setCustomTokenCount] = useState<number>(0);
 
@@ -126,61 +128,63 @@ const StorageUsage: React.VFC = () => {
 
   return (
     <SettingsContainer>
-      <HeaderTitle>
-        <SettingTitle>{t('Total Size')}</SettingTitle>
-      </HeaderTitle>
-      <SettingsComponent>
-        <Setting>
-          <SettingTitle>BitPay</SettingTitle>
+      <SettingsHome>
+        <HeaderTitle>
+          <SettingTitle>{t('Total Size')}</SettingTitle>
+        </HeaderTitle>
+        <SettingsComponent>
+          <Setting>
+            <SettingTitle>BitPay</SettingTitle>
 
-          <Button buttonType="pill">{appSize}</Button>
-        </Setting>
+            <Button buttonType="pill">{appSize}</Button>
+          </Setting>
 
-        <Hr />
+          <Hr />
 
-        <Setting>
-          <SettingTitle>{t('Free Disk Storage')}</SettingTitle>
+          <Setting>
+            <SettingTitle>{t('Free Disk Storage')}</SettingTitle>
 
-          <Button buttonType="pill">{deviceFreeStorage}</Button>
-        </Setting>
+            <Button buttonType="pill">{deviceFreeStorage}</Button>
+          </Setting>
 
-        <Hr />
-        <Setting>
-          <SettingTitle>{t('Total Disk Storage')}</SettingTitle>
+          <Hr />
+          <Setting>
+            <SettingTitle>{t('Total Disk Storage')}</SettingTitle>
 
-          <Button buttonType="pill">{deviceTotalStorage}</Button>
-        </Setting>
-      </SettingsComponent>
-      <HeaderTitle>
-        <SettingTitle>{t('Details')}</SettingTitle>
-      </HeaderTitle>
-      <SettingsComponent style={{marginBottom: 10}}>
-        <Setting>
-          <SettingTitle>
-            {t('Wallets')} ({walletsCount || '0'})
-          </SettingTitle>
+            <Button buttonType="pill">{deviceTotalStorage}</Button>
+          </Setting>
+        </SettingsComponent>
+        <HeaderTitle>
+          <SettingTitle>{t('Details')}</SettingTitle>
+        </HeaderTitle>
+        <SettingsComponent style={{marginBottom: 10}}>
+          <Setting>
+            <SettingTitle>
+              {t('Wallets')} ({walletsCount || '0'})
+            </SettingTitle>
 
-          <Button buttonType="pill">{walletStorage}</Button>
-        </Setting>
+            <Button buttonType="pill">{walletStorage}</Button>
+          </Setting>
 
-        <Hr />
-        <Setting>
-          <SettingTitle>
-            {t('Custom Tokens')} ({customTokenCount || '0'})
-          </SettingTitle>
+          <Hr />
+          <Setting>
+            <SettingTitle>
+              {t('Custom Tokens')} ({customTokenCount || '0'})
+            </SettingTitle>
 
-          <Button buttonType="pill">{customTokenStorage}</Button>
-        </Setting>
+            <Button buttonType="pill">{customTokenStorage}</Button>
+          </Setting>
 
-        <Hr />
-        <Setting>
-          <SettingTitle>
-            {t('Contacts')} ({contactCount || '0'})
-          </SettingTitle>
+          <Hr />
+          <Setting>
+            <SettingTitle>
+              {t('Contacts')} ({contactCount || '0'})
+            </SettingTitle>
 
-          <Button buttonType="pill">{contactStorage}</Button>
-        </Setting>
-      </SettingsComponent>
+            <Button buttonType="pill">{contactStorage}</Button>
+          </Setting>
+        </SettingsComponent>
+      </SettingsHome>
     </SettingsContainer>
   );
 };
