@@ -84,8 +84,8 @@ const TxpDetailsContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled(KeyboardAwareScrollView)`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const SubTitle = styled(BaseText)`

@@ -268,6 +268,10 @@ const WalletStack = () => {
           component={Copayers}
         />
         <Wallet.Screen
+          name={WalletScreens.ADDING_OPTIONS}
+          component={AddingOptions}
+        />
+        <Wallet.Screen
           name={WalletScreens.CREATION_OPTIONS}
           component={CreationOptions}
         />
