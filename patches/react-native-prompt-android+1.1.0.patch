@@ -1,0 +1,11 @@
+diff --git a/node_modules/react-native-prompt-android/index.macos.js b/node_modules/react-native-prompt-android/index.macos.js
+new file mode 100644
+index 0000000..c35c997
+--- /dev/null
++++ b/node_modules/react-native-prompt-android/index.macos.js
+@@ -0,0 +1,5 @@
++import { Alert } from 'react-native';
++
++export default function prompt(title, message, callbackOrButtons, options) {
++    Alert.prompt(title, message, callbackOrButtons, options.type, options.defaultValue, options.keyboardType);
++}

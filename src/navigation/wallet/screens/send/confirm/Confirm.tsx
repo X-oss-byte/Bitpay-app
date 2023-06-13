@@ -71,6 +71,7 @@ import {
   IsERCToken,
 } from '../../../../../store/wallet/utils/currency';
 import SendingToERC20Warning from '../../../components/SendingToERC20Warning';
+import prompt from 'react-native-prompt-android';
 
 const VerticalPadding = styled.View`
   padding: ${ScreenGutter} 0;
@@ -234,7 +235,10 @@ const Confirm = () => {
         },
       ],
       {
-        type: Platform.OS === 'ios' ? 'plain-text' : 'numeric',
+        type:
+          Platform.OS === 'ios' || Platform.OS === 'macos'
+            ? 'plain-text'
+            : 'numeric',
         cancelable: true,
         defaultValue: '',
         // @ts-ignore
