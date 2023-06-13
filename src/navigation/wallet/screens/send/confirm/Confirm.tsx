@@ -62,7 +62,7 @@ import {
   InfoTriangle,
   ScreenGutter,
 } from '../../../../../components/styled/Containers';
-import {Platform, TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 import {GetFeeOptions} from '../../../../../store/wallet/effects/fee/fee';
 import {Memo} from './Memo';
 import {toFiat} from '../../../../../store/wallet/utils/wallet';
@@ -71,7 +71,6 @@ import {
   IsERCToken,
 } from '../../../../../store/wallet/utils/currency';
 import SendingToERC20Warning from '../../../components/SendingToERC20Warning';
-import prompt from 'react-native-prompt-android';
 
 const VerticalPadding = styled.View`
   padding: ${ScreenGutter} 0;
@@ -200,7 +199,7 @@ const Confirm = () => {
   };
 
   const editValue = (title: string, type: string) => {
-    prompt(
+    Alert.prompt(
       title,
       '',
       [
@@ -234,16 +233,9 @@ const Confirm = () => {
           },
         },
       ],
-      {
-        type:
-          Platform.OS === 'ios' || Platform.OS === 'macos'
-            ? 'plain-text'
-            : 'numeric',
-        cancelable: true,
-        defaultValue: '',
-        // @ts-ignore
-        keyboardType: 'numeric',
-      },
+      'plain-text',
+      '',
+      'numeric',
     );
   };
 
