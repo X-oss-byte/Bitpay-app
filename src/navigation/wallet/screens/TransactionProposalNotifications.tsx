@@ -554,7 +554,7 @@ const TransactionProposalNotifications = () => {
         }}
         sections={allTxps}
         stickyHeaderIndices={[allTxps?.length]}
-        stickySectionHeadersEnabled={true}
+        stickySectionHeadersEnabled={false}
         keyExtractor={keyExtractor}
         renderItem={renderTxpByWallet}
         renderSectionHeader={({section: {title}}) => {

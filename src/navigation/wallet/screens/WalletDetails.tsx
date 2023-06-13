@@ -1067,7 +1067,7 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
         }}
         sections={groupedHistory}
         stickyHeaderIndices={[groupedHistory?.length]}
-        stickySectionHeadersEnabled={true}
+        stickySectionHeadersEnabled={false}
         keyExtractor={keyExtractor}
         renderItem={renderTransaction}
         renderSectionHeader={({section: {title}}) => {
