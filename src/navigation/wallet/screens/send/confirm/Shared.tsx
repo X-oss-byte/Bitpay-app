@@ -513,23 +513,11 @@ export const WalletSelector = ({
 
   const showSelector = useCallback(
     async autoSelect => {
-      const {keyWallets, coinbaseWallets} = walletsAndAccounts;
-      if (keyWallets.length || coinbaseWallets.length) {
+      const {keyWallets} = walletsAndAccounts;
+      if (keyWallets.length) {
         if (autoSelect) {
-          if (
-            keyWallets.length === 1 &&
-            keyWallets[0].wallets.length === 1 &&
-            coinbaseWallets.length === 0
-          ) {
+          if (keyWallets.length === 1 && keyWallets[0].wallets.length === 1) {
             return selectOption(() => onWalletSelect(keyWallets[0].wallets[0]));
-          } else if (
-            coinbaseWallets.length === 1 &&
-            coinbaseWallets[0].wallets.length === 1 &&
-            keyWallets.length === 0
-          ) {
-            return selectOption(() =>
-              onCoinbaseAccountSelect(coinbaseWallets[0].wallets[0]),
-            );
           }
         }
         await sleep(10);
@@ -552,15 +540,12 @@ export const WalletSelector = ({
     let hasWallets: boolean = false;
     let hasCoinbase: boolean = false;
 
-    const {keyWallets, coinbaseWallets} = walletsAndAccounts;
+    const {keyWallets} = walletsAndAccounts;
     if (keyWallets.length > 0 && keyWallets[0].wallets.length > 0) {
       hasWallets = true;
     }
-    if (coinbaseWallets.length > 0 && coinbaseWallets[0].wallets.length > 0) {
-      hasCoinbase = true;
-    }
 
-    if (!hasWallets && !hasCoinbase) {
+    if (!hasWallets) {
       setShowNoWalletsMessage(true);
     }
   }, [walletsAndAccounts]);
@@ -594,14 +579,6 @@ export const WalletSelector = ({
             keyWallets={walletsAndAccounts.keyWallets}
             hideBalance={hideAllBalances}
             onPress={wallet => selectOption(() => onWalletSelect(wallet), true)}
-          />
-          <KeyWalletsRow<WalletRowProps>
-            keyWallets={walletsAndAccounts.coinbaseWallets}
-            keySvg={CoinbaseSmall}
-            hideBalance={hideAllBalances}
-            onPress={account =>
-              selectOption(() => onCoinbaseAccountSelect(account), true)
-            }
           />
         </WalletSelectMenuBodyContainer>
       </WalletSelectMenuContainer>

@@ -233,7 +233,7 @@ const WalletStack = () => {
           name={WalletScreens.CONFIRM}
           component={Confirm}
         />
-        {/* <Wallet.Screen
+        <Wallet.Screen
           options={{
             headerTitle: () => (
               <HeaderTitle>{t('Confirm Payment')}</HeaderTitle>
@@ -241,16 +241,7 @@ const WalletStack = () => {
           }}
           name={WalletScreens.PAY_PRO_CONFIRM}
           component={PayProConfirm}
-        />*/}
-        {/*<Wallet.Screen
-          options={{
-            headerTitle: () => (
-              <HeaderTitle>{t('Two-Step Verification')}</HeaderTitle>
-            ),
-          }}
-          name={WalletScreens.PAY_PRO_CONFIRM_TWO_FACTOR}
-          component={PayProConfirmTwoFactor}
-        />*/}
+        />
         <Wallet.Screen
           options={{
             headerTitle: () => (
@@ -345,13 +336,13 @@ const WalletStack = () => {
           name={WalletScreens.TRANSACTION_PROPOSAL_DETAILS}
           component={TransactionProposalDetails}
         />
-        {/* <Wallet.Screen
+        <Wallet.Screen
           options={{
             ...TransitionPresets.DefaultTransition,
           }}
           name={WalletScreens.TRANSACTION_PROPOSAL_NOTIFICATIONS}
           component={TransactionProposalNotifications}
-        />*/}
+        />
         <Wallet.Screen
           options={{
             headerTitle: () => (

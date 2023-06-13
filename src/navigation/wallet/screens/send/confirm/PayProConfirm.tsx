@@ -2,7 +2,7 @@ import {RouteProp, StackActions} from '@react-navigation/core';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import React, {useEffect, useMemo, useState} from 'react';
 import {useTranslation} from 'react-i18next';
-import {WalletScreens, WalletStackParamList} from '../../../WalletStack';
+import {WalletStackParamList} from '../../../WalletStack';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
 import SecureLockIcon from '../../../../../../assets/img/secure-lock.svg';
 import {
@@ -13,7 +13,6 @@ import {
 } from '../../../../../store/wallet/wallet.models';
 import SwipeButton from '../../../../../components/swipe-button/SwipeButton';
 import {
-  buildTxDetails,
   createPayProTxProposal,
   handleCreateTxProposalError,
   removeTxp,
@@ -41,16 +40,39 @@ import {AppActions} from '../../../../../store/app';
 import {CustomErrorMessage} from '../../../components/ErrorMessages';
 import {PayProOptions} from '../../../../../store/wallet/effects/paypro/paypro';
 import {GetFeeOptions} from '../../../../../store/wallet/effects/fee/fee';
-import {WalletRowProps} from '../../../../../components/list/WalletRow';
-import {Invoice} from '../../../../../store/shop/shop.models';
-import {startGetRates} from '../../../../../store/wallet/effects';
-import {
-  CoinbaseAccountProps,
-  CoinbaseErrorMessages,
-} from '../../../../../api/coinbase/coinbase.types';
-import {coinbasePayInvoice} from '../../../../../store/coinbase';
 import {Memo} from './Memo';
 
+export interface InvoiceMinerFee {
+  satoshisPerByte: number;
+  totalFee: number;
+}
+export interface Invoice {
+  id: string;
+  url: string;
+  buyerProvidedInfo?: {
+    selectedTransactionCurrency?: string;
+  };
+  exchangeRates: any;
+  minerFees: {[currency: string]: InvoiceMinerFee};
+  paymentSubtotals: {[currency: string]: number};
+  paymentTotals: {[currency: string]: number};
+  paymentDisplayTotals: {[currency: string]: string};
+  price: number;
+  amountPaid: number;
+  displayAmountPaid: string;
+  nonPayProPaymentReceived?: boolean;
+  transactionCurrency: string;
+  status: 'new' | 'paid' | 'confirmed' | 'complete' | 'expired' | 'invalid';
+  expirationTime: number;
+  merchantName: string;
+  currency: string;
+  oauth?: {
+    coinbase?: {
+      enabled: boolean;
+      threshold: number;
+    };
+  };
+}
 export interface PayProConfirmParamList {
   wallet?: Wallet;
   recipient?: Recipient;
@@ -79,8 +101,6 @@ const PayProConfirm = () => {
   const [walletSelectorVisible, setWalletSelectorVisible] = useState(false);
 
   const [key, setKey] = useState(keys[_wallet ? _wallet.keyId : '']);
-  const [coinbaseAccount, setCoinbaseAccount] =
-    useState<CoinbaseAccountProps>();
   const [invoice, setInvoice] = useState<Invoice>(_invoice);
   const [wallet, setWallet] = useState(_wallet);
   const [recipient, setRecipient] = useState(_recipient);
@@ -182,28 +202,6 @@ const PayProConfirm = () => {
     );
   };
 
-  const onCoinbaseAccountSelect = async (walletRowProps: WalletRowProps) => {
-    dispatch(startOnGoingProcessModal('CREATING_TXP'));
-    const selectedCoinbaseAccount = walletRowProps.coinbaseAccount!;
-    try {
-      const rates = await dispatch(startGetRates({}));
-      const newTxDetails = dispatch(
-        buildTxDetails({
-          invoice,
-          wallet: walletRowProps,
-          rates,
-          defaultAltCurrencyIsoCode: defaultAltCurrency.isoCode,
-        }),
-      );
-      updateTxDetails(newTxDetails);
-      updateTxp(undefined);
-      setCoinbaseAccount(selectedCoinbaseAccount);
-      dispatch(dismissOnGoingProcessModal());
-    } catch (err) {
-      handleCreateGiftCardInvoiceOrTxpError(err);
-    }
-  };
-
   const onWalletSelect = async (selectedWallet: Wallet) => {
     setWalletSelectorVisible(false);
     // not ideal - will dive into why the timeout has to be this long
@@ -215,13 +213,7 @@ const PayProConfirm = () => {
     dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
     txp && wallet && recipient
       ? await dispatch(startSendPayment({txp, key, wallet, recipient}))
-      : await dispatch(
-          coinbasePayInvoice(
-            invoice!.id,
-            coinbaseAccount!.currency.code,
-            twoFactorCode,
-          ),
-        );
+      : null;
     dispatch(dismissOnGoingProcessModal());
     await sleep(400);
     setShowPaymentSentModal(true);
@@ -247,28 +239,6 @@ const PayProConfirm = () => {
     );
   };
 
-  const request2FA = async () => {
-    navigation.navigate('Wallet', {
-      screen: WalletScreens.PAY_PRO_CONFIRM_TWO_FACTOR,
-      params: {
-        onSubmit: async twoFactorCode => {
-          try {
-            await sendPayment(twoFactorCode);
-          } catch (error: any) {
-            dispatch(dismissOnGoingProcessModal());
-            const invalid2faMessage = CoinbaseErrorMessages.twoFactorInvalid;
-            error?.message?.includes(invalid2faMessage)
-              ? showError({defaultErrorMessage: invalid2faMessage})
-              : handlePaymentFailure(error);
-            throw error;
-          }
-        },
-      },
-    });
-    await sleep(400);
-    setResetSwipeButton(true);
-  };
-
   const handlePaymentFailure = async (error: any) => {
     dispatch(dismissOnGoingProcessModal());
     if (wallet && txp) {
@@ -279,7 +249,6 @@ const PayProConfirm = () => {
     updateTxDetails(undefined);
     updateTxp(undefined);
     setWallet(undefined);
-    setCoinbaseAccount(undefined);
     showError({
       error,
       defaultErrorMessage: t('Could not send transaction'),
@@ -316,7 +285,7 @@ const PayProConfirm = () => {
             }}
             hr
           />
-          {wallet || coinbaseAccount ? (
+          {wallet ? (
             <>
               <SendingFrom
                 sender={sendingFrom!}
@@ -359,10 +328,10 @@ const PayProConfirm = () => {
           setWalletSelectorVisible={setWalletSelectorVisible}
           walletsAndAccounts={memoizedKeysAndWalletsList}
           onWalletSelect={onWalletSelect}
-          onCoinbaseAccountSelect={onCoinbaseAccountSelect}
+          onCoinbaseAccountSelect={() => {}}
           onBackdropPress={async () => {
             setWalletSelectorVisible(false);
-            if (!wallet && !coinbaseAccount) {
+            if (!wallet) {
               await sleep(100);
               navigation.goBack();
             }
@@ -373,30 +342,19 @@ const PayProConfirm = () => {
           isVisible={showPaymentSentModal}
           onCloseModal={async () => {
             navigation.dispatch(StackActions.popToTop());
-            if (coinbaseAccount) {
-              navigation.dispatch(StackActions.pop(3));
-            }
-            coinbaseAccount
-              ? navigation.navigate('Coinbase', {
-                  screen: 'CoinbaseAccount',
-                  params: {
-                    accountId: coinbaseAccount.id,
-                    refresh: true,
-                  },
-                })
-              : navigation.navigate('Wallet', {
-                  screen: 'WalletDetails',
-                  params: {
-                    walletId: wallet!.id,
-                    key,
-                  },
-                });
+            navigation.navigate('Wallet', {
+              screen: 'WalletDetails',
+              params: {
+                walletId: wallet!.id,
+                key,
+              },
+            });
             await sleep(0);
             setShowPaymentSentModal(false);
           }}
         />
       </ConfirmScrollView>
-      {wallet || coinbaseAccount ? (
+      {wallet ? (
         <>
           <SwipeButton
             disabled={disableSwipeSendButton}
@@ -408,14 +366,7 @@ const PayProConfirm = () => {
               } catch (err: any) {
                 dispatch(dismissOnGoingProcessModal());
                 await sleep(400);
-                const twoFactorRequired =
-                  coinbaseAccount &&
-                  err?.message?.includes(
-                    CoinbaseErrorMessages.twoFactorRequired,
-                  );
-                twoFactorRequired
-                  ? await request2FA()
-                  : await handlePaymentFailure(err);
+                await handlePaymentFailure(err);
               }
             }}
           />
