@@ -12,11 +12,11 @@ import {URL} from '../../../../constants';
 import {APP_VERSION} from '../../../../constants/config';
 import {useTranslation} from 'react-i18next';
 import {View} from 'react-native';
-import {useDispatch} from 'react-redux';
 import {openUrlWithInAppBrowser} from '../../../../store/app/app.effects';
 import AngleRight from '../../../../../assets/img/angle-right.svg';
 import {GIT_COMMIT_HASH} from '@env';
 import LinkSvg from '../../../../../assets/img/link.svg';
+import {useAppDispatch} from '../../../../utils/hooks';
 
 interface LinkSetting {
   key: string;
@@ -27,7 +27,7 @@ interface LinkSetting {
 const About = () => {
   const navigation = useNavigation();
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
 
   const LINKS: LinkSetting[] = [
     {
@@ -88,11 +88,11 @@ const About = () => {
 
       <Hr />
 
-      <Setting
+      {/* <Setting
         onPress={() => navigation.navigate('About', {screen: 'SendFeedback'})}>
         <SettingTitle>{t('Send Feedback')}</SettingTitle>
         <AngleRight />
-      </Setting>
+      </Setting> */}
 
       <Hr />
 

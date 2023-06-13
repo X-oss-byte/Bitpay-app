@@ -14,8 +14,8 @@ const ExportKeyContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const ExportKeyParagraph = styled(Paragraph)`
