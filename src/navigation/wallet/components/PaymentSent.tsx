@@ -1,16 +1,15 @@
 import React from 'react';
-import Modal from 'react-native-modal';
 import styled from 'styled-components/native';
 import {Success, White} from '../../../styles/colors';
 import {WIDTH} from '../../../components/styled/Containers';
 import PaymentCompleteSvg from '../../../../assets/img/wallet/payment-complete.svg';
 import {BaseText} from '../../../components/styled/Text';
 import {useTranslation} from 'react-i18next';
+import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 
 const PaymentSentContainer = styled.View`
   flex: 1;
   background-color: ${Success};
-  width: ${WIDTH}px;
 `;
 
 const PaymentSentHero = styled.View`
@@ -52,19 +51,7 @@ interface PaymentSentModal {
 const PaymentSent = ({isVisible, onCloseModal, title}: PaymentSentModal) => {
   const {t} = useTranslation();
   return (
-    <Modal
-      isVisible={isVisible}
-      backdropOpacity={1}
-      backdropColor={Success}
-      animationIn={'fadeInUp'}
-      animationOut={'fadeOutDown'}
-      backdropTransitionOutTiming={0}
-      hideModalContentWhileAnimating={true}
-      useNativeDriverForBackdrop={true}
-      useNativeDriver={true}
-      style={{
-        alignItems: 'center',
-      }}>
+    <SheetModal isVisible={isVisible} onBackdropPress={onCloseModal}>
       <PaymentSentContainer>
         <PaymentSentHero>
           <PaymentCompleteSvg />
@@ -79,7 +66,7 @@ const PaymentSent = ({isVisible, onCloseModal, title}: PaymentSentModal) => {
           </CloseButton>
         </PaymentSentFooter>
       </PaymentSentContainer>
-    </Modal>
+    </SheetModal>
   );
 };
 
