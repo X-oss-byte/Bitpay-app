@@ -11,7 +11,6 @@ import {
   ScreenGutter,
   AdvancedOptionsButtonText,
 } from '../../../../components/styled/Containers';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SlateDark, White} from '../../../../styles/colors';
 import yup from '../../../../lib/yup';
 import {Controller, useForm} from 'react-hook-form';
@@ -37,9 +36,8 @@ const ExportWalletContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScrollView = styled(KeyboardAwareScrollView)`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+const ScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const PasswordFormContainer = styled.View`

@@ -8,7 +8,6 @@ import {
   Text,
   View,
 } from 'react-native';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useDispatch, useSelector} from 'react-redux';
 import styled from 'styled-components/native';
 import {Network} from '../../constants';
@@ -121,10 +120,8 @@ const SkipIntroButton = () => {
 };
 
 const BpDevtools = () => {
-  const insets = useSafeAreaInsets();
-
   return (
-    <View style={{marginTop: insets.top}}>
+    <View>
       <ScrollView
         horizontal={true}
         style={{

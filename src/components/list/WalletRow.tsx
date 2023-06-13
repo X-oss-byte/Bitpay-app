@@ -29,6 +29,7 @@ const NestedArrowContainer = styled.View`
   align-items: center;
   justify-content: center;
   margin-right: 15px;
+  margin-left: 15px;
 `;
 
 export interface WalletRowProps {

@@ -118,7 +118,7 @@ const HomeRoot = () => {
 
           {/* ////////////////////////////// CTA BUY SWAP RECEIVE SEND BUTTONS */}
           {hasKeys ? (
-            <HomeSection style={{marginBottom: 25}}>
+            <HomeSection style={{marginBottom: 20}}>
               <LinkingButtons
                 receive={{
                   cta: () => dispatch(receiveCrypto(navigation, 'HomeRoot')),

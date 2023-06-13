@@ -37,8 +37,8 @@ const ContactsDetailsContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const DetailsScrollContainer = styled.View`
-  padding: 20px ${ScreenGutter};
+const DetailsScrollContainer = styled.ScrollView`
+  margin: 0 ${ScreenGutter};
 `;
 
 const Detail = styled.View`

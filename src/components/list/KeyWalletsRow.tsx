@@ -8,15 +8,12 @@ import {Wallet} from '../../store/wallet/wallet.models';
 import {WalletRowProps} from './WalletRow';
 import WalletRow from './WalletRow';
 import {SvgProps} from 'react-native-svg';
-import {ScreenGutter} from '../styled/Containers';
 
 interface KeyWalletsRowContainerProps {
   isLast?: boolean;
 }
 
 const KeyWalletsRowContainer = styled.View<KeyWalletsRowContainerProps>`
-  padding: 0 ${ScreenGutter};
-  margin-bottom: 0px;
   border-bottom-width: ${({isLast}) => (isLast ? 0 : 1)}px;
   border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : '#ECEFFD')};
   border-bottom-width: 0;

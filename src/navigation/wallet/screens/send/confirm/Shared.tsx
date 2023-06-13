@@ -44,7 +44,6 @@ import {
   WalletSelectMenuHeaderContainer,
   WalletSelectMenuHeaderIconContainer,
 } from '../../GlobalSelect';
-import CoinbaseSmall from '../../../../../../assets/img/logos/coinbase-small.svg';
 import {useNavigation} from '@react-navigation/native';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
 import {showNoWalletsModal} from '../../../../../store/wallet/effects/send/send';
@@ -52,7 +51,6 @@ import Clipboard from '@react-native-community/clipboard';
 import CopiedSvg from '../../../../../../assets/img/copied-success.svg';
 
 import {useTranslation} from 'react-i18next';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import AddressCard from '../../../components/AddressCard';
 import {LuckySevens} from '../../../../../styles/colors';
 import {IsERCToken} from '../../../../../store/wallet/utils/currency';
@@ -64,8 +62,8 @@ export const ConfirmContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-export const ConfirmScrollView = styled(KeyboardAwareScrollView)`
-  margin: 20px ${ScreenGutter};
+export const ConfirmScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 export const HeaderTitle = styled(H6)`
@@ -538,7 +536,6 @@ export const WalletSelector = ({
 
   useMemo(() => {
     let hasWallets: boolean = false;
-    let hasCoinbase: boolean = false;
 
     const {keyWallets} = walletsAndAccounts;
     if (keyWallets.length > 0 && keyWallets[0].wallets.length > 0) {

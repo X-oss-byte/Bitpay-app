@@ -16,12 +16,14 @@ import {useTranslation} from 'react-i18next';
 import ContactRow from '../../../../components/list/ContactRow';
 
 const SeeAllLink = styled(Link)`
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 16px;
 `;
 
 const PlusIconContainer = styled.View`
-  margin-right: 15px;
+  flex-direction: row;
+  align-items: center;
+  margin-top: 15px;
 `;
 
 const Contacts = () => {
@@ -56,9 +58,10 @@ const Contacts = () => {
         }}>
         <PlusIconContainer>
           <Icons.Add />
+          <H6 style={{marginLeft: 15}} medium={true}>
+            {t('Add Contact')}
+          </H6>
         </PlusIconContainer>
-
-        <H6 medium={true}>{t('Add Contact')}</H6>
       </Setting>
 
       {contacts.length > 2 ? (

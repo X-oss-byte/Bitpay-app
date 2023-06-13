@@ -86,8 +86,6 @@ const About = () => {
         <AngleRight />
       </Setting>
 
-      <Hr />
-
       {/* <Setting
         onPress={() => navigation.navigate('About', {screen: 'SendFeedback'})}>
         <SettingTitle>{t('Send Feedback')}</SettingTitle>

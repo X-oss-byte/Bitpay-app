@@ -35,7 +35,7 @@ import {
 } from '../../../store/wallet/wallet.models';
 import {RefreshControl, SectionList, View} from 'react-native';
 import TransactionProposalRow from '../../../components/list/TransactionProposalRow';
-import {Air, LightBlack, SlateDark, White} from '../../../styles/colors';
+import {Air, LightBlack} from '../../../styles/colors';
 import {sleep} from '../../../utils/helper-methods';
 import {TRANSACTION_ROW_HEIGHT} from '../../../components/list/TransactionRow';
 import {findWalletById} from '../../../store/wallet/utils/wallet';
@@ -66,11 +66,6 @@ import {TransactionIcons} from '../../../constants/TransactionIcons';
 
 const NotificationsContainer = styled.SafeAreaView`
   flex: 1;
-`;
-
-const ListHeaderPadding = styled.View`
-  padding: 10px;
-  margin-top: 10px;
 `;
 
 const TransactionSectionHeaderContainer = styled.View`
@@ -115,7 +110,6 @@ const TransactionProposalNotifications = () => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
   const {keys} = useAppSelector(({WALLET}) => WALLET);
   const wallets = keyId
     ? keys[keyId].wallets
@@ -498,6 +492,7 @@ const TransactionProposalNotifications = () => {
     ]);
   };
 
+  // TODO: create click to refresh
   const onRefresh = async () => {
     setRefreshing(true);
     await sleep(1000);
@@ -542,16 +537,6 @@ const TransactionProposalNotifications = () => {
   return (
     <NotificationsContainer>
       <SectionList
-        refreshControl={
-          <RefreshControl
-            tintColor={theme.dark ? White : SlateDark}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
-        ListHeaderComponent={() => {
-          return <ListHeaderPadding />;
-        }}
         sections={allTxps}
         stickyHeaderIndices={[allTxps?.length]}
         stickySectionHeadersEnabled={false}
@@ -639,7 +624,6 @@ const TransactionProposalNotifications = () => {
           }}
         />
       ) : null}
-
       <PaymentSent
         isVisible={showPaymentSentModal}
         onCloseModal={async () => {

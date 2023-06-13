@@ -8,7 +8,6 @@ import debounce from 'lodash.debounce';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Appearance, AppState, AppStateStatus} from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
-import {SafeAreaProvider} from 'react-native-safe-area-context';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
 import OnGoingProcessModal from './components/modal/ongoing-process/OngoingProcess';
 import DecryptEnterPasswordModal from './navigation/wallet/components/DecryptEnterPasswordModal';
@@ -292,54 +291,52 @@ export default () => {
   const initialRoute = RootStacks.TABS;
 
   return (
-    <SafeAreaProvider>
-      <ThemeProvider theme={theme}>
-        <NavigationContainer ref={navigationRef} theme={theme}>
-          <Root.Navigator
-            screenOptions={{
-              ...baseScreenOptions,
-              headerShown: false,
+    <ThemeProvider theme={theme}>
+      <NavigationContainer ref={navigationRef} theme={theme}>
+        <Root.Navigator
+          screenOptions={{
+            ...baseScreenOptions,
+            headerShown: false,
+          }}
+          initialRouteName={initialRoute}>
+          <Root.Screen
+            name={RootStacks.DEBUG}
+            component={DebugScreen}
+            options={{
+              ...baseNavigatorOptions,
+              gestureEnabled: false,
+              animationEnabled: false,
             }}
-            initialRouteName={initialRoute}>
-            <Root.Screen
-              name={RootStacks.DEBUG}
-              component={DebugScreen}
-              options={{
-                ...baseNavigatorOptions,
-                gestureEnabled: false,
-                animationEnabled: false,
-              }}
-            />
-            <Root.Screen
-              name={RootStacks.TABS}
-              component={TabsStack}
-              options={{
-                gestureEnabled: false,
-              }}
-            />
-            <Root.Screen
-              options={{
-                gestureEnabled: false,
-              }}
-              name={RootStacks.WALLET}
-              component={WalletStack}
-            />
-            <Root.Screen
-              name={RootStacks.GENERAL_SETTINGS}
-              component={GeneralSettingsStack}
-            />
-            <Root.Screen name={RootStacks.CONTACTS} component={ContactsStack} />
-            <Root.Screen
-              name={RootStacks.NETWORK_FEE_POLICY_SETTINGS}
-              component={NetworkFeePolicySettingsStack}
-            />
-            <Root.Screen name={RootStacks.ABOUT} component={AboutStack} />
-          </Root.Navigator>
-          <OnGoingProcessModal />
-          <BottomNotificationModal />
-          <DecryptEnterPasswordModal />
-        </NavigationContainer>
-      </ThemeProvider>
-    </SafeAreaProvider>
+          />
+          <Root.Screen
+            name={RootStacks.TABS}
+            component={TabsStack}
+            options={{
+              gestureEnabled: false,
+            }}
+          />
+          <Root.Screen
+            options={{
+              gestureEnabled: false,
+            }}
+            name={RootStacks.WALLET}
+            component={WalletStack}
+          />
+          <Root.Screen
+            name={RootStacks.GENERAL_SETTINGS}
+            component={GeneralSettingsStack}
+          />
+          <Root.Screen name={RootStacks.CONTACTS} component={ContactsStack} />
+          <Root.Screen
+            name={RootStacks.NETWORK_FEE_POLICY_SETTINGS}
+            component={NetworkFeePolicySettingsStack}
+          />
+          <Root.Screen name={RootStacks.ABOUT} component={AboutStack} />
+        </Root.Navigator>
+        <OnGoingProcessModal />
+        <BottomNotificationModal />
+        <DecryptEnterPasswordModal />
+      </NavigationContainer>
+    </ThemeProvider>
   );
 };

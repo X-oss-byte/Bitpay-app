@@ -35,8 +35,7 @@ const ExportTransactionHistoryContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  margin-left: ${ScreenGutter};
 `;
 
 const ExportTransactionHistoryDescription = styled(Paragraph)`

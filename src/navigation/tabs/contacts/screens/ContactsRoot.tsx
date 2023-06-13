@@ -1,7 +1,6 @@
 import React, {useState, useCallback, useEffect, useLayoutEffect} from 'react';
 import {useTranslation} from 'react-i18next';
 import debounce from 'lodash.debounce';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import styled, {useTheme} from 'styled-components/native';
 import {TouchableOpacity, FlatList, View} from 'react-native';
 import {useSelector} from 'react-redux';
@@ -129,7 +128,6 @@ const HideableView = styled.View<HideableViewProps>`
 const ContactsRoot: React.FC = () => {
   const {t} = useTranslation();
   const theme = useTheme();
-  const insets = useSafeAreaInsets();
   const contacts = useSelector(({CONTACT}: RootState) => CONTACT.list);
   const navigation = useNavigation();
   const {control} = useForm();
@@ -192,7 +190,7 @@ const ContactsRoot: React.FC = () => {
   };
 
   return (
-    <ContactsContainer style={{paddingTop: insets.top}}>
+    <ContactsContainer>
       {contactList.length ? (
         <>
           <SearchContainer>

@@ -35,7 +35,6 @@ import {
   SlateDark,
   White,
 } from '../../../styles/colors';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import Banner from '../../../components/banner/Banner';
 import Info from '../../../components/icons/info/Info';
 import {sleep} from '../../../utils/helper-methods';
@@ -83,9 +82,8 @@ const TxpDetailsContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScrollView = styled(KeyboardAwareScrollView)`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+const ScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const SubTitle = styled(BaseText)`

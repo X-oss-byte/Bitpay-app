@@ -1,22 +1,12 @@
 import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
-import {
-  BaseText,
-  HeaderTitle,
-  Link,
-  Paragraph,
-} from '../../../../components/styled/Text';
+import {BaseText, HeaderTitle, Link} from '../../../../components/styled/Text';
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Clipboard from '@react-native-community/clipboard';
-import {
-  ScreenGutter,
-  SearchContainer,
-  SearchInput,
-} from '../../../../components/styled/Containers';
+import {ScreenGutter, WIDTH} from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
 import {
   LightBlack,
-  Midnight,
   NeutralSlate,
   SlateDark,
   White,
@@ -83,6 +73,7 @@ import OptionsSheet, {Option} from '../../components/OptionsSheet';
 import Icons from '../../components/WalletIcons';
 import ContactRow from '../../../../components/list/ContactRow';
 import {getCurrencyCodeFromCoinAndChain} from '../../../bitpay-id/utils/bitpay-id-utils';
+import BoxInput from '../../../../components/form/BoxInput';
 
 const ValidDataTypes: string[] = [
   'BitcoinAddress',
@@ -107,8 +98,23 @@ const SafeAreaView = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  margin-left: ${ScreenGutter};
+`;
+
+const HeaderSearchContainer = styled.View`
+  padding: ${ScreenGutter};
+`;
+
+const horizontalPadding = 20;
+const SearchBox = styled(BoxInput)`
+  width: ${WIDTH - horizontalPadding * 2}px;
+  font-size: 16px;
+  position: relative;
+`;
+
+const SearchContainer = styled.View`
+  padding: 0 ${horizontalPadding}px;
+  margin: 20px 0;
 `;
 
 const PasteClipboardContainer = styled.TouchableOpacity`
@@ -131,38 +137,6 @@ export const ContactTitle = styled(BaseText)`
   color: ${({theme: {dark}}) => (dark ? White : SlateDark)};
   margin-left: 10px;
 `;
-
-const EmailContainer = styled.View`
-  align-items: center;
-  flex-direction: row;
-  margin-top: 10px;
-`;
-
-const EmailIconContainer = styled.View`
-  align-items: center;
-  background-color: ${({theme}) => (theme.dark ? Midnight : '#EDF0FE')};
-  border-radius: 50px;
-  justify-content: center;
-  margin-right: 13px;
-  height: 50px;
-  width: 50px;
-`;
-
-const EmailText = styled(Paragraph)`
-  font-weight: 600;
-`;
-
-const InfoSheetMessage = styled.View`
-  padding: 20px 0;
-`;
-
-const isEmailAddress = (text: string) => {
-  if (!text.includes('@')) {
-    return false;
-  }
-  const reg = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w\w+)+$/;
-  return reg.test(text);
-};
 
 export const BuildKeyWalletRow = (
   keys: {[key in string]: Key},
@@ -531,9 +505,10 @@ const SendTo = () => {
 
   return (
     <SafeAreaView>
-      <ScrollView keyboardShouldPersistTaps={'handled'}>
+      <HeaderSearchContainer>
         <SearchContainer>
-          <SearchInput
+          <SearchBox
+            type={t('search')}
             placeholder={t('Search contact or enter address')}
             placeholderTextColor={placeHolderTextColor}
             value={searchInput}
@@ -554,7 +529,9 @@ const SendTo = () => {
             <Link>{t('Paste from clipboard')}</Link>
           </PasteClipboardContainer>
         ) : null}
+      </HeaderSearchContainer>
 
+      <ScrollView>
         {contacts.length > 0 ? (
           <>
             <ContactTitleContainer>

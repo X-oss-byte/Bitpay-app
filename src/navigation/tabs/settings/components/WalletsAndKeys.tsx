@@ -18,8 +18,8 @@ import {keyBackupRequired} from '../../home/components/Crypto';
 import {SettingsComponent} from '../SettingsRoot';
 
 const CreateOrImportLink = styled(Link)`
-  font-weight: 500;
-  font-size: 18px;
+  font-weight: 400;
+  font-size: 16px;
 `;
 const WalletsAndKeys = () => {
   const {t} = useTranslation();

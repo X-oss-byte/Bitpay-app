@@ -37,7 +37,7 @@ export const SettingsContainer = styled.SafeAreaView`
 `;
 
 export const Settings = styled.ScrollView`
-  margin: 10px ${ScreenGutter};
+  margin: 10px 0 10px ${ScreenGutter};
 `;
 
 export const SettingsComponent = styled.View`

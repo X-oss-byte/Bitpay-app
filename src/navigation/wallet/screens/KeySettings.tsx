@@ -1,4 +1,4 @@
-import React, {useEffect, useLayoutEffect, useRef} from 'react';
+import React, {useEffect, useLayoutEffect} from 'react';
 import {
   BaseText,
   HeaderTitle,
@@ -10,7 +10,7 @@ import {
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../WalletStack';
-import {View, TouchableOpacity, ScrollView} from 'react-native';
+import {View, TouchableOpacity} from 'react-native';
 import styled from 'styled-components/native';
 import {
   ActiveOpacity,
@@ -70,8 +70,7 @@ const WalletSettingsContainer = styled.View`
 `;
 
 const ScrollContainer = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  margin-left: ${ScreenGutter};
 `;
 
 const Title = styled(BaseText)`
@@ -92,6 +91,7 @@ const WalletNameContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const VerticalPadding = styled.View`
@@ -103,9 +103,8 @@ const WalletSettingsTitle = styled(SettingTitle)`
 `;
 
 const AddWalletText = styled(Link)`
-  font-size: 18px;
-  font-weight: 500;
-  margin: 10px 0;
+  font-size: 16px;
+  font-weight: 400;
 `;
 
 const KeySettings = () => {
@@ -113,7 +112,6 @@ const KeySettings = () => {
   const {
     params: {key, context},
   } = useRoute<RouteProp<WalletStackParamList, 'KeySettings'>>();
-  const scrollViewRef = useRef<ScrollView>(null);
   const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const {defaultAltCurrency, hideAllBalances} = useAppSelector(({APP}) => APP);
@@ -139,7 +137,6 @@ const KeySettings = () => {
         screen: 'CreateEncryptPassword',
         params: {key},
       });
-      scrollViewRef?.current?.scrollToEnd({animated: false});
     }
   }, [context, key, navigation]);
 
@@ -281,7 +278,7 @@ const KeySettings = () => {
 
   return (
     <WalletSettingsContainer>
-      <ScrollContainer ref={scrollViewRef}>
+      <ScrollContainer>
         <WalletNameContainer
           activeOpacity={ActiveOpacity}
           onPress={() => {

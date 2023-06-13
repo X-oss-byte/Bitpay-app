@@ -114,8 +114,8 @@ export const WalletSelectMenuHeaderIconContainer = styled.View`
   padding-right: 0px;
 `;
 
-export const WalletSelectMenuBodyContainer = styled.ScrollView`
-  padding: 0 ${ScreenGutter} 2px;
+export const WalletSelectMenuBodyContainer = styled.View`
+  padding-left: ${ScreenGutter};
 `;
 
 const NoWalletsMsg = styled(BaseText)`
@@ -578,7 +578,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           {!!modalTitle && (
             <ModalTitleContainer>
               <TextAlign align={'center'}>
-                <H4>{modalTitle}</H4>
+                <H4>{modalTitle} BLABL</H4>
               </TextAlign>
               {onHelpPress ? (
                 <TouchableOpacity
@@ -610,7 +610,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           </NoWalletsMsg>
         )}
         <SheetModal
-          placement={'bottom'}
+          fullScreen={true}
           isVisible={walletSelectModalVisible}
           onBackdropPress={() => setWalletSelectModalVisible(false)}>
           <WalletSelectMenuContainer>

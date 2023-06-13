@@ -1,4 +1,4 @@
-import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useState} from 'react';
 import {
   BaseText,
   H4,
@@ -10,7 +10,6 @@ import {
 } from '../../../components/styled/Text';
 import styled from 'styled-components/native';
 import {FlatList, Keyboard, View, TouchableOpacity} from 'react-native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   ActiveOpacity,
   AdvancedOptionsButton,
@@ -107,9 +106,8 @@ const CreateWalletContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScrollView = styled(KeyboardAwareScrollView)`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+const ScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const ButtonContainer = styled.View`

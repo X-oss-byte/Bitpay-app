@@ -37,8 +37,7 @@ const AddressesContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin: 20px 0 65px;
-  padding: 0 ${ScreenGutter};
+  margin-left: ${ScreenGutter};
 `;
 
 const VerticalPadding = styled.View`

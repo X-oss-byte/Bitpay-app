@@ -1,7 +1,7 @@
 import React, {memo} from 'react';
 import styled from 'styled-components/native';
 import {useTheme} from 'styled-components/native';
-import {Column} from '../styled/Containers';
+import {Column, ScreenGutter} from '../styled/Containers';
 import {H5, ListItemSubText} from '../styled/Text';
 import AngleRight from '../../../assets/img/angle-right.svg';
 import ContactIcon from '../../navigation/tabs/contacts/components/ContactIcon';
@@ -29,6 +29,7 @@ const ContactImageContainer = styled.View`
 const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
+  padding: 8px 0;
 `;
 
 export interface ContactRowProps {
@@ -64,7 +65,6 @@ const ContactRow = ({contact, onPress}: Props) => {
             {email ? email : address}
           </ListItemSubText>
         </ContactColumn>
-        <AngleRight />
       </RowContainer>
     </ContactContainer>
   );

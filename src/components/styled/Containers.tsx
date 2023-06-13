@@ -134,6 +134,7 @@ export const CardContainer = styled.View`
 
 export interface SheetParams {
   placement?: 'top' | 'bottom';
+  fullScreen?: boolean;
 }
 
 export const SheetContainer = styled.View<SheetParams>`
@@ -142,10 +143,15 @@ export const SheetContainer = styled.View<SheetParams>`
   justify-content: center;
   align-content: center;
   border-${({placement}: SheetParams) =>
-    placement === 'top' ? 'bottom' : 'top'}-left-radius: 17px;
+    placement === 'top' ? 'bottom' : 'top'}-left-radius: ${({
+  fullScreen,
+}: SheetParams) => (fullScreen ? 0 : '17px')};
   border-${({placement}: SheetParams) =>
-    placement === 'top' ? 'bottom' : 'top'}-right-radius: 17px;
-  max-height: ${HEIGHT - 100}px;
+    placement === 'top' ? 'bottom' : 'top'}-right-radius: ${({
+  fullScreen,
+}: SheetParams) => (fullScreen ? 0 : '17px')};
+  max-height: ${({fullScreen}: SheetParams) =>
+    fullScreen ? '100%' : HEIGHT - 100 + 'px'};
 `;
 
 // Settings List

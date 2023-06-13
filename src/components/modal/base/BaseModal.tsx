@@ -14,6 +14,7 @@ type ModalProps = {
   onBackdropPress?: () => void;
   children: React.ReactNode;
   placement: 'top' | 'bottom' | undefined;
+  fullScreen?: boolean;
 };
 
 const BaseModal: React.FC<ModalProps> = props => {
@@ -21,7 +22,7 @@ const BaseModal: React.FC<ModalProps> = props => {
   const dispatch = useAppDispatch();
   const activeModalId = useAppSelector(({APP}) => APP.activeModalId);
   const [isVisibleSafe, setVisibleSafe] = useState(false);
-  const {id, isVisible, onModalHide, onModalWillShow, placement} =
+  const {id, isVisible, onModalHide, onModalWillShow, placement, fullScreen} =
     props as ModalProps;
 
   useEffect(() => {
@@ -63,6 +64,8 @@ const BaseModal: React.FC<ModalProps> = props => {
           top: placement === 'top' ? 0 : undefined,
           bottom: placement === 'bottom' ? 0 : undefined,
           width: '100%',
+          left: fullScreen ? 0 : undefined,
+          height: fullScreen ? '100%' : undefined,
           zIndex: isVisibleSafe ? 1000000 : undefined,
         }}>
         {props.children}

@@ -42,8 +42,7 @@ const WalletSettingsContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  margin-left: ${ScreenGutter};
 `;
 
 const Title = styled(BaseText)`
@@ -58,6 +57,7 @@ const WalletNameContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
   justify-content: space-between;
+  cursor: pointer;
 `;
 
 const InfoDescription = styled(BaseText)`

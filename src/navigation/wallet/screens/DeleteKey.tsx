@@ -4,7 +4,6 @@ import {useNavigation, useRoute} from '@react-navigation/native';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../WalletStack';
 import styled from 'styled-components/native';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {ScreenGutter} from '../../../components/styled/Containers';
 import Button from '../../../components/button/Button';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
@@ -23,9 +22,8 @@ const DeleteKeyContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScrollView = styled(KeyboardAwareScrollView)`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+const ScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const Title = styled(H5)`
@@ -40,7 +38,6 @@ const DeleteKey = () => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
-  const homeCarouselConfig = useAppSelector(({APP}) => APP.homeCarouselConfig);
 
   const {keys} = useAppSelector(({WALLET}) => WALLET);
 
@@ -58,7 +55,7 @@ const DeleteKey = () => {
   const startDeleteKey = async () => {
     setIsVisible(false);
     await sleep(500);
-    dispatch(startOnGoingProcessModal('DELETING_KEY'));
+    await dispatch(startOnGoingProcessModal('DELETING_KEY'));
 
     await sleep(300);
     const previousKeysLength = Object.keys(keys).length;

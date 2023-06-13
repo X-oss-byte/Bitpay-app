@@ -48,7 +48,7 @@ export interface VerifyPhraseParamList {
   walletTermsAccepted: boolean;
 }
 
-const VerifyPhraseContainer = styled.View`
+const VerifyPhraseContainer = styled.SafeAreaView`
   flex: 1;
 `;
 

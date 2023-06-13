@@ -41,10 +41,8 @@ import {
   White,
 } from '../../../../styles/colors';
 import {CurrencyImage} from '../../../../components/currency-image/CurrencyImage';
-import {useSafeAreaInsets} from 'react-native-safe-area-context';
 import {useTranslation} from 'react-i18next';
 import BoxInput from '../../../../components/form/BoxInput';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {SUPPORTED_EVM_COINS} from '../../../../constants/currencies';
 
 const CIRCLE_SIZE = 20;
@@ -72,8 +70,9 @@ const TxSpeedContainer = styled(SheetContainer)`
   padding: 0 0 20px 0;
 `;
 
-const TxSpeedScroll = styled(KeyboardAwareScrollView)`
+const TxSpeedScroll = styled.ScrollView`
   margin-top: 0;
+  margin-left: ${ScreenGutter};
 `;
 
 const SheetHeaderContainer = styled.View`
@@ -192,7 +191,6 @@ const TransactionLevel = ({
   const {img, currencyAbbreviation, network, chain} = wallet;
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const insets = useSafeAreaInsets();
   const theme = useTheme();
 
   const [speedUpMinFeePerKb, setSpeedUpMinFeePerKb] = useState<number>();
@@ -459,12 +457,15 @@ const TransactionLevel = ({
   };
 
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={onClose}>
+    <SheetModal
+      isVisible={isVisible}
+      onBackdropPress={onClose}
+      placement={'bottom'}>
       <TxSpeedContainer>
         <TxSpeedScroll
           extraScrollHeight={150}
           keyboardShouldPersistTaps={'handled'}>
-          <SheetHeaderContainer style={{marginTop: insets.top}}>
+          <SheetHeaderContainer>
             <TouchableOpacity
               activeOpacity={ActiveOpacity}
               onPress={() => onClose()}>

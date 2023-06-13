@@ -13,7 +13,6 @@ import BoxInput from '../../../components/form/BoxInput';
 import Button from '../../../components/button/Button';
 import {WalletActions} from '../../../store/wallet/index';
 import {useLogger, useAppDispatch} from '../../../utils/hooks';
-import {KeyboardAwareScrollView} from 'react-native-keyboard-aware-scroll-view';
 import {
   dismissBottomNotificationModal,
   showBottomNotificationModal,
@@ -25,9 +24,8 @@ const EncryptPasswordContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ScrollView = styled(KeyboardAwareScrollView)`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+const ScrollView = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const Paragraph = styled(BaseText)`

@@ -40,7 +40,7 @@ export interface RecoveryPhraseParamList {
   walletTermsAccepted: boolean;
 }
 
-const RecoveryPhraseContainer = styled.View`
+const RecoveryPhraseContainer = styled.SafeAreaView`
   flex: 1;
 `;
 

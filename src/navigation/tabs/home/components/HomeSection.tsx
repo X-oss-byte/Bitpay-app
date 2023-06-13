@@ -26,7 +26,7 @@ interface HomeRowProps {
 }
 
 const HomeRowContainer = styled.View<{slim?: boolean}>`
-  margin-bottom: ${({slim}) => (slim ? 32 : 28)}px;
+  margin-bottom: ${({slim}) => (slim ? 20 : 16)}px;
 `;
 
 const Header = styled.View<{slim?: boolean}>`

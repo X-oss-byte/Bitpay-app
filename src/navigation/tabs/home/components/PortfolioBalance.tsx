@@ -16,7 +16,7 @@ import {useTranslation} from 'react-i18next';
 const PortfolioContainer = styled.View`
   justify-content: center;
   align-items: center;
-  margin-top: 35px;
+  margin-top: 25px;
 `;
 
 const PortfolioBalanceHeader = styled.View`
@@ -44,6 +44,7 @@ const PercentageText = styled(BaseText)`
 
 const PercentageContainer = styled.View`
   flex-direction: row;
+  margin-top: 5px;
 `;
 
 const PortfolioBalance = () => {

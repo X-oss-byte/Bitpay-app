@@ -7,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, Text, FlatList, View} from 'react-native';
+import {StyleSheet, FlatList} from 'react-native';
 import styled, {useTheme} from 'styled-components/native';
 import Button from '../../../components/button/Button';
 import {
@@ -22,7 +22,6 @@ import {
   ScreenGutter,
 } from '../../../components/styled/Containers';
 import {HeaderTitle, Link} from '../../../components/styled/Text';
-import {IS_ANDROID} from '../../../constants';
 import {EVM_SUPPORTED_TOKENS_LENGTH} from '../../../constants/currencies';
 import {Key} from '../../../store/wallet/wallet.models';
 import {LightBlack, Slate30} from '../../../styles/colors';
