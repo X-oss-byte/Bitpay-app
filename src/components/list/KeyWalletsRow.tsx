@@ -23,6 +23,10 @@ interface KeyNameContainerProps {
   noBorder?: boolean;
 }
 
+const KeyWalletsScrollView = styled.ScrollView`
+  padding: 0px 5px;
+`;
+
 const KeyNameContainer = styled.View<KeyNameContainerProps>`
   flex-direction: row;
   align-items: center;
@@ -71,7 +75,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
   hideBalance,
 }: KeyWalletProps<T>) => {
   return (
-    <ScrollView>
+    <KeyWalletsScrollView>
       {keyWallets.map((key, keyIndex) => (
         <KeyWalletsRowContainer
           key={key.key}
@@ -102,7 +106,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
           ))}
         </KeyWalletsRowContainer>
       ))}
-    </ScrollView>
+    </KeyWalletsScrollView>
   );
 };
 
