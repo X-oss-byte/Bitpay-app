@@ -73,7 +73,7 @@ const TxSpeedContainer = styled(SheetContainer)`
 `;
 
 const TxSpeedScroll = styled.ScrollView`
-  margin-top: 0;
+  padding: 0px 8px;
   margin-left: ${ScreenGutter};
 `;
 

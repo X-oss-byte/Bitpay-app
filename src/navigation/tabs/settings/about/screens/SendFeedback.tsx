@@ -36,7 +36,8 @@ export interface SendFeedbackParamList {
 
 const SendFeedbackContainer = styled.SafeAreaView`
   flex: 1;
-  margin: 20px ${ScreenGutter};
+  padding: 0px 10px;
+  margin-left: ${ScreenGutter};
 `;
 
 const SendFeedbackEmoji = styled.View`

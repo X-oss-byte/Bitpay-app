@@ -76,8 +76,8 @@ const TxsDetailsContainer = styled.View`
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  padding: 0px 8px;
+  margin-left: ${ScreenGutter};
 `;
 
 const SubTitle = styled(BaseText)`

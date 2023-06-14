@@ -82,7 +82,8 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 
 const ContentView = styled(ScrollView)`
-  margin: 20px ${ScreenGutter};
+  padding: 0px 8px;
+  margin-left: ${ScreenGutter};
 `;
 
 const PasswordParagraph = styled(BaseText)`

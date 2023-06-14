@@ -70,6 +70,7 @@ const WalletSettingsContainer = styled.View`
 `;
 
 const ScrollContainer = styled.ScrollView`
+  padding: 0px 8px;
   margin-left: ${ScreenGutter};
 `;
 

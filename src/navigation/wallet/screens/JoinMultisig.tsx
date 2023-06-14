@@ -50,8 +50,8 @@ export const JoinContainer = styled.View`
 `;
 
 const ScrollViewContainer = styled.ScrollView`
-  padding: 0px 10px;
-  margin: 20px ${ScreenGutter};
+  padding: 0px 8px;
+  margin-left: ${ScreenGutter};
 `;
 
 const CtaContainer = styled(_CtaContainer)`

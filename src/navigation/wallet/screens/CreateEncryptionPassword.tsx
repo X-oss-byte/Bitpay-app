@@ -25,6 +25,7 @@ const EncryptPasswordContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
+  padding: 0px 8px;
   margin-left: ${ScreenGutter};
 `;
 

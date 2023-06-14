@@ -85,7 +85,8 @@ export const MultisigContainer = styled.View`
 `;
 
 const ScrollViewContainer = styled.ScrollView`
-  margin: 20px ${ScreenGutter};
+  padding: 0px 10px;
+  margin-left: ${ScreenGutter};
 `;
 
 const ErrorText = styled(BaseText)`
