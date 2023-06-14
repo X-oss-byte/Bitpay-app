@@ -30,7 +30,6 @@ import {
   Amount,
   ConfirmContainer,
   ConfirmScrollView,
-  DetailsList,
   ExchangeRate,
   Fee,
   Header,
@@ -62,7 +61,7 @@ import {
   InfoTriangle,
   ScreenGutter,
 } from '../../../../../components/styled/Containers';
-import {Alert, TouchableOpacity} from 'react-native';
+import {Alert, TouchableOpacity, View} from 'react-native';
 import {GetFeeOptions} from '../../../../../store/wallet/effects/fee/fee';
 import {Memo} from './Memo';
 import {toFiat} from '../../../../../store/wallet/utils/wallet';
@@ -352,127 +351,120 @@ const Confirm = () => {
 
   return (
     <ConfirmContainer>
-      <ConfirmScrollView
-        extraScrollHeight={50}
-        contentContainerStyle={{paddingBottom: 50}}
-        keyboardShouldPersistTaps={'handled'}>
-        <DetailsList keyboardShouldPersistTaps={'handled'}>
-          <Header>Summary</Header>
-          <SendingTo
-            recipient={recipientData}
-            recipientList={recipientListData}
+      <ConfirmScrollView>
+        <Header>Summary</Header>
+        <SendingTo
+          recipient={recipientData}
+          recipientList={recipientListData}
+          hr
+        />
+        <Fee
+          onPress={
+            isTxLevelAvailable() && !selectInputs
+              ? () => setShowTransactionLevel(true)
+              : undefined
+          }
+          fee={fee}
+          feeOptions={feeOptions}
+          hr
+        />
+        {enableReplaceByFee &&
+        !selectInputs &&
+        currencyAbbreviation.toLowerCase() === 'btc' ? (
+          <>
+            <Setting activeOpacity={1}>
+              <SettingTitle>{t('Enable Replace-By-Fee')}</SettingTitle>
+              <ToggleSwitch
+                onChange={value => {
+                  setEnableRBF(value);
+                  onChangeEnableReplaceByFee(value);
+                }}
+                isEnabled={enableRBF}
+              />
+            </Setting>
+            <Hr />
+          </>
+        ) : null}
+        {gasPrice !== undefined ? (
+          <SharedDetailRow
+            description={t('Gas price')}
+            value={gasPrice.toFixed(2) + ' Gwei'}
             hr
           />
-          <Fee
+        ) : null}
+        {gasLimit !== undefined ? (
+          <SharedDetailRow
+            description={t('Gas limit')}
+            value={gasLimit}
+            onPress={() => editValue(t('Edit gas limit'), 'gasLimit')}
+            hr
+          />
+        ) : null}
+        {nonce !== undefined && nonce !== null ? (
+          <SharedDetailRow
+            description={t('Nonce')}
+            value={nonce}
             onPress={
-              isTxLevelAvailable() && !selectInputs
-                ? () => setShowTransactionLevel(true)
+              customizeNonce
+                ? () => editValue(t('Edit nonce'), 'nonce')
                 : undefined
             }
-            fee={fee}
-            feeOptions={feeOptions}
             hr
           />
-          {enableReplaceByFee &&
-          !selectInputs &&
-          currencyAbbreviation.toLowerCase() === 'btc' ? (
-            <>
-              <Setting activeOpacity={1}>
-                <SettingTitle>{t('Enable Replace-By-Fee')}</SettingTitle>
-                <ToggleSwitch
-                  onChange={value => {
-                    setEnableRBF(value);
-                    onChangeEnableReplaceByFee(value);
-                  }}
-                  isEnabled={enableRBF}
-                />
-              </Setting>
-              <Hr />
-            </>
-          ) : null}
-          {gasPrice !== undefined ? (
+        ) : null}
+        <SendingFrom sender={sendingFrom} hr />
+        {rateStr ? (
+          <ExchangeRate description={t('Exchange Rate')} rateStr={rateStr} />
+        ) : null}
+        {currencyAbbreviation === 'xrp' ? (
+          <>
             <SharedDetailRow
-              description={t('Gas price')}
-              value={gasPrice.toFixed(2) + ' Gwei'}
-              hr
-            />
-          ) : null}
-          {gasLimit !== undefined ? (
-            <SharedDetailRow
-              description={t('Gas limit')}
-              value={gasLimit}
-              onPress={() => editValue(t('Edit gas limit'), 'gasLimit')}
-              hr
-            />
-          ) : null}
-          {nonce !== undefined && nonce !== null ? (
-            <SharedDetailRow
-              description={t('Nonce')}
-              value={nonce}
-              onPress={
-                customizeNonce
-                  ? () => editValue(t('Edit nonce'), 'nonce')
-                  : undefined
+              description={t('Destination Tag')}
+              value={destinationTag || 'edit'}
+              onPress={() =>
+                editValue(t('Edit destination tag'), 'destinationTag')
               }
-              hr
             />
-          ) : null}
-          <SendingFrom sender={sendingFrom} hr />
-          {rateStr ? (
-            <ExchangeRate description={t('Exchange Rate')} rateStr={rateStr} />
-          ) : null}
-          {currencyAbbreviation === 'xrp' ? (
-            <>
-              <SharedDetailRow
-                description={t('Destination Tag')}
-                value={destinationTag || 'edit'}
-                onPress={() =>
-                  editValue(t('Edit destination tag'), 'destinationTag')
-                }
-              />
-              <Info>
-                <InfoTriangle />
-                <InfoDescription>
-                  {t(
-                    'A Destination Tag is an optional number that corresponds to an invoice or a XRP account on an exchange.',
-                  )}
-                </InfoDescription>
+            <Info>
+              <InfoTriangle />
+              <InfoDescription>
+                {t(
+                  'A Destination Tag is an optional number that corresponds to an invoice or a XRP account on an exchange.',
+                )}
+              </InfoDescription>
 
-                <VerticalPadding>
-                  <TouchableOpacity
-                    activeOpacity={ActiveOpacity}
-                    onPress={() => {
-                      dispatch(
-                        openUrlWithInAppBrowser(URL.HELP_DESTINATION_TAG),
-                      );
-                    }}>
-                    <Link>{t('Learn More')}</Link>
-                  </TouchableOpacity>
-                </VerticalPadding>
-              </Info>
-            </>
-          ) : null}
-          {txp && currencyAbbreviation !== 'xrp' ? (
-            <Memo
-              memo={txp.message || message || ''}
-              onChange={message => setTxp({...txp, message})}
-            />
-          ) : null}
-          <Amount
-            description={t('SubTotal')}
-            amount={subTotal}
-            height={83}
-            chain={chain}
-            network={wallet.credentials.network}
+              <VerticalPadding>
+                <TouchableOpacity
+                  activeOpacity={ActiveOpacity}
+                  onPress={() => {
+                    dispatch(openUrlWithInAppBrowser(URL.HELP_DESTINATION_TAG));
+                  }}>
+                  <Link>{t('Learn More')}</Link>
+                </TouchableOpacity>
+              </VerticalPadding>
+            </Info>
+          </>
+        ) : null}
+        {txp && currencyAbbreviation !== 'xrp' ? (
+          <Memo
+            memo={txp.message || message || ''}
+            onChange={message => setTxp({...txp, message})}
           />
-          <Amount
-            description={t('Total')}
-            amount={total}
-            height={83}
-            chain={chain}
-            network={wallet.credentials.network}
-          />
-        </DetailsList>
+        ) : null}
+        <Amount
+          description={t('SubTotal')}
+          amount={subTotal}
+          height={83}
+          chain={chain}
+          network={wallet.credentials.network}
+        />
+        <Amount
+          description={t('Total')}
+          amount={total}
+          height={83}
+          chain={chain}
+          network={wallet.credentials.network}
+        />
 
         <PaymentSent
           isVisible={showPaymentSentModal}

@@ -63,7 +63,8 @@ export const ConfirmContainer = styled.SafeAreaView`
 `;
 
 export const ConfirmScrollView = styled.ScrollView`
-  margin-left: ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 export const HeaderTitle = styled(H6)`
@@ -98,10 +99,6 @@ export const DetailRow = styled(Row)`
 
 export const DetailColumn = styled(Column)`
   align-items: flex-end;
-`;
-
-export const DetailsList = styled(ScrollView)`
-  padding: 0 ${ScreenGutter};
 `;
 
 export const ConfirmSubText = styled(H7)`

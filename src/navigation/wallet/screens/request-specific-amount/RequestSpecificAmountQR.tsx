@@ -16,7 +16,6 @@ import CopiedSvg from '../../../../../assets/img/copied-success.svg';
 import Clipboard from '@react-native-community/clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import {LightBlack, White} from '../../../../styles/colors';
-import ShareIcon from '../../../../components/icons/share/Share';
 import GhostSvg from '../../../../../assets/img/ghost-straight-face.svg';
 import {createWalletAddress} from '../../../../store/wallet/effects/address/address';
 import {
@@ -35,8 +34,8 @@ const SpecificAmtQRContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-top: 20px;
-  padding: 0 ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const ParagraphContainer = styled.View`
@@ -121,11 +120,6 @@ const RequestSpecificAmountQR = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{walletName}</HeaderTitle>,
-      headerRight: () => (
-        <ShareIconContainer activeOpacity={0.75}>
-          <ShareIcon />
-        </ShareIconContainer>
-      ),
     });
   }, [navigation, walletName, qrValue]);
 

@@ -27,7 +27,6 @@ import {
   Amount,
   ConfirmContainer,
   ConfirmScrollView,
-  DetailsList,
   ExchangeRate,
   Fee,
   Header,
@@ -260,68 +259,54 @@ const PayProConfirm = () => {
 
   return (
     <ConfirmContainer>
-      <ConfirmScrollView
-        extraScrollHeight={50}
-        contentContainerStyle={{paddingBottom: 50}}
-        keyboardShouldPersistTaps={'handled'}>
-        <DetailsList keyboardShouldPersistTaps={'handled'}>
-          <Header hr>Summary</Header>
-          {invoice ? (
-            <RemainingTime
-              invoiceExpirationTime={invoice.expirationTime}
-              setDisableSwipeSendButton={setDisableSwipeSendButton}
-            />
-          ) : null}
-          <SendingTo
-            recipient={{
-              recipientName: payProHost,
-              img: () => (
-                <SecureLockIcon
-                  height={18}
-                  width={18}
-                  style={{marginTop: -2}}
-                />
-              ),
-            }}
-            hr
+      <ConfirmScrollView>
+        <Header hr>Summary</Header>
+        {invoice ? (
+          <RemainingTime
+            invoiceExpirationTime={invoice.expirationTime}
+            setDisableSwipeSendButton={setDisableSwipeSendButton}
           />
-          {wallet ? (
-            <>
-              <SendingFrom
-                sender={sendingFrom!}
-                onPress={openKeyWalletSelector}
+        ) : null}
+        <SendingTo
+          recipient={{
+            recipientName: payProHost,
+            img: () => (
+              <SecureLockIcon height={18} width={18} style={{marginTop: -2}} />
+            ),
+          }}
+          hr
+        />
+        {wallet ? (
+          <>
+            <SendingFrom
+              sender={sendingFrom!}
+              onPress={openKeyWalletSelector}
+              hr
+            />
+            {txDetails?.rateStr ? (
+              <ExchangeRate
+                description={t('Exchange Rate')}
+                rateStr={txDetails?.rateStr}
+              />
+            ) : null}
+            {txp ? (
+              <Memo
+                memo={txp.message}
+                onChange={message => updateTxp({...txp, message})}
+              />
+            ) : null}
+            <Amount description={'SubTotal'} amount={subTotal} height={83} hr />
+            {wallet && fee ? (
+              <Fee
+                fee={fee}
+                hideFeeOptions
+                feeOptions={GetFeeOptions(wallet.chain)}
                 hr
               />
-              {txDetails?.rateStr ? (
-                <ExchangeRate
-                  description={t('Exchange Rate')}
-                  rateStr={txDetails?.rateStr}
-                />
-              ) : null}
-              {txp ? (
-                <Memo
-                  memo={txp.message}
-                  onChange={message => updateTxp({...txp, message})}
-                />
-              ) : null}
-              <Amount
-                description={'SubTotal'}
-                amount={subTotal}
-                height={83}
-                hr
-              />
-              {wallet && fee ? (
-                <Fee
-                  fee={fee}
-                  hideFeeOptions
-                  feeOptions={GetFeeOptions(wallet.chain)}
-                  hr
-                />
-              ) : null}
-              <Amount description={'Total'} amount={total} height={83} />
-            </>
-          ) : null}
-        </DetailsList>
+            ) : null}
+            <Amount description={'Total'} amount={total} height={83} />
+          </>
+        ) : null}
 
         <WalletSelector
           isVisible={walletSelectorVisible}

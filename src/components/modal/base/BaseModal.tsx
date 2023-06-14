@@ -44,20 +44,22 @@ const BaseModal: React.FC<ModalProps> = props => {
   }, [activeModalId, id, isVisible]);
   return isVisibleSafe ? (
     <>
-      <Pressable
-        style={{
-          position: 'absolute',
-          height: '100%',
-          width: '100%',
-          top: 0,
-          left: 0,
-          opacity: 0.3,
-          zIndex: 1,
-          backgroundColor: theme.dark ? White : Black,
-        }}
-        onPress={props.onBackdropPress}>
-        <View />
-      </Pressable>
+      {!fullScreen ? (
+        <Pressable
+          style={{
+            position: 'absolute',
+            height: '100%',
+            width: '100%',
+            top: 0,
+            left: 0,
+            opacity: 0.3,
+            zIndex: 1,
+            backgroundColor: theme.dark ? White : Black,
+          }}
+          onPress={props.onBackdropPress}>
+          <View />
+        </Pressable>
+      ) : null}
       <View
         style={{
           position: 'absolute',
@@ -65,7 +67,6 @@ const BaseModal: React.FC<ModalProps> = props => {
           bottom: placement === 'bottom' ? 0 : undefined,
           width: '100%',
           left: fullScreen ? 0 : undefined,
-          height: fullScreen ? '100%' : undefined,
           zIndex: isVisibleSafe ? 1000000 : undefined,
         }}>
         {props.children}

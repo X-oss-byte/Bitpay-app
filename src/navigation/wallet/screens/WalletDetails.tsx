@@ -326,35 +326,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
     setRefreshing(!!fullWalletObj.isRefreshing);
   }, [fullWalletObj.isRefreshing]);
 
-  const ShareAddress = async () => {
-    try {
-      // await sleep(1000);
-      // const address = (await dispatch<any>(
-      //   createWalletAddress({wallet: fullWalletObj, newAddress: false}),
-      // )) as string;
-      // Share.share(
-      //   {
-      //     message: address,
-      //     title: t('Share Address'),
-      //   },
-      //   {
-      //     dialogTitle: t('Share Address'),
-      //     subject: t('Share Address'),
-      //     excludedActivityTypes: [
-      //       'print',
-      //       'addToReadingList',
-      //       'markupAsPDF',
-      //       'openInIbooks',
-      //       'postToFacebook',
-      //       'postToTwitter',
-      //       'saveToCameraRoll',
-      //       'sharePlay',
-      //     ],
-      //   },
-      // );
-    } catch (e) {}
-  };
-
   const assetOptions: Array<Option> = _.compact([
     {
       img: <Icons.RequestAmount />,
@@ -381,14 +352,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
           },
         });
       },
-    },
-    {
-      img: <Icons.ShareAddress />,
-      title: t('Share Address'),
-      description: t(
-        'Share your wallet address to someone in your contacts so they can send you funds.',
-      ),
-      onPress: ShareAddress,
     },
     {
       img: <Icons.Settings />,

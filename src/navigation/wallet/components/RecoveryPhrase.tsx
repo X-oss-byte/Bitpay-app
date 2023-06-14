@@ -541,7 +541,7 @@ const RecoveryPhrase = () => {
   }, []);
 
   return (
-    <ContentView keyboardShouldPersistTaps={'handled'}>
+    <ContentView>
       <Paragraph>
         {t(
           'Enter your recovery phrase (usually 12-words) in the correct order. Separate each word with a single space only (no commas or any other punctuation). For backup phrases in non-English languages: Some words may include special symbols, so be sure to spell all the words correctly.',

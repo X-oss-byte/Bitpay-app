@@ -76,7 +76,8 @@ const TxsDetailsContainer = styled.View`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-left: ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const SubTitle = styled(BaseText)`
@@ -394,9 +395,7 @@ const TransactionDetails = () => {
   return (
     <TxsDetailsContainer>
       {!isLoading && txs ? (
-        <ScrollView
-          keyboardShouldPersistTaps={'handled'}
-          extraScrollHeight={80}>
+        <ScrollView>
           <>
             {NotZeroAmountEVM(txs.amount, currencyAbbreviation) ? (
               <H2 medium={true}>{txs.amountStr}</H2>

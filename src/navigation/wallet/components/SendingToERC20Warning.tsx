@@ -138,7 +138,10 @@ const SendingToERC20Warning = ({isVisible, closeModal, wallet}: Props) => {
   const dispatch = useAppDispatch();
 
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={closeModal}>
+    <SheetModal
+      isVisible={isVisible}
+      onBackdropPress={closeModal}
+      fullScreen={true}>
       <SheetContainer>
         <SendingInfoContainer>
           <SendingToHeader>

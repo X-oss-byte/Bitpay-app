@@ -143,7 +143,7 @@ const FileOrText = () => {
   });
 
   return (
-    <ContentView keyboardShouldPersistTaps={'handled'}>
+    <ContentView>
       <FormRow>
         <HeaderContainer>
           <ImportTitle>{t('Backup plain text code')}</ImportTitle>

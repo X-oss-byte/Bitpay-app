@@ -26,13 +26,14 @@ import {
   ActiveOpacity,
   CtaContainer,
   ScreenGutter,
+  Setting,
+  SettingTitle,
   SheetContainer,
   WIDTH,
 } from '../../../../components/styled/Containers';
 import SheetModal from '../../../../components/modal/base/sheet/SheetModal';
 import Back from '../../../../components/back/Back';
 import {TouchableOpacity, View} from 'react-native';
-import {DetailsList} from './confirm/Shared';
 import Button from '../../../../components/button/Button';
 import {
   Caution,
@@ -44,6 +45,7 @@ import {CurrencyImage} from '../../../../components/currency-image/CurrencyImage
 import {useTranslation} from 'react-i18next';
 import BoxInput from '../../../../components/form/BoxInput';
 import {SUPPORTED_EVM_COINS} from '../../../../constants/currencies';
+import Checkbox from '../../../../components/checkbox/Checkbox';
 
 const CIRCLE_SIZE = 20;
 
@@ -84,7 +86,7 @@ const SheetHeaderContainer = styled.View`
 const TitleContainer = styled.View`
   justify-content: center;
   align-items: center;
-  width: ${WIDTH - 110}px;
+  width: 95%;
 `;
 
 const ErrorText = styled(BaseText)`
@@ -460,11 +462,9 @@ const TransactionLevel = ({
     <SheetModal
       isVisible={isVisible}
       onBackdropPress={onClose}
-      placement={'bottom'}>
+      fullScreen={true}>
       <TxSpeedContainer>
-        <TxSpeedScroll
-          extraScrollHeight={150}
-          keyboardShouldPersistTaps={'handled'}>
+        <TxSpeedScroll>
           <SheetHeaderContainer>
             <TouchableOpacity
               activeOpacity={ActiveOpacity}
@@ -482,166 +482,100 @@ const TransactionLevel = ({
             )}
           </TxSpeedParagraph>
 
-          <View>
-            {feeOptions && feeOptions.length > 0 ? (
-              <>
-                <StepsHeaderContainer>
-                  <FeeLevelStepsHeader>
-                    <CurrencyImageContainer>
-                      <CurrencyImage img={img} size={20} />
-                    </CurrencyImageContainer>
-                    <H4>
-                      {chain.charAt(0).toUpperCase() + chain.slice(1)}{' '}
-                      {t('Network Fee Policy')}
-                    </H4>
-                  </FeeLevelStepsHeader>
+          {feeOptions && feeOptions.length > 0 ? (
+            <>
+              <StepsHeaderContainer>
+                <FeeLevelStepsHeader>
+                  <CurrencyImageContainer>
+                    <CurrencyImage img={img} size={20} />
+                  </CurrencyImageContainer>
+                  <H4>
+                    {chain.charAt(0).toUpperCase() + chain.slice(1)}{' '}
+                    {t('Network Fee Policy')}
+                  </H4>
+                </FeeLevelStepsHeader>
 
-                  <FeeLevelStepsHeaderSubTitle>
-                    {selectedLevel === 'custom' && customSatsPerByte
-                      ? `${customSatsPerByte} ${feeUnit}`
-                      : null}
-                    {selectedLevel !== 'custom'
-                      ? `${getSelectedFeeOption()?.uiFeePerSatByte} ${
-                          getSelectedFeeOption()?.avgConfirmationTime
-                        }`
-                      : null}
-                  </FeeLevelStepsHeaderSubTitle>
-                </StepsHeaderContainer>
+                <FeeLevelStepsHeaderSubTitle>
+                  {selectedLevel === 'custom' && customSatsPerByte
+                    ? `${customSatsPerByte} ${feeUnit}`
+                    : null}
+                  {selectedLevel !== 'custom'
+                    ? `${getSelectedFeeOption()?.uiFeePerSatByte} ${
+                        getSelectedFeeOption()?.avgConfirmationTime
+                      }`
+                    : null}
+                </FeeLevelStepsHeaderSubTitle>
 
-                <StepsContainer>
-                  {feeOptions.map((fee, i, {length}) => (
-                    <FeeLevelStepContainer key={i} length={length}>
-                      <TopLabelContainer>
-                        {i !== 0 && selectedLevel === fee.level ? (
-                          <View style={{flexShrink: 1}}>
-                            <FeeLevelStepTopLabel length={length} medium={true}>
-                              {fee.uiLevel}
-                            </FeeLevelStepTopLabel>
-                          </View>
-                        ) : null}
-                      </TopLabelContainer>
-
-                      <FeeLevelStep>
-                        <FeeLevelStepCircle
-                          isActive={selectedLevel === fee.level}
-                          isDisabled={fee.disabled}
-                          onPress={() => {
-                            setDisableApply(false);
-                            setSelectedLevel(fee.level);
-                          }}
-                          disabled={!!fee.disabled}
-                          backgroundColor={getBackgroundColor(i)}
-                          style={[
-                            {
-                              shadowColor: '#000',
-                              shadowOffset: {width: -2, height: 4},
-                              shadowOpacity:
-                                selectedLevel === fee.level ? 0.1 : 0,
-                              shadowRadius: 5,
-                              borderRadius: 12,
-                              elevation: 3,
-                            },
-                          ]}
-                        />
-
-                        <FeeLevelStepLine
-                          backgroundColor={getBackgroundColor(i + 1)}
-                        />
-                      </FeeLevelStep>
-                    </FeeLevelStepContainer>
-                  ))}
-
-                  <View>
-                    <TopLabelContainer />
-
-                    <FeeLevelStep isLast={true}>
-                      <FeeLevelStepCircle
-                        isActive={selectedLevel === 'custom'}
-                        onPress={onSelectCustomFee}
-                        backgroundColor={getBackgroundColor()}
-                        style={[
-                          {
-                            shadowColor: '#000',
-                            shadowOffset: {width: -2, height: 4},
-                            shadowOpacity: selectedLevel === 'custom' ? 0.1 : 0,
-                            shadowRadius: 5,
-                            borderRadius: 12,
-                            elevation: 3,
-                          },
-                        ]}
-                      />
-                    </FeeLevelStep>
-                  </View>
-                </StepsContainer>
-
-                <BottomLabelContainer>
-                  <FeeLevelStepBottomLabel>
-                    {feeOptions[0].uiLevel}
-                  </FeeLevelStepBottomLabel>
-                  <FeeLevelStepBottomLabel>
-                    {t('Custom')}
-                  </FeeLevelStepBottomLabel>
-                </BottomLabelContainer>
-
-                <DetailsList>
-                  {selectedLevel === 'custom' ? (
-                    <ActionContainer>
-                      <BoxInput
-                        keyboardType={'number-pad'}
-                        type="number"
-                        value={customSatsPerByte}
-                        onChangeText={(text: string) => {
-                          checkFees(text);
-                          setCustomSatsPerByte(text);
-                        }}
-                      />
-                      {error === 'required' ? (
-                        <ErrorText>{t('Fee is required')}.</ErrorText>
-                      ) : null}
-                      {error === 'showMinWarning' ? (
-                        <ErrorText>
-                          {t('Fee is lower than recommended.')}
-                        </ErrorText>
-                      ) : null}
-                      {error === 'showMaxWarning' ? (
-                        <ErrorText>
-                          {t('Fee should not be higher than ') +
-                            maxFeeRecommended +
-                            ' ' +
-                            feeUnit +
-                            '.'}
-                        </ErrorText>
-                      ) : null}
-                      {error === 'showMinError' ? (
-                        <ErrorText>
-                          {t('Fee should be higher than ') +
-                            minFeeAllowed +
-                            ' ' +
-                            feeUnit +
-                            '.'}
-                        </ErrorText>
-                      ) : null}
-                      {error === 'showMaxError' ? (
-                        <ErrorText>
-                          {t('Fee Should be lesser than ') +
-                            maxFeeAllowed +
-                            ' ' +
-                            feeUnit +
-                            '.'}
-                        </ErrorText>
-                      ) : null}
-                    </ActionContainer>
+                {feeOptions.map((fee, i) => (
+                  <Setting>
+                    <SettingTitle>{fee.uiLevel}</SettingTitle>
+                    <Checkbox
+                      radio={true}
+                      onPress={() => {
+                        if (selectedLevel !== fee.level) {
+                          setDisableApply(false);
+                          setSelectedLevel(fee.level);
+                        }
+                      }}
+                      checked={fee.level === selectedLevel}
+                    />
+                  </Setting>
+                ))}
+              </StepsHeaderContainer>
+              {selectedLevel === 'custom' ? (
+                <ActionContainer>
+                  <BoxInput
+                    keyboardType={'number-pad'}
+                    type="number"
+                    value={customSatsPerByte}
+                    onChangeText={(text: string) => {
+                      checkFees(text);
+                      setCustomSatsPerByte(text);
+                    }}
+                  />
+                  {error === 'required' ? (
+                    <ErrorText>{t('Fee is required')}.</ErrorText>
                   ) : null}
-                </DetailsList>
+                  {error === 'showMinWarning' ? (
+                    <ErrorText>{t('Fee is lower than recommended.')}</ErrorText>
+                  ) : null}
+                  {error === 'showMaxWarning' ? (
+                    <ErrorText>
+                      {t('Fee should not be higher than ') +
+                        maxFeeRecommended +
+                        ' ' +
+                        feeUnit +
+                        '.'}
+                    </ErrorText>
+                  ) : null}
+                  {error === 'showMinError' ? (
+                    <ErrorText>
+                      {t('Fee should be higher than ') +
+                        minFeeAllowed +
+                        ' ' +
+                        feeUnit +
+                        '.'}
+                    </ErrorText>
+                  ) : null}
+                  {error === 'showMaxError' ? (
+                    <ErrorText>
+                      {t('Fee Should be lesser than ') +
+                        maxFeeAllowed +
+                        ' ' +
+                        feeUnit +
+                        '.'}
+                    </ErrorText>
+                  ) : null}
+                </ActionContainer>
+              ) : null}
 
-                <CtaContainer>
-                  <Button onPress={() => onApply()} disabled={disableApply}>
-                    {t('Apply')}
-                  </Button>
-                </CtaContainer>
-              </>
-            ) : null}
-          </View>
+              <CtaContainer>
+                <Button onPress={() => onApply()} disabled={disableApply}>
+                  {t('Apply')}
+                </Button>
+              </CtaContainer>
+            </>
+          ) : null}
         </TxSpeedScroll>
       </TxSpeedContainer>
     </SheetModal>
