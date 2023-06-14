@@ -19,11 +19,10 @@ import {
   MinFeeWarning,
 } from '../../components/ErrorMessages';
 import {useAppDispatch} from '../../../../utils/hooks';
-import {GetFeeUnits, GetTheme} from '../../../../store/wallet/utils/currency';
-import styled, {useTheme} from 'styled-components/native';
+import {GetFeeUnits} from '../../../../store/wallet/utils/currency';
+import styled from 'styled-components/native';
 import {
   ActionContainer,
-  ActiveOpacity,
   CtaContainer,
   ScreenGutter,
   Setting,
@@ -32,15 +31,8 @@ import {
   WIDTH,
 } from '../../../../components/styled/Containers';
 import SheetModal from '../../../../components/modal/base/sheet/SheetModal';
-import Back from '../../../../components/back/Back';
-import {TouchableOpacity, View} from 'react-native';
 import Button from '../../../../components/button/Button';
-import {
-  Caution,
-  NeutralSlate,
-  SlateDark,
-  White,
-} from '../../../../styles/colors';
+import {Caution, SlateDark, White} from '../../../../styles/colors';
 import {CurrencyImage} from '../../../../components/currency-image/CurrencyImage';
 import {useTranslation} from 'react-i18next';
 import BoxInput from '../../../../components/form/BoxInput';
@@ -70,7 +62,7 @@ const CloseButton = styled.TouchableOpacity`
 `;
 
 const CloseButtonText = styled(Paragraph)`
-  color: ${({theme: {dark}}) => (dark ? White : Action)};
+  color: ${({theme: {dark}}) => (dark ? White : Caution)};
 `;
 
 const TxSpeedContainer = styled(SheetContainer)`
@@ -104,12 +96,6 @@ const ErrorText = styled(BaseText)`
   margin-top: 4px;
 `;
 
-const StepsContainer = styled.View`
-  flex-direction: row;
-  margin: ${ScreenGutter};
-  padding: 0 3px;
-`;
-
 export const FeeLevelStepContainer = styled.View<{length: number}>`
   /* Circle size + horizontal gutter */
   width: ${({length}) => (WIDTH - (CIRCLE_SIZE + 36)) / length}px;
@@ -140,16 +126,6 @@ export const FeeLevelStepLine = styled.View<{backgroundColor: string}>`
   flex-grow: 1;
   height: 2px;
   align-self: center;
-`;
-
-const TopLabelContainer = styled.View`
-  min-height: 30px;
-`;
-
-const BottomLabelContainer = styled.View`
-  justify-content: space-between;
-  flex-direction: row;
-  margin: 0 ${ScreenGutter};
 `;
 
 export const FeeLevelStepBottomLabel = styled(H7)`
@@ -201,7 +177,6 @@ const TransactionLevel = ({
   const {img, currencyAbbreviation, network, chain} = wallet;
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const theme = useTheme();
 
   const [speedUpMinFeePerKb, setSpeedUpMinFeePerKb] = useState<number>();
   const {feeUnit, feeUnitAmount, blockTime} = dispatch(
@@ -221,9 +196,6 @@ const TransactionLevel = ({
   const [minFeeRecommended, setMinFeeRecommended] = useState<number>();
   const minFeeAllowed = FEE_MIN;
   const [maxFeeAllowed, setMaxFeeAllowed] = useState<number>();
-
-  const {coinColor: backgroundColor} = GetTheme(currencyAbbreviation)!;
-  const themedBackground = theme.dark ? '#464646' : NeutralSlate;
 
   const setSpeedUpMinFee = (_feeLevels: Fee[]): number | undefined => {
     const minFeeLevel = currencyAbbreviation === 'btc' ? 'custom' : 'priority';
@@ -437,33 +409,8 @@ const TransactionLevel = ({
     };
   };
 
-  const onSelectCustomFee = () => {
-    setError(undefined);
-    setSelectedLevel('custom');
-    if (customSatsPerByte) {
-      checkFees(customSatsPerByte);
-    }
-  };
-
   const getSelectedFeeOption = () => {
     return feeOptions?.find(({level}) => level === selectedLevel);
-  };
-
-  const getBackgroundColor = (index?: number) => {
-    if (selectedLevel === 'custom') {
-      return backgroundColor;
-    }
-
-    if (index !== undefined) {
-      const selectedIndex =
-        feeOptions?.findIndex(({level}) => level === selectedLevel) || 0;
-
-      if (!(selectedIndex + 1 <= index)) {
-        return backgroundColor;
-      }
-    }
-
-    return '#E1E7E4';
   };
 
   return (
