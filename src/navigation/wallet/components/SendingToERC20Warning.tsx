@@ -119,6 +119,7 @@ interface Props {
   isVisible: boolean;
   closeModal: () => void;
   wallet: Wallet;
+  placement?: 'top' | 'bottom';
 }
 
 export const viewOnBlockchain =
@@ -133,7 +134,12 @@ export const viewOnBlockchain =
     dispatch(openUrlWithInAppBrowser(url));
   };
 
-const SendingToERC20Warning = ({isVisible, closeModal, wallet}: Props) => {
+const SendingToERC20Warning = ({
+  isVisible,
+  closeModal,
+  wallet,
+  placement,
+}: Props) => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
 
@@ -141,7 +147,7 @@ const SendingToERC20Warning = ({isVisible, closeModal, wallet}: Props) => {
     <SheetModal
       isVisible={isVisible}
       onBackdropPress={closeModal}
-      fullScreen={true}>
+      placement={placement}>
       <SheetContainer>
         <SendingInfoContainer>
           <SendingToHeader>

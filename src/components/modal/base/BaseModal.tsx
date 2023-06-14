@@ -13,7 +13,7 @@ type ModalProps = {
   onModalWillShow?: () => void;
   onBackdropPress?: () => void;
   children: React.ReactNode;
-  placement: 'top' | 'bottom' | undefined;
+  placement: 'top' | 'bottom' | 'center' | undefined;
   fullScreen?: boolean;
 };
 
@@ -67,6 +67,7 @@ const BaseModal: React.FC<ModalProps> = props => {
           bottom: placement === 'bottom' ? 0 : undefined,
           width: '100%',
           left: fullScreen ? 0 : undefined,
+          height: fullScreen ? '100%' : undefined,
           zIndex: isVisibleSafe ? 1000000 : undefined,
         }}>
         {props.children}

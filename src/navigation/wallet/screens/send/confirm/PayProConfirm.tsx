@@ -325,6 +325,7 @@ const PayProConfirm = () => {
 
         <PaymentSent
           isVisible={showPaymentSentModal}
+          fullScreen={true}
           onCloseModal={async () => {
             navigation.dispatch(StackActions.popToTop());
             navigation.navigate('Wallet', {

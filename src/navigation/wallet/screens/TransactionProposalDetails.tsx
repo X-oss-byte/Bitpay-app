@@ -83,7 +83,8 @@ const TxpDetailsContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  margin-left: ${ScreenGutter};
+  padding: 0px 10px;
+  margin: 20px ${ScreenGutter};
 `;
 
 const SubTitle = styled(BaseText)`
@@ -777,6 +778,7 @@ const TransactionProposalDetails = () => {
 
       <PaymentSent
         isVisible={showPaymentSentModal}
+        fullScreen={true}
         title={lastSigner ? t('Payment Sent') : t('Payment Accepted')}
         onCloseModal={async () => {
           setShowPaymentSentModal(false);

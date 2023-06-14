@@ -626,6 +626,7 @@ const TransactionProposalNotifications = () => {
       ) : null}
       <PaymentSent
         isVisible={showPaymentSentModal}
+        fullScreen={true}
         onCloseModal={async () => {
           setShowPaymentSentModal(false);
           await sleep(300);

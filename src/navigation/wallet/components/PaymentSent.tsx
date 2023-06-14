@@ -44,14 +44,23 @@ const CloseText = styled(BaseText)`
 
 interface PaymentSentModal {
   isVisible: boolean;
+  fullScreen?: boolean;
   onCloseModal: () => void;
   title?: string;
 }
 
-const PaymentSent = ({isVisible, onCloseModal, title}: PaymentSentModal) => {
+const PaymentSent = ({
+  isVisible,
+  onCloseModal,
+  title,
+  fullScreen,
+}: PaymentSentModal) => {
   const {t} = useTranslation();
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={onCloseModal}>
+    <SheetModal
+      isVisible={isVisible}
+      fullScreen={fullScreen}
+      onBackdropPress={onCloseModal}>
       <PaymentSentContainer>
         <PaymentSentHero>
           <PaymentCompleteSvg />

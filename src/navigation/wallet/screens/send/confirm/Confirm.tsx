@@ -466,44 +466,6 @@ const Confirm = () => {
           network={wallet.credentials.network}
         />
 
-        <PaymentSent
-          isVisible={showPaymentSentModal}
-          title={
-            wallet.credentials.n > 1 ? t('Proposal created') : t('Payment Sent')
-          }
-          onCloseModal={async () => {
-            setShowPaymentSentModal(false);
-            if (recipient.type === 'coinbase') {
-              navigation.dispatch(
-                CommonActions.reset({
-                  index: 2,
-                  routes: [
-                    {
-                      name: 'Tabs',
-                      params: {screen: 'Home'},
-                    },
-                    {
-                      name: 'Coinbase',
-                      params: {
-                        screen: 'CoinbaseRoot',
-                      },
-                    },
-                  ],
-                }),
-              );
-            } else {
-              navigation.dispatch(StackActions.popToTop());
-              navigation.dispatch(
-                StackActions.replace('WalletDetails', {
-                  walletId: wallet!.id,
-                  key,
-                }),
-              );
-              await sleep(0);
-              setShowPaymentSentModal(false);
-            }
-          }}
-        />
         {isTxLevelAvailable() ? (
           <TransactionLevel
             feeLevel={fee.feeLevel}
@@ -527,6 +489,7 @@ const Confirm = () => {
       {wallet && IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? (
         <SendingToERC20Warning
           isVisible={showSendingERC20Modal}
+          placement={'bottom'}
           closeModal={() => {
             setShowSendingERC20Modal(false);
           }}
@@ -565,6 +528,45 @@ const Confirm = () => {
                   }),
                 );
             }
+          }
+        }}
+      />
+      <PaymentSent
+        isVisible={showPaymentSentModal}
+        fullScreen={true}
+        title={
+          wallet.credentials.n > 1 ? t('Proposal created') : t('Payment Sent')
+        }
+        onCloseModal={async () => {
+          setShowPaymentSentModal(false);
+          if (recipient.type === 'coinbase') {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 2,
+                routes: [
+                  {
+                    name: 'Tabs',
+                    params: {screen: 'Home'},
+                  },
+                  {
+                    name: 'Coinbase',
+                    params: {
+                      screen: 'CoinbaseRoot',
+                    },
+                  },
+                ],
+              }),
+            );
+          } else {
+            navigation.dispatch(StackActions.popToTop());
+            navigation.dispatch(
+              StackActions.replace('WalletDetails', {
+                walletId: wallet!.id,
+                key,
+              }),
+            );
+            await sleep(0);
+            setShowPaymentSentModal(false);
           }
         }}
       />

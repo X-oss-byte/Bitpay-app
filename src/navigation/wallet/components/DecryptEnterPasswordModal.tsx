@@ -102,16 +102,8 @@ const DecryptEnterPasswordModal = () => {
   return (
     <SheetModal
       isVisible={isVisible}
-      animationIn={'fadeInUp'}
-      animationOut={'fadeOutDown'}
-      backdropTransitionOutTiming={0}
-      hideModalContentWhileAnimating={true}
-      useNativeDriverForBackdrop={true}
-      useNativeDriver={true}
-      onBackdropPress={dismissModal}
-      style={{
-        alignItems: 'center',
-      }}>
+      placement={'bottom'}
+      onBackdropPress={dismissModal}>
       <DecryptFormContainer>
         <PasswordFormContainer>
           <HeaderTitle>{t('Enter encryption password')}</HeaderTitle>

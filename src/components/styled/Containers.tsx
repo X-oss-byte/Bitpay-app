@@ -133,7 +133,7 @@ export const CardContainer = styled.View`
 `;
 
 export interface SheetParams {
-  placement?: 'top' | 'bottom';
+  placement?: 'top' | 'bottom' | 'center';
   fullScreen?: boolean;
 }
 
