@@ -4,6 +4,7 @@ import React, {
   useMemo,
   useState,
   useEffect,
+  useLayoutEffect,
 } from 'react';
 import styled from 'styled-components/native';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
@@ -16,7 +17,7 @@ import {
   keyExtractor,
   sleep,
 } from '../../../utils/helper-methods';
-import {FlatList, TouchableOpacity, View} from 'react-native';
+import {FlatList, Pressable, View} from 'react-native';
 import GlobalSelectRow from '../../../components/list/GlobalSelectRow';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 import {ScreenGutter} from '../../../components/styled/Containers';
@@ -28,13 +29,16 @@ import KeyWalletsRow, {
 import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import {LightBlack, White} from '../../../styles/colors';
-import {H4, TextAlign, BaseText} from '../../../components/styled/Text';
+import {
+  H4,
+  TextAlign,
+  BaseText,
+  HeaderTitle,
+} from '../../../components/styled/Text';
 import {RouteProp, useRoute} from '@react-navigation/core';
 import {WalletScreens, WalletStackParamList} from '../WalletStack';
-import {useNavigation, useTheme} from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 import ReceiveAddress from '../components/ReceiveAddress';
-import CloseModal from '../../../../assets/img/close-modal-icon.svg';
-import InfoSvg from '../../../../assets/img/info.svg';
 import {
   createProposalAndBuildTxDetails,
   handleCreateTxProposalError,
@@ -43,47 +47,13 @@ import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
 } from '../../../store/app/app.actions';
-import {Effect, RootState} from '../../../store';
+import {Effect} from '../../../store';
 import {BitpaySupportedTokenOpts} from '../../../constants/tokens';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {ButtonState} from '../../../components/button/Button';
 import {useTranslation} from 'react-i18next';
 import {toFiat} from '../../../store/wallet/utils/wallet';
 import {LogActions} from '../../../store/log';
-
-const ModalHeader = styled.View`
-  height: 50px;
-  margin-right: 10px;
-  margin-left: 10px;
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-  position: relative;
-`;
-
-const CloseModalButtonContainer = styled.View`
-  position: absolute;
-  left: 0;
-`;
-
-const CloseModalButton = styled.TouchableOpacity`
-  padding: 5px;
-  height: 41px;
-  width: 41px;
-  border-radius: 50px;
-  background-color: #9ba3ae33;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const ModalTitleContainer = styled.View`
-  display: flex;
-  flex-direction: row;
-  justify-content: center;
-  align-items: center;
-`;
 
 const SafeAreaView = styled.SafeAreaView`
   flex: 1;
@@ -189,7 +159,6 @@ export type GlobalSelectModalContext =
   | 'contact';
 
 interface GlobalSelectProps {
-  useAsModal: any;
   modalTitle?: string;
   customSupportedCurrencies?: string[];
   onDismiss?: (newWallet?: any) => void;
@@ -199,21 +168,13 @@ interface GlobalSelectProps {
 }
 
 const GlobalSelect: React.FC<GlobalSelectProps> = ({
-  useAsModal,
-  modalTitle,
   customSupportedCurrencies,
   onDismiss,
-  modalContext,
   livenetOnly,
-  onHelpPress,
 }) => {
   const {t} = useTranslation();
   const route = useRoute<RouteProp<WalletStackParamList, 'GlobalSelect'>>();
   let {context, recipient, amount} = route.params || {};
-  if (useAsModal && modalContext) {
-    context = modalContext;
-  }
-  const theme = useTheme();
   const dispatch = useAppDispatch();
   const {keys, tokenOptions, customTokenOptions} = useAppSelector(
     ({WALLET}) => WALLET,
@@ -364,12 +325,6 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
 
   const onWalletSelect = useCallback(
     async (wallet: Wallet) => {
-      if (useAsModal && onDismiss) {
-        setWalletSelectModalVisible(false);
-        await sleep(100);
-        onDismiss(wallet);
-        return;
-      }
       if (['coinbase', 'contact', 'scanner'].includes(context)) {
         setWalletSelectModalVisible(false);
         const {name, address, type, destinationTag, opts} = recipient!;
@@ -431,7 +386,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
         setShowReceiveAddressBottomModal(true);
       }
     },
-    [context, navigation, onDismiss, recipient, useAsModal],
+    [context, navigation, onDismiss, recipient],
   );
 
   const _createProposalAndBuildTxDetails =
@@ -453,12 +408,12 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
       setButtonState?: (state: ButtonState) => void;
       opts: any;
     }): Effect<Promise<void>> =>
-    async (dispatch, getState) => {
+    async dispatch => {
       try {
         if (setButtonState) {
           setButtonState('loading');
         } else {
-          dispatch(startOnGoingProcessModal('CREATING_TXP'));
+          await dispatch(startOnGoingProcessModal('CREATING_TXP'));
         }
         const {txDetails, txp} = await dispatch(
           createProposalAndBuildTxDetails({
@@ -543,56 +498,32 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
     setShowReceiveAddressBottomModal(false);
   };
 
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: () => {
+        return (
+          <HeaderTitle>
+            {walletSelectModalVisible
+              ? t('Select a wallet')
+              : t('Select a currency')}
+          </HeaderTitle>
+        );
+      },
+    });
+  }, [navigation, t, walletSelectModalVisible]);
+
   useEffect(() => {
     if (!wallets[0]) {
       // No wallets available
       // TODO: show warning
-      if (useAsModal) {
-        closeModal();
-      } else if (navigation.canGoBack()) {
+      if (navigation.canGoBack()) {
         navigation.goBack();
       }
     }
-  }, [navigation, wallets, useAsModal]);
+  }, [navigation, wallets]);
 
   return (
     <SafeAreaView>
-      {useAsModal && (
-        <ModalHeader>
-          <CloseModalButtonContainer>
-            <CloseModalButton
-              onPress={() => {
-                if (onDismiss) {
-                  onDismiss();
-                }
-              }}>
-              <CloseModal
-                {...{
-                  width: 20,
-                  height: 20,
-                  color: theme.dark ? 'white' : 'black',
-                }}
-              />
-            </CloseModalButton>
-          </CloseModalButtonContainer>
-          {!!modalTitle && (
-            <ModalTitleContainer>
-              <TextAlign align={'center'}>
-                <H4>{modalTitle} BLABL</H4>
-              </TextAlign>
-              {onHelpPress ? (
-                <TouchableOpacity
-                  onPress={() => {
-                    onHelpPress();
-                  }}
-                  style={{marginLeft: 5}}>
-                  <InfoSvg width={20} height={20} />
-                </TouchableOpacity>
-              ) : null}
-            </ModalTitleContainer>
-          )}
-        </ModalHeader>
-      )}
       <View>
         {data.length > 0 && (
           <FlatList
@@ -614,11 +545,6 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           isVisible={walletSelectModalVisible}
           onBackdropPress={() => setWalletSelectModalVisible(false)}>
           <WalletSelectMenuContainer>
-            <WalletSelectMenuHeaderContainer>
-              <TextAlign align={'center'}>
-                <H4>{t('Select a wallet')}</H4>
-              </TextAlign>
-            </WalletSelectMenuHeaderContainer>
             <WalletSelectMenuBodyContainer>
               <KeyWalletsRow
                 keyWallets={keyWallets!}

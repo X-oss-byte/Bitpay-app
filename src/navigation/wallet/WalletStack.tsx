@@ -348,11 +348,7 @@ const WalletStack = () => {
           component={TransactionProposalNotifications}
         />
         <Wallet.Screen
-          options={{
-            headerTitle: () => (
-              <HeaderTitle>{t('Select a currency')}</HeaderTitle>
-            ),
-          }}
+          options={{gestureEnabled: false}}
           name={WalletScreens.GLOBAL_SELECT}
           component={GlobalSelect}
         />
