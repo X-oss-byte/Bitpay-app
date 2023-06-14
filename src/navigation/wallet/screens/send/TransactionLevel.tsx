@@ -65,6 +65,14 @@ export enum evmAvgTime {
   urgent = 'ASAP',
 }
 
+const CloseButton = styled.TouchableOpacity`
+  margin: auto;
+`;
+
+const CloseButtonText = styled(Paragraph)`
+  color: ${({theme: {dark}}) => (dark ? White : Action)};
+`;
+
 const TxSpeedContainer = styled(SheetContainer)`
   flex: 1;
   justify-content: flex-start;
@@ -78,7 +86,7 @@ const TxSpeedScroll = styled.ScrollView`
 `;
 
 const SheetHeaderContainer = styled.View`
-  margin-bottom: 15px;
+  margin: 15px;
   align-items: center;
   flex-direction: row;
 `;
@@ -462,15 +470,12 @@ const TransactionLevel = ({
     <SheetModal
       isVisible={isVisible}
       onBackdropPress={onClose}
-      fullScreen={true}>
+      placement={'bottom'}
+      fullScreen={false}
+      useMaxHeight={true}>
       <TxSpeedContainer>
         <TxSpeedScroll>
           <SheetHeaderContainer>
-            <TouchableOpacity
-              activeOpacity={ActiveOpacity}
-              onPress={() => onClose()}>
-              <Back opacity={1} background={themedBackground} />
-            </TouchableOpacity>
             <TitleContainer>
               <HeaderTitle>{t('Transaction Speed')}</HeaderTitle>
             </TitleContainer>
@@ -574,6 +579,9 @@ const TransactionLevel = ({
                   {t('Apply')}
                 </Button>
               </CtaContainer>
+              <CloseButton onPress={() => onClose()}>
+                <CloseButtonText>{t('CLOSE')}</CloseButtonText>
+              </CloseButton>
             </>
           ) : null}
         </TxSpeedScroll>

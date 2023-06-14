@@ -2,7 +2,7 @@ import React, {useEffect, useState} from 'react';
 import {AppActions} from '../../../store/app';
 import {ModalId} from '../../../store/app/app.reducer';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
-import {View, Pressable, ScrollView} from 'react-native';
+import {View, Pressable} from 'react-native';
 import {useTheme} from '@react-navigation/native';
 import {Black, OledBlack, White} from '../../../styles/colors';
 
@@ -15,6 +15,7 @@ type ModalProps = {
   children: React.ReactNode;
   placement: 'top' | 'bottom' | 'center' | undefined;
   fullScreen?: boolean;
+  useMaxHeight?: boolean;
 };
 
 const BaseModal: React.FC<ModalProps> = props => {
@@ -22,8 +23,15 @@ const BaseModal: React.FC<ModalProps> = props => {
   const dispatch = useAppDispatch();
   const activeModalId = useAppSelector(({APP}) => APP.activeModalId);
   const [isVisibleSafe, setVisibleSafe] = useState(false);
-  const {id, isVisible, onModalHide, onModalWillShow, placement, fullScreen} =
-    props as ModalProps;
+  const {
+    id,
+    isVisible,
+    onModalHide,
+    onModalWillShow,
+    placement,
+    fullScreen,
+    useMaxHeight,
+  } = props as ModalProps;
 
   useEffect(() => {
     if (isVisible) {
@@ -43,49 +51,38 @@ const BaseModal: React.FC<ModalProps> = props => {
     }
   }, [activeModalId, id, isVisible]);
   return isVisibleSafe ? (
-    fullScreen ? (
+    <>
+      {!fullScreen ? (
+        <Pressable
+          style={{
+            position: 'absolute',
+            height: '100%',
+            width: '100%',
+            top: 0,
+            left: 0,
+            opacity: 0.3,
+            zIndex: 1,
+            backgroundColor: theme.dark ? White : Black,
+          }}
+          onPress={props.onBackdropPress}>
+          <View />
+        </Pressable>
+      ) : null}
       <View
         style={{
           position: 'absolute',
-          top: 0,
+          top: placement === 'top' || fullScreen ? 0 : undefined,
+          bottom: placement === 'bottom' ? 0 : undefined,
           width: '100%',
-          left: 0,
-          height: '100%',
-          zIndex: 1000000,
+          left: fullScreen ? 0 : undefined,
+          height: fullScreen ? '100%' : undefined,
+          zIndex: isVisibleSafe ? 1000000 : undefined,
           backgroundColor: theme.dark ? OledBlack : White,
+          maxHeight: useMaxHeight ? '80%' : undefined,
         }}>
         {props.children}
       </View>
-    ) : (
-      <>
-        {!fullScreen ? (
-          <Pressable
-            style={{
-              position: 'absolute',
-              height: '100%',
-              width: '100%',
-              top: 0,
-              left: 0,
-              opacity: 0.3,
-              zIndex: 1,
-              backgroundColor: theme.dark ? White : Black,
-            }}
-            onPress={props.onBackdropPress}>
-            <View />
-          </Pressable>
-        ) : null}
-        <View
-          style={{
-            position: 'absolute',
-            top: placement === 'top' ? 0 : undefined,
-            bottom: placement === 'bottom' ? 0 : undefined,
-            width: '100%',
-            zIndex: isVisibleSafe ? 1000000 : undefined,
-          }}>
-          {props.children}
-        </View>
-      </>
-    )
+    </>
   ) : null;
 };
 

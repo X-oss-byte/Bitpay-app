@@ -465,37 +465,7 @@ const Confirm = () => {
           chain={chain}
           network={wallet.credentials.network}
         />
-
-        {isTxLevelAvailable() ? (
-          <TransactionLevel
-            feeLevel={fee.feeLevel}
-            wallet={wallet}
-            isVisible={showTransactionLevel}
-            onCloseModal={(selectedLevel, customFeePerKB) =>
-              onCloseTxLevelModal(selectedLevel, customFeePerKB)
-            }
-            customFeePerKB={
-              fee.feeLevel === 'custom' ? txp?.feePerKb : undefined
-            }
-            feePerSatByte={
-              fee.feeLevel === 'custom' && txp?.feePerKb
-                ? txp?.feePerKb / 1000
-                : undefined
-            }
-            isSpeedUpTx={speedup}
-          />
-        ) : null}
       </ConfirmScrollView>
-      {wallet && IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? (
-        <SendingToERC20Warning
-          isVisible={showSendingERC20Modal}
-          placement={'bottom'}
-          closeModal={() => {
-            setShowSendingERC20Modal(false);
-          }}
-          wallet={wallet}
-        />
-      ) : null}
       <SwipeButton
         title={speedup ? t('Speed Up') : t('Slide to send')}
         forceReset={resetSwipeButton}
@@ -531,6 +501,34 @@ const Confirm = () => {
           }
         }}
       />
+
+      {isTxLevelAvailable() ? (
+        <TransactionLevel
+          feeLevel={fee.feeLevel}
+          wallet={wallet}
+          isVisible={showTransactionLevel}
+          onCloseModal={(selectedLevel, customFeePerKB) =>
+            onCloseTxLevelModal(selectedLevel, customFeePerKB)
+          }
+          customFeePerKB={fee.feeLevel === 'custom' ? txp?.feePerKb : undefined}
+          feePerSatByte={
+            fee.feeLevel === 'custom' && txp?.feePerKb
+              ? txp?.feePerKb / 1000
+              : undefined
+          }
+          isSpeedUpTx={speedup}
+        />
+      ) : null}
+      {wallet && IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? (
+        <SendingToERC20Warning
+          isVisible={showSendingERC20Modal}
+          placement={'bottom'}
+          closeModal={() => {
+            setShowSendingERC20Modal(false);
+          }}
+          wallet={wallet}
+        />
+      ) : null}
       <PaymentSent
         isVisible={showPaymentSentModal}
         fullScreen={true}

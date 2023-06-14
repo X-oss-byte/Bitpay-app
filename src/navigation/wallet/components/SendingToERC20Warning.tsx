@@ -2,7 +2,10 @@ import React from 'react';
 import styled from 'styled-components/native';
 import {BaseText, Paragraph} from '../../../components/styled/Text';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
-import {SheetContainer} from '../../../components/styled/Containers';
+import {
+  ScreenGutter,
+  SheetContainer,
+} from '../../../components/styled/Containers';
 import {
   Action,
   Black,
@@ -26,6 +29,11 @@ import {Effect} from '../../../store';
 import {useAppDispatch} from '../../../utils/hooks';
 
 export const BchAddressTypes = ['Cash Address', 'Legacy'];
+
+const SendingInfoContainerScroll = styled.ScrollView`
+  padding: 0px 8px;
+  margin-left: ${ScreenGutter};
+`;
 
 const CloseButton = styled.TouchableOpacity`
   margin: auto;
@@ -147,54 +155,58 @@ const SendingToERC20Warning = ({
     <SheetModal
       isVisible={isVisible}
       onBackdropPress={closeModal}
-      placement={placement}>
+      placement={placement}
+      useMaxHeight={true}>
       <SheetContainer>
-        <SendingInfoContainer>
-          <SendingToHeader>
-            <InfoSvg />
-            <TitleContainer size={20} marginLeft={10}>
-              {t('Sending to')}
-            </TitleContainer>
-          </SendingToHeader>
-          <SendingToDescription>
-            {t(
-              'You are about to send COIN using the PROTOCOLNAME Network. Make sure your recipient is expecting this exact asset and network. BitPay is not responsible for any funds lost.',
-              {
-                coin: wallet.currencyAbbreviation.toUpperCase(),
-                protocolName: titleCasing(
-                  getProtocolName(wallet.chain, wallet.network)!,
-                ),
-              },
-            )}
-          </SendingToDescription>
-          <TitleContainer>{t('Network')}</TitleContainer>
-          <SendingToNetworkBadgeContainer>
-            <SendingToNetworkBadge>
-              <CurrencyImage
-                img={getBadgeImg(wallet.currencyAbbreviation, wallet.chain)}
-                size={25}
-              />
-              <SendingToNetwork>
-                {titleCasing(getProtocolName(wallet.chain, wallet.network)!)}
-              </SendingToNetwork>
-            </SendingToNetworkBadge>
-          </SendingToNetworkBadgeContainer>
-          <ContractHeaderContainer>
-            <TitleContainer>{t('Contract Address')}</TitleContainer>
-            <LinkContainer>
-              <LinkIcon />
-              <ContractLink onPress={() => dispatch(viewOnBlockchain(wallet))}>
-                {t('View Contract')}
-              </ContractLink>
-            </LinkContainer>
-          </ContractHeaderContainer>
-          <ContractAddressText>
-            {wallet.credentials.token.address}
-          </ContractAddressText>
-        </SendingInfoContainer>
-        <CloseButton onPress={closeModal}>
-          <CloseButtonText>{t('CLOSE')}</CloseButtonText>
-        </CloseButton>
+        <SendingInfoContainerScroll>
+          <SendingInfoContainer>
+            <SendingToHeader>
+              <InfoSvg />
+              <TitleContainer size={20} marginLeft={10}>
+                {t('Sending to')}
+              </TitleContainer>
+            </SendingToHeader>
+            <SendingToDescription>
+              {t(
+                'You are about to send COIN using the PROTOCOLNAME Network. Make sure your recipient is expecting this exact asset and network. BitPay is not responsible for any funds lost.',
+                {
+                  coin: wallet.currencyAbbreviation.toUpperCase(),
+                  protocolName: titleCasing(
+                    getProtocolName(wallet.chain, wallet.network)!,
+                  ),
+                },
+              )}
+            </SendingToDescription>
+            <TitleContainer>{t('Network')}</TitleContainer>
+            <SendingToNetworkBadgeContainer>
+              <SendingToNetworkBadge>
+                <CurrencyImage
+                  img={getBadgeImg(wallet.currencyAbbreviation, wallet.chain)}
+                  size={25}
+                />
+                <SendingToNetwork>
+                  {titleCasing(getProtocolName(wallet.chain, wallet.network)!)}
+                </SendingToNetwork>
+              </SendingToNetworkBadge>
+            </SendingToNetworkBadgeContainer>
+            <ContractHeaderContainer>
+              <TitleContainer>{t('Contract Address')}</TitleContainer>
+              <LinkContainer>
+                <LinkIcon />
+                <ContractLink
+                  onPress={() => dispatch(viewOnBlockchain(wallet))}>
+                  {t('View Contract')}
+                </ContractLink>
+              </LinkContainer>
+            </ContractHeaderContainer>
+            <ContractAddressText>
+              {wallet.credentials.token.address}
+            </ContractAddressText>
+          </SendingInfoContainer>
+          <CloseButton onPress={closeModal}>
+            <CloseButtonText>{t('CLOSE')}</CloseButtonText>
+          </CloseButton>
+        </SendingInfoContainerScroll>
       </SheetContainer>
     </SheetModal>
   );

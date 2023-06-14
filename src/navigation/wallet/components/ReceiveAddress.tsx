@@ -10,6 +10,7 @@ import {BottomNotificationConfig} from '../../../components/modal/bottom-notific
 import {
   SheetContainer,
   ActiveOpacity,
+  ScreenGutter,
 } from '../../../components/styled/Containers';
 import {BWCErrorMessage} from '../../../constants/BWCError';
 import {CustomErrorMessage} from './ErrorMessages';
@@ -54,6 +55,11 @@ import {
 } from './SendingToERC20Warning';
 
 export const BchAddressTypes = ['Cash Address', 'Legacy'];
+
+const ReceiveAddressContainerScroll = styled.ScrollView`
+  padding: 0px 8px;
+  margin-left: ${ScreenGutter};
+`;
 
 const CopyToClipboard = styled.TouchableOpacity`
   border: 1px solid #9ba3ae;
@@ -311,84 +317,89 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
     <SheetModal
       isVisible={isVisible}
       onBackdropPress={_closeModal}
-      placement={'bottom'}>
+      placement={'bottom'}
+      useMaxHeight={
+        IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? true : false
+      }>
       <ReceiveAddressContainer>
-        {!singleAddress ? (
-          <ReceiveAddressHeader
-            onPressRefresh={() => createAddress(true)}
-            contextHandlers={headerContextHandlers}
-            showRefresh={isUtxo}
-          />
-        ) : null}
+        <ReceiveAddressContainerScroll>
+          {!singleAddress ? (
+            <ReceiveAddressHeader
+              onPressRefresh={() => createAddress(true)}
+              contextHandlers={headerContextHandlers}
+              showRefresh={isUtxo}
+            />
+          ) : null}
 
-        {address ? (
-          <>
-            <CopyToClipboard
-              onPress={copyToClipboard}
-              activeOpacity={ActiveOpacity}>
-              <CopyImgContainer>
-                {!copied ? <CopySvg width={17} /> : <CopiedSvg width={17} />}
-              </CopyImgContainer>
-              <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
-                {address}
-              </AddressText>
-            </CopyToClipboard>
+          {address ? (
+            <>
+              <CopyToClipboard
+                onPress={copyToClipboard}
+                activeOpacity={ActiveOpacity}>
+                <CopyImgContainer>
+                  {!copied ? <CopySvg width={17} /> : <CopiedSvg width={17} />}
+                </CopyImgContainer>
+                <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
+                  {address}
+                </AddressText>
+              </CopyToClipboard>
 
-            <QRCodeContainer>
-              <QRCodeBackground>
-                <QRCode value={address} size={200} />
-              </QRCodeBackground>
-            </QRCodeContainer>
-          </>
-        ) : loading ? (
-          <LoadingContainer>
-            <LoadingText>{t('Generating Address...')}</LoadingText>
-          </LoadingContainer>
-        ) : (
-          <LoadingContainer>
-            <GhostSvg />
-            <LoadingText>
-              {t('Something went wrong. Please try again.')}
-            </LoadingText>
-          </LoadingContainer>
-        )}
+              <QRCodeContainer>
+                <QRCodeBackground>
+                  <QRCode value={address} size={200} />
+                </QRCodeBackground>
+              </QRCodeContainer>
+            </>
+          ) : loading ? (
+            <LoadingContainer>
+              <LoadingText>{t('Generating Address...')}</LoadingText>
+            </LoadingContainer>
+          ) : (
+            <LoadingContainer>
+              <GhostSvg />
+              <LoadingText>
+                {t('Something went wrong. Please try again.')}
+              </LoadingText>
+            </LoadingContainer>
+          )}
 
-        {IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? (
-          <WarningContainer>
-            <WarningHeader>
-              <WarningSvg />
-              <WarningDescription>
-                <WarningTitle>{t('Warning!')}</WarningTitle>
-                {'\n'}
-                {t(
-                  'Receive only COIN on the PROTOCOLNAME Network to avoid losing funds.',
-                  {
-                    coin: wallet.currencyAbbreviation.toUpperCase(),
-                    protocolName: titleCasing(
-                      getProtocolName(wallet.chain, wallet.network)!,
-                    ),
-                  },
-                )}
-              </WarningDescription>
-            </WarningHeader>
-            <ContractHeaderContainer>
-              <TitleContainer>{t('Contract Address')}</TitleContainer>
-              <LinkContainer>
-                <LinkIcon />
-                <ContractLink
-                  onPress={() => dispatch(viewOnBlockchain(wallet))}>
-                  {t('View Contract')}
-                </ContractLink>
-              </LinkContainer>
-            </ContractHeaderContainer>
-            <ContractAddressText>
-              {wallet.credentials.token.address}
-            </ContractAddressText>
-          </WarningContainer>
-        ) : null}
-        <CloseButton onPress={_closeModal}>
-          <CloseButtonText>{t('CLOSE')}</CloseButtonText>
-        </CloseButton>
+          {IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? (
+            <WarningContainer>
+              <WarningHeader>
+                <WarningSvg />
+                <WarningDescription>
+                  <WarningTitle>{t('Warning!')}</WarningTitle>
+                  {'\n'}
+                  {t(
+                    'Receive only COIN on the PROTOCOLNAME Network to avoid losing funds.',
+                    {
+                      coin: wallet.currencyAbbreviation.toUpperCase(),
+                      protocolName: titleCasing(
+                        getProtocolName(wallet.chain, wallet.network)!,
+                      ),
+                    },
+                  )}
+                </WarningDescription>
+              </WarningHeader>
+              <ContractHeaderContainer>
+                <TitleContainer>{t('Contract Address')}</TitleContainer>
+                <LinkContainer>
+                  <LinkIcon />
+                  <ContractLink
+                    onPress={() => dispatch(viewOnBlockchain(wallet))}>
+                    {t('View Contract')}
+                  </ContractLink>
+                </LinkContainer>
+              </ContractHeaderContainer>
+              <ContractAddressText>
+                {wallet.credentials.token.address}
+              </ContractAddressText>
+            </WarningContainer>
+          ) : null}
+          <CloseButton onPress={_closeModal}>
+            <CloseButtonText>{t('CLOSE')}</CloseButtonText>
+          </CloseButton>
+        </ReceiveAddressContainerScroll>
       </ReceiveAddressContainer>
     </SheetModal>
   );
