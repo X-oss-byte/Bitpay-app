@@ -566,12 +566,6 @@ const SendTo = () => {
           </>
         ) : null}
 
-        <OptionsSheet
-          isVisible={showWalletOptions}
-          closeModal={() => setShowWalletOptions(false)}
-          options={assetOptions}
-        />
-
         <View style={{marginTop: 10}}>
           <KeyWalletsRow
             keyWallets={keyWallets}
@@ -582,6 +576,12 @@ const SendTo = () => {
           />
         </View>
       </ScrollView>
+
+      <OptionsSheet
+        isVisible={showWalletOptions}
+        closeModal={() => setShowWalletOptions(false)}
+        options={assetOptions}
+      />
     </SafeAreaView>
   );
 };
