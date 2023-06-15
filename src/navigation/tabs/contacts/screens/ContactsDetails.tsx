@@ -14,6 +14,7 @@ import {
   SlateDark,
   LightBlack,
   White,
+  Slate10,
 } from '../../../../styles/colors';
 import {deleteContact} from '../../../../store/contact/contact.actions';
 import Settings from '../../../../components/settings/Settings';
@@ -83,10 +84,11 @@ const AddressContainer = styled.TouchableOpacity`
 
 const OptionContainer = styled.TouchableOpacity<{lastElement?: string}>`
   flex-direction: row;
-  padding: 30px 25px;
+  padding: 25px;
   align-items: stretch;
   border-bottom-color: ${({theme: {dark}}) => (dark ? SlateDark : '#ebecee')};
   border-bottom-width: ${({lastElement}) => lastElement || '1px'};
+  cursor: pointer;
 `;
 
 const OptionIconContainer = styled.View`
@@ -109,9 +111,10 @@ const OptionTitleText = styled(BaseText)`
 
 const ModalContainer = styled.View`
   background: ${({theme: {dark}}) => (dark ? LightBlack : White)};
+  border-top-color: ${({theme: {dark}}) => (dark ? LightBlack : Slate10)};
+  border-top-width: 1px;
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  padding: 30px 0 0 0;
 `;
 
 const CopyImgContainer = styled.View`
@@ -215,12 +218,12 @@ const ContactsDetails = ({
       headerRight: () => (
         <Settings
           onPress={() => {
-            setShowIconOptions(true);
+            setShowIconOptions(!showIconOptions);
           }}
         />
       ),
     });
-  }, [navigation]);
+  }, [navigation, showIconOptions]);
 
   useEffect(() => {
     if (!copied) {
