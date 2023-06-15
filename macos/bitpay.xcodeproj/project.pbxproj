@@ -18,6 +18,7 @@
 		514201552437B4B40078DB4F /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 514201532437B4B40078DB4F /* Main.storyboard */; };
 		514201582437B4B40078DB4F /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 514201572437B4B40078DB4F /* main.m */; };
 		6BE9D8D435333D16AF3FC006 /* libPods-bitpay-iOS.a in Frameworks */ = {isa = PBXBuildFile; fileRef = 126076DCB5ACD55560CEE4C9 /* libPods-bitpay-iOS.a */; };
+		6D67C1122A3B686D009DEA1B /* fonts in Resources */ = {isa = PBXBuildFile; fileRef = 6D67C1112A3B686D009DEA1B /* fonts */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -45,6 +46,7 @@
 		514201562437B4B40078DB4F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		514201572437B4B40078DB4F /* main.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = main.m; sourceTree = "<group>"; };
 		514201592437B4B40078DB4F /* bitpay.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = bitpay.entitlements; sourceTree = "<group>"; };
+		6D67C1112A3B686D009DEA1B /* fonts */ = {isa = PBXFileReference; lastKnownFileType = folder; name = fonts; path = "bitpay-macOS/fonts"; sourceTree = "<group>"; };
 		9D32DFD059D5DB6DDEF38881 /* Pods-Shared-bitpay-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-bitpay-iOS.debug.xcconfig"; path = "Target Support Files/Pods-Shared-bitpay-iOS/Pods-Shared-bitpay-iOS.debug.xcconfig"; sourceTree = "<group>"; };
 		A82DFB63B157C65E5D698CA2 /* Pods-Shared-bitpay-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Shared-bitpay-iOS.release.xcconfig"; path = "Target Support Files/Pods-Shared-bitpay-iOS/Pods-Shared-bitpay-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		B064482F4097CAA95E5AE93C /* Pods-bitpay-iOS.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpay-iOS.debug.xcconfig"; path = "Target Support Files/Pods-bitpay-iOS/Pods-bitpay-iOS.debug.xcconfig"; sourceTree = "<group>"; };
@@ -141,6 +143,7 @@
 		83CBB9F61A601CBA00E9B192 = {
 			isa = PBXGroup;
 			children = (
+				6D67C1112A3B686D009DEA1B /* fonts */,
 				5142014A2437B4B30078DB4F /* bitpay-macOS */,
 				13B07FAE1A68108700A75B9A /* bitpay-iOS */,
 				832341AE1AAA6A7D00B99B32 /* Libraries */,
@@ -259,6 +262,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				6D67C1122A3B686D009DEA1B /* fonts in Resources */,
 				514201522437B4B40078DB4F /* Assets.xcassets in Resources */,
 				514201552437B4B40078DB4F /* Main.storyboard in Resources */,
 			);
