@@ -49,7 +49,10 @@ const DeleteConfirmationModal = ({
 }: ConfirmationModalProps) => {
   const {t} = useTranslation();
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={onPressCancel}>
+    <SheetModal
+      isVisible={isVisible}
+      placement="bottom"
+      onBackdropPress={onPressCancel}>
       <SheetContainer>
         <Header>
           <CautionSvg />

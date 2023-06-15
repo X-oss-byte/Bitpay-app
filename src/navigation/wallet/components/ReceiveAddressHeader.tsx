@@ -7,6 +7,7 @@ import {useTranslation} from 'react-i18next';
 
 const Header = styled.View`
   margin-bottom: 30px;
+  margin-top: 10px;
   flex-direction: row;
   justify-content: center;
   position: relative;

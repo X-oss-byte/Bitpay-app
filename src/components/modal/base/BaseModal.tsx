@@ -15,7 +15,7 @@ type ModalProps = {
   children: React.ReactNode;
   placement: 'top' | 'bottom' | 'center' | undefined;
   fullScreen?: boolean;
-  useMaxHeight?: boolean;
+  useMaxHeight?: string;
 };
 
 const BaseModal: React.FC<ModalProps> = props => {
@@ -78,7 +78,7 @@ const BaseModal: React.FC<ModalProps> = props => {
           height: fullScreen ? '100%' : undefined,
           zIndex: isVisibleSafe ? 1000000 : undefined,
           backgroundColor: theme.dark ? OledBlack : White,
-          maxHeight: useMaxHeight ? '80%' : undefined,
+          maxHeight: useMaxHeight ? useMaxHeight : undefined,
         }}>
         {props.children}
       </View>

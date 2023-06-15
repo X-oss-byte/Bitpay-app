@@ -1,12 +1,11 @@
-import {useTheme} from '@react-navigation/native';
 import React from 'react';
 import styled from 'styled-components/native';
-import CloseModal from '../../../assets/img/close-modal-icon.svg';
 import Button from '../../components/button/Button';
-import {BaseText} from '../../components/styled/Text';
-import {Black, White} from '../../styles/colors';
+import {BaseText, Paragraph} from '../../components/styled/Text';
+import {Action, White} from '../../styles/colors';
 import SheetModal from '../modal/base/sheet/SheetModal';
 import Amount, {AmountProps} from './Amount';
+import {useTranslation} from 'react-i18next';
 
 const ModalHeaderText = styled(BaseText)`
   font-size: 18px;
@@ -22,27 +21,21 @@ const ModalHeader = styled.View`
   position: relative;
 `;
 
-const CloseModalButton = styled.TouchableOpacity`
-  position: absolute;
-  left: 10px;
-  height: 41px;
-  width: 41px;
-  border-radius: 50px;
-  background-color: #9ba3ae33;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
 const ModalHeaderRight = styled(BaseText)`
   position: absolute;
   right: 5px;
 `;
 
 const StyledAmountModalContainer = styled.SafeAreaView`
-  background-color: ${({theme}) => (theme.dark ? Black : White)};
   flex: 1;
-  padding-bottom: 45px;
+`;
+
+const CloseButton = styled.TouchableOpacity`
+  margin: auto;
+`;
+
+const CloseButtonText = styled(Paragraph)`
+  color: ${({theme: {dark}}) => (dark ? White : Action)};
 `;
 
 type AmountModalProps = AmountProps & {
@@ -55,24 +48,15 @@ type AmountModalProps = AmountProps & {
 const AmountModal: React.VFC<AmountModalProps> = props => {
   const {onClose, onSendMaxPressed, isVisible, modalTitle, ...amountProps} =
     props;
-  const theme = useTheme();
+  const {t} = useTranslation();
 
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={onClose}>
+    <SheetModal
+      isVisible={isVisible}
+      fullScreen={true}
+      onBackdropPress={onClose}>
       <StyledAmountModalContainer>
         <ModalHeader>
-          <CloseModalButton
-            onPress={() => {
-              onClose?.();
-            }}>
-            <CloseModal
-              {...{
-                width: 20,
-                height: 20,
-                color: theme.dark ? 'white' : 'black',
-              }}
-            />
-          </CloseModalButton>
           {modalTitle ? <ModalHeaderText>{modalTitle}</ModalHeaderText> : null}
           {onSendMaxPressed ? (
             <ModalHeaderRight>
@@ -87,6 +71,12 @@ const AmountModal: React.VFC<AmountModalProps> = props => {
         </ModalHeader>
 
         <Amount {...amountProps} onSendMaxPressed={onSendMaxPressed} />
+        <CloseButton
+          onPress={() => {
+            onClose?.();
+          }}>
+          <CloseButtonText>{t('CLOSE')}</CloseButtonText>
+        </CloseButton>
       </StyledAmountModalContainer>
     </SheetModal>
   );

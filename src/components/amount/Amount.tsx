@@ -114,7 +114,6 @@ const Amount: React.VFC<AmountProps> = ({
 }) => {
   const dispatch = useAppDispatch();
   const {t} = useTranslation();
-  const logger = useLogger();
   const defaultAltCurrency = useAppSelector(({APP}) => APP.defaultAltCurrency);
   const allRates = useAppSelector(({RATE}) => RATE.rates);
   const curValRef = useRef('');

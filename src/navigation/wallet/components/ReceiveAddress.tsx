@@ -319,7 +319,9 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
       onBackdropPress={_closeModal}
       placement={'bottom'}
       useMaxHeight={
-        IsERCToken(wallet.currencyAbbreviation, wallet.chain) ? true : false
+        IsERCToken(wallet.currencyAbbreviation, wallet.chain)
+          ? '80%'
+          : undefined
       }>
       <ReceiveAddressContainer>
         <ReceiveAddressContainerScroll>

@@ -542,218 +542,82 @@ const RecoveryPhrase = () => {
   }, []);
 
   return (
-    <ContentView>
-      <Paragraph>
-        {t(
-          'Enter your recovery phrase (usually 12-words) in the correct order. Separate each word with a single space only (no commas or any other punctuation). For backup phrases in non-English languages: Some words may include special symbols, so be sure to spell all the words correctly.',
-        )}
-      </Paragraph>
-
-      <HeaderContainer>
-        <ImportTitle>{t('Recovery phrase')}</ImportTitle>
-      </HeaderContainer>
-
-      <Controller
-        control={control}
-        render={({field: {onChange, onBlur, value}}) => (
-          <ImportTextInput
-            accessibilityLabel="import-text-input"
-            multiline
-            autoCapitalize={'none'}
-            numberOfLines={3}
-            onChangeText={(text: string) => onChange(text)}
-            onBlur={onBlur}
-            value={value}
-            autoCorrect={false}
-            spellCheck={false}
-            autoComplete="off"
-          />
-        )}
-        name="text"
-        defaultValue=""
-      />
-
-      {errors.text?.message && <ErrorText>{errors.text.message}</ErrorText>}
-
-      <CuationText>
-        {t('This process may take a few minutes to complete.')}
-      </CuationText>
-      <CtaContainer>
-        <AdvancedOptionsContainer accessibilityLabel="advanced-options-container">
-          <AdvancedOptionsButton
-            accessibilityLabel="show-advanced-options"
-            onPress={() => {
-              setShowAdvancedOptions(!showAdvancedOptions);
-            }}>
-            {showAdvancedOptions ? (
-              <>
-                <AdvancedOptionsButtonText>
-                  {t('Hide Advanced Options')}
-                </AdvancedOptionsButtonText>
-                <ChevronUpSvg />
-              </>
-            ) : (
-              <>
-                <AdvancedOptionsButtonText>
-                  {t('Show Advanced Options')}
-                </AdvancedOptionsButtonText>
-                <ChevronDownSvg />
-              </>
-            )}
-          </AdvancedOptionsButton>
-
-          {showAdvancedOptions && !derivationPathEnabled && (
-            <AdvancedOptions>
-              <RowContainer
-                activeOpacity={1}
-                onPress={() => {
-                  setIncludeTestnetWallets(!includeTestnetWallets);
-                }}>
-                <Column>
-                  <OptionTitle>{t('Include Testnet Wallets')}</OptionTitle>
-                </Column>
-                <CheckBoxContainer accessibilityLabel="include-testnet-wallet-checkbox">
-                  <Checkbox
-                    checked={includeTestnetWallets}
-                    onPress={() => {
-                      setIncludeTestnetWallets(!includeTestnetWallets);
-                    }}
-                  />
-                </CheckBoxContainer>
-              </RowContainer>
-            </AdvancedOptions>
+    <>
+      <ContentView>
+        <Paragraph>
+          {t(
+            'Enter your recovery phrase (usually 12-words) in the correct order. Separate each word with a single space only (no commas or any other punctuation). For backup phrases in non-English languages: Some words may include special symbols, so be sure to spell all the words correctly.',
           )}
+        </Paragraph>
 
-          {showAdvancedOptions && !derivationPathEnabled && (
-            <AdvancedOptions>
-              <RowContainer
-                activeOpacity={1}
-                onPress={() => {
-                  setIncludeLegacyWallets(!includeLegacyWallets);
-                }}>
-                <Column>
-                  <OptionTitle>{t('Include Legacy Wallets')}</OptionTitle>
-                </Column>
-                <CheckBoxContainer accessibilityLabel="include-legacy-wallet-checkbox">
-                  <Checkbox
-                    checked={includeLegacyWallets}
-                    onPress={() => {
-                      setIncludeLegacyWallets(!includeLegacyWallets);
-                    }}
-                  />
-                </CheckBoxContainer>
-              </RowContainer>
-            </AdvancedOptions>
+        <HeaderContainer>
+          <ImportTitle>{t('Recovery phrase')}</ImportTitle>
+        </HeaderContainer>
+
+        <Controller
+          control={control}
+          render={({field: {onChange, onBlur, value}}) => (
+            <ImportTextInput
+              accessibilityLabel="import-text-input"
+              multiline
+              autoCapitalize={'none'}
+              numberOfLines={3}
+              onChangeText={(text: string) => onChange(text)}
+              onBlur={onBlur}
+              value={value}
+              autoCorrect={false}
+              spellCheck={false}
+              autoComplete="off"
+            />
           )}
+          name="text"
+          defaultValue=""
+        />
 
-          {showAdvancedOptions && (
-            <AdvancedOptions>
-              <RowContainer
-                activeOpacity={1}
-                onPress={() => {
-                  setDerivationPathEnabled(!derivationPathEnabled);
-                }}>
-                <Column>
-                  <OptionTitle>{t('Specify Derivation Path')}</OptionTitle>
-                </Column>
-                <CheckBoxContainer accessibilityLabel="specify-derivation-path-checkbox">
-                  <Checkbox
-                    checked={derivationPathEnabled}
-                    onPress={() => {
-                      setDerivationPathEnabled(!derivationPathEnabled);
-                    }}
-                  />
-                </CheckBoxContainer>
-              </RowContainer>
-            </AdvancedOptions>
-          )}
+        {errors.text?.message && <ErrorText>{errors.text.message}</ErrorText>}
 
-          {showAdvancedOptions && derivationPathEnabled && (
-            <AdvancedOptions>
-              <CurrencySelectorContainer>
-                <Label>{t('CURRENCY')}</Label>
-                <CurrencyContainer
-                  accessibilityLabel="currency-container"
-                  activeOpacity={ActiveOpacity}
-                  onPress={() => {
-                    setCurrencyModalVisible(true);
-                  }}>
-                  <Row
-                    style={{
-                      alignItems: 'center',
-                      justifyContent: 'space-between',
-                    }}>
-                    <Row style={{alignItems: 'center'}}>
-                      <CurrencyImage img={selectedCurrency.img} size={30} />
-                      <CurrencyName>
-                        {selectedCurrency?.currencyAbbreviation?.toUpperCase()}
-                      </CurrencyName>
-                    </Row>
-                    <Icons.DownToggle />
-                  </Row>
-                </CurrencyContainer>
-              </CurrencySelectorContainer>
-            </AdvancedOptions>
-          )}
+        <CuationText>
+          {t('This process may take a few minutes to complete.')}
+        </CuationText>
+        <CtaContainer>
+          <AdvancedOptionsContainer accessibilityLabel="advanced-options-container">
+            <AdvancedOptionsButton
+              accessibilityLabel="show-advanced-options"
+              onPress={() => {
+                setShowAdvancedOptions(!showAdvancedOptions);
+              }}>
+              {showAdvancedOptions ? (
+                <>
+                  <AdvancedOptionsButtonText>
+                    {t('Hide Advanced Options')}
+                  </AdvancedOptionsButtonText>
+                  <ChevronUpSvg />
+                </>
+              ) : (
+                <>
+                  <AdvancedOptionsButtonText>
+                    {t('Show Advanced Options')}
+                  </AdvancedOptionsButtonText>
+                  <ChevronDownSvg />
+                </>
+              )}
+            </AdvancedOptionsButton>
 
-          <SheetModal
-            isVisible={currencyModalVisible}
-            onBackdropPress={() => setCurrencyModalVisible(false)}>
-            <CurrencySelectionModalContainer>
-              <TextAlign align={'center'}>
-                <H4>{t('Select a Coin')}</H4>
-              </TextAlign>
-              <FlatList
-                contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
-                data={CurrencyOptions}
-                keyExtractor={keyExtractor}
-                renderItem={renderItem}
-              />
-            </CurrencySelectionModalContainer>
-          </SheetModal>
-
-          {showAdvancedOptions && derivationPathEnabled && (
-            <AdvancedOptions>
-              <InputContainer>
-                <BoxInput
-                  accessibilityLabel="derivation-path-box-input"
-                  label={'DERIVATION PATH'}
-                  onChangeText={(text: string) =>
-                    setAdvancedOptions({
-                      ...advancedOptions,
-                      derivationPath: text,
-                    })
-                  }
-                  value={advancedOptions.derivationPath}
-                />
-              </InputContainer>
-            </AdvancedOptions>
-          )}
-
-          {showAdvancedOptions &&
-            derivationPathEnabled &&
-            advancedOptions.derivationPath ===
-              DefaultDerivationPath.defaultBTC && (
+            {showAdvancedOptions && !derivationPathEnabled && (
               <AdvancedOptions>
                 <RowContainer
                   activeOpacity={1}
                   onPress={() => {
-                    setAdvancedOptions({
-                      ...advancedOptions,
-                      isMultisig: !advancedOptions.isMultisig,
-                    });
+                    setIncludeTestnetWallets(!includeTestnetWallets);
                   }}>
                   <Column>
-                    <OptionTitle>{t('Shared Wallet')}</OptionTitle>
+                    <OptionTitle>{t('Include Testnet Wallets')}</OptionTitle>
                   </Column>
-                  <CheckBoxContainer accessibilityLabel="shared-wallet-checkbox">
+                  <CheckBoxContainer accessibilityLabel="include-testnet-wallet-checkbox">
                     <Checkbox
-                      checked={advancedOptions.isMultisig}
+                      checked={includeTestnetWallets}
                       onPress={() => {
-                        setAdvancedOptions({
-                          ...advancedOptions,
-                          isMultisig: !advancedOptions.isMultisig,
-                        });
+                        setIncludeTestnetWallets(!includeTestnetWallets);
                       }}
                     />
                   </CheckBoxContainer>
@@ -761,36 +625,175 @@ const RecoveryPhrase = () => {
               </AdvancedOptions>
             )}
 
-          {showAdvancedOptions && (
-            <AdvancedOptions>
-              <InputContainer>
-                <BoxInput
-                  accessibilityLabel="password-input-box"
-                  placeholder={'strongPassword123'}
-                  type={'password'}
-                  onChangeText={(text: string) =>
-                    setAdvancedOptions({...advancedOptions, passphrase: text})
-                  }
-                  value={advancedOptions.passphrase}
-                />
-              </InputContainer>
-              <PasswordParagraph>
-                {t(
-                  "This field is only for users who, in previous versions (it's not supported anymore), set a password to protect their recovery phrase. This field is not for your encrypt password.",
-                )}
-              </PasswordParagraph>
-            </AdvancedOptions>
-          )}
-        </AdvancedOptionsContainer>
-      </CtaContainer>
+            {showAdvancedOptions && !derivationPathEnabled && (
+              <AdvancedOptions>
+                <RowContainer
+                  activeOpacity={1}
+                  onPress={() => {
+                    setIncludeLegacyWallets(!includeLegacyWallets);
+                  }}>
+                  <Column>
+                    <OptionTitle>{t('Include Legacy Wallets')}</OptionTitle>
+                  </Column>
+                  <CheckBoxContainer accessibilityLabel="include-legacy-wallet-checkbox">
+                    <Checkbox
+                      checked={includeLegacyWallets}
+                      onPress={() => {
+                        setIncludeLegacyWallets(!includeLegacyWallets);
+                      }}
+                    />
+                  </CheckBoxContainer>
+                </RowContainer>
+              </AdvancedOptions>
+            )}
 
-      <Button
-        accessibilityLabel="import-wallet-button"
-        buttonStyle={'primary'}
-        onPress={handleSubmit(onSubmit)}>
-        {t('Import Wallet')}
-      </Button>
-    </ContentView>
+            {showAdvancedOptions && (
+              <AdvancedOptions>
+                <RowContainer
+                  activeOpacity={1}
+                  onPress={() => {
+                    setDerivationPathEnabled(!derivationPathEnabled);
+                  }}>
+                  <Column>
+                    <OptionTitle>{t('Specify Derivation Path')}</OptionTitle>
+                  </Column>
+                  <CheckBoxContainer accessibilityLabel="specify-derivation-path-checkbox">
+                    <Checkbox
+                      checked={derivationPathEnabled}
+                      onPress={() => {
+                        setDerivationPathEnabled(!derivationPathEnabled);
+                      }}
+                    />
+                  </CheckBoxContainer>
+                </RowContainer>
+              </AdvancedOptions>
+            )}
+
+            {showAdvancedOptions && derivationPathEnabled && (
+              <AdvancedOptions>
+                <CurrencySelectorContainer>
+                  <Label>{t('CURRENCY')}</Label>
+                  <CurrencyContainer
+                    accessibilityLabel="currency-container"
+                    activeOpacity={ActiveOpacity}
+                    onPress={() => {
+                      setCurrencyModalVisible(true);
+                    }}>
+                    <Row
+                      style={{
+                        alignItems: 'center',
+                        justifyContent: 'space-between',
+                      }}>
+                      <Row style={{alignItems: 'center'}}>
+                        <CurrencyImage img={selectedCurrency.img} size={30} />
+                        <CurrencyName>
+                          {selectedCurrency?.currencyAbbreviation?.toUpperCase()}
+                        </CurrencyName>
+                      </Row>
+                      <Icons.DownToggle />
+                    </Row>
+                  </CurrencyContainer>
+                </CurrencySelectorContainer>
+              </AdvancedOptions>
+            )}
+
+            {showAdvancedOptions && derivationPathEnabled && (
+              <AdvancedOptions>
+                <InputContainer>
+                  <BoxInput
+                    accessibilityLabel="derivation-path-box-input"
+                    label={'DERIVATION PATH'}
+                    onChangeText={(text: string) =>
+                      setAdvancedOptions({
+                        ...advancedOptions,
+                        derivationPath: text,
+                      })
+                    }
+                    value={advancedOptions.derivationPath}
+                  />
+                </InputContainer>
+              </AdvancedOptions>
+            )}
+
+            {showAdvancedOptions &&
+              derivationPathEnabled &&
+              advancedOptions.derivationPath ===
+                DefaultDerivationPath.defaultBTC && (
+                <AdvancedOptions>
+                  <RowContainer
+                    activeOpacity={1}
+                    onPress={() => {
+                      setAdvancedOptions({
+                        ...advancedOptions,
+                        isMultisig: !advancedOptions.isMultisig,
+                      });
+                    }}>
+                    <Column>
+                      <OptionTitle>{t('Shared Wallet')}</OptionTitle>
+                    </Column>
+                    <CheckBoxContainer accessibilityLabel="shared-wallet-checkbox">
+                      <Checkbox
+                        checked={advancedOptions.isMultisig}
+                        onPress={() => {
+                          setAdvancedOptions({
+                            ...advancedOptions,
+                            isMultisig: !advancedOptions.isMultisig,
+                          });
+                        }}
+                      />
+                    </CheckBoxContainer>
+                  </RowContainer>
+                </AdvancedOptions>
+              )}
+
+            {showAdvancedOptions && (
+              <AdvancedOptions>
+                <InputContainer>
+                  <BoxInput
+                    accessibilityLabel="password-input-box"
+                    placeholder={'strongPassword123'}
+                    type={'password'}
+                    onChangeText={(text: string) =>
+                      setAdvancedOptions({...advancedOptions, passphrase: text})
+                    }
+                    value={advancedOptions.passphrase}
+                  />
+                </InputContainer>
+                <PasswordParagraph>
+                  {t(
+                    "This field is only for users who, in previous versions (it's not supported anymore), set a password to protect their recovery phrase. This field is not for your encrypt password.",
+                  )}
+                </PasswordParagraph>
+              </AdvancedOptions>
+            )}
+          </AdvancedOptionsContainer>
+        </CtaContainer>
+
+        <Button
+          accessibilityLabel="import-wallet-button"
+          buttonStyle={'primary'}
+          onPress={handleSubmit(onSubmit)}>
+          {t('Import Wallet')}
+        </Button>
+      </ContentView>
+      <SheetModal
+        isVisible={currencyModalVisible}
+        placement={'bottom'}
+        useMaxHeight={'60%'}
+        onBackdropPress={() => setCurrencyModalVisible(false)}>
+        <CurrencySelectionModalContainer>
+          <TextAlign align={'center'}>
+            <H4>{t('Select a Coin')}</H4>
+          </TextAlign>
+          <FlatList
+            contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
+            data={CurrencyOptions}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+          />
+        </CurrencySelectionModalContainer>
+      </SheetModal>
+    </>
   );
 };
 

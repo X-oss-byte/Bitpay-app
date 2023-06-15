@@ -125,11 +125,11 @@ const WalletRow = ({wallet, hideIcon, onPress, isLast, hideBalance}: Props) => {
             {walletName || currencyName}
           </H5>
         </Row>
-        <Row style={{alignItems: 'center'}}>
+        <Row>
           <ListItemSubText
             ellipsizeMode="tail"
             numberOfLines={1}
-            style={{marginTop: Platform.OS === 'ios' ? 2 : 0}}>
+            style={{marginTop: 2}}>
             {currencyAbbreviation.toUpperCase()}{' '}
             {multisig ? `${multisig} ` : null}
           </ListItemSubText>
@@ -139,14 +139,18 @@ const WalletRow = ({wallet, hideIcon, onPress, isLast, hideBalance}: Props) => {
       <BalanceColumn>
         {!hideBalance ? (
           <>
-            <H5 numberOfLines={1} ellipsizeMode="tail">
-              {cryptoBalance}
-            </H5>
-            {showFiatBalance && (
-              <ListItemSubText textAlign={'right'}>
-                {network === 'testnet' ? 'Test - No Value' : fiatBalance}
-              </ListItemSubText>
-            )}
+            <Row>
+              <H5 numberOfLines={1} ellipsizeMode="tail">
+                {cryptoBalance}
+              </H5>
+            </Row>
+            <Row>
+              {showFiatBalance && (
+                <ListItemSubText>
+                  {network === 'testnet' ? 'Test - No Value' : fiatBalance}
+                </ListItemSubText>
+              )}
+            </Row>
           </>
         ) : (
           <H5>****</H5>

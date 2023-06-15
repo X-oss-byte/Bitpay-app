@@ -7,7 +7,7 @@ interface Props extends SheetParams {
   isVisible: boolean;
   onBackdropPress: (props?: any) => void;
   children: any;
-  useMaxHeight?: boolean;
+  useMaxHeight?: string;
 }
 
 const SheetModal: React.FC<Props> = ({
