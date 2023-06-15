@@ -562,15 +562,15 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
             )}
           </WalletSelectMenuContainer>
         </SheetModal>
-        {/*Receive modal if one wallet*/}
-        {receiveWallet && !walletSelectModalVisible && (
-          <ReceiveAddress
-            isVisible={showReceiveAddressBottomModal}
-            closeModal={closeModal}
-            wallet={receiveWallet}
-          />
-        )}
       </View>
+      {/*Receive modal if one wallet*/}
+      {receiveWallet && !walletSelectModalVisible && (
+        <ReceiveAddress
+          isVisible={showReceiveAddressBottomModal}
+          closeModal={closeModal}
+          wallet={receiveWallet}
+        />
+      )}
     </SafeAreaView>
   );
 };
