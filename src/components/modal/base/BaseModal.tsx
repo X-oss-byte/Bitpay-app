@@ -77,7 +77,11 @@ const BaseModal: React.FC<ModalProps> = props => {
           left: fullScreen ? 0 : undefined,
           height: fullScreen ? '100%' : undefined,
           zIndex: isVisibleSafe ? 1000000 : undefined,
-          backgroundColor: theme.dark ? OledBlack : White,
+          backgroundColor: fullScreen
+            ? theme.dark
+              ? OledBlack
+              : White
+            : undefined,
           maxHeight: useMaxHeight ? useMaxHeight : undefined,
         }}>
         {props.children}
