@@ -24,48 +24,48 @@ interface HeadingProps {
 }
 
 export const H1 = styled(BaseText)<HeadingProps>`
-  font-size: 40px;
+  font-size: 50px;
   font-style: normal;
   font-weight: ${({medium = false}) => (medium ? 500 : 700)};
   letter-spacing: 0;
 `;
 
 export const H2 = styled(BaseText)<HeadingProps>`
-  font-size: 30px;
+  font-size: 38px;
   font-style: normal;
   font-weight: ${({medium = false}) => (medium ? 500 : 700)};
   letter-spacing: 0;
 `;
 
 export const H3 = styled(BaseText)<HeadingProps>`
-  font-size: 20px;
+  font-size: 25px;
   font-style: normal;
   font-weight: 700;
   letter-spacing: 0;
 `;
 
 export const H4 = styled(BaseText)<HeadingProps>`
-  font-size: 18px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   letter-spacing: 0;
 `;
 
 export const H5 = styled(BaseText)<HeadingProps>`
-  font-size: 16px;
+  font-size: 18px;
   font-style: normal;
   font-weight: ${({bold = false}) => (bold ? 700 : 500)};
   letter-spacing: 0;
 `;
 
 export const H6 = styled(BaseText)<HeadingProps>`
-  font-size: 14px;
+  font-size: 16px;
   font-style: normal;
   font-weight: ${({medium}) => (medium ? 400 : 500)};
 `;
 
 export const H7 = styled(BaseText)<HeadingProps>`
-  font-size: 12px;
+  font-size: 14px;
   font-style: normal;
   font-weight: ${({medium = false}) => (medium ? 500 : 400)};
   letter-spacing: 0;
@@ -84,13 +84,13 @@ export const ListItemSubText = styled(H7)<{
 `;
 
 export const Small = styled(BaseText)`
-  font-size: 12px;
+  font-size: 13px;
   font-weight: 400;
   line-height: 18px;
 `;
 
 export const Smallest = styled(BaseText)`
-  font-size: 10px;
+  font-size: 12px;
   font-weight: 400;
   line-height: 15px;
   color: ${({theme: {dark}}) => (dark ? LuckySevens : Black)};
