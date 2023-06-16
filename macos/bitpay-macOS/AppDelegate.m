@@ -47,6 +47,9 @@
   // Assign to windowController property and show the window
   self.windowController = [[NSWindowController alloc] initWithWindow:self.window];
   [self.windowController showWindow:self];
+
+  // Bring the application to the front
+  [NSApp activateIgnoringOtherApps:YES];
 }
 
 - (void)applicationWillTerminate:(NSNotification *)aNotification {
