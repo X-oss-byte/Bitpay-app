@@ -20,8 +20,8 @@
 
 - (void)applicationDidFinishLaunching:(NSNotification *)aNotification {
    // Set your desired screen size
-  CGFloat screenWidth = 600;
-  CGFloat screenHeight = 800;
+  CGFloat screenWidth = 400;
+  CGFloat screenHeight = 650;
   
   RCTRootView *rootView = [[RCTRootView alloc] initWithBridge:self.bridge
                                                    moduleName:@"bitpay"
@@ -36,6 +36,10 @@
                                                  defer:NO];
   
   [self.window setContentView:rootView];
+
+  // Set minimum and maximum size
+  [self.window setMinSize:NSMakeSize(400, 650)];
+  [self.window setMaxSize:NSMakeSize(800, 800)];
 
   // Center the window
   [self.window center];
