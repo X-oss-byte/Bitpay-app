@@ -315,18 +315,10 @@
 			inputPaths = (
 				"${PODS_ROOT}/Target Support Files/Pods-bitpay-iOS/Pods-bitpay-iOS-resources.sh",
 				"${PODS_CONFIGURATION_BUILD_DIR}/React-Core-iOS/AccessibilityResources.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Appboy-iOS-SDK/AppboyUI.ContentCards.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Appboy-iOS-SDK/Appboy.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Appboy-iOS-SDK/AppboyUI.InAppMessage.bundle",
-				"${PODS_CONFIGURATION_BUILD_DIR}/Appboy-iOS-SDK/AppboyUI.NewsFeed.bundle",
 			);
 			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AccessibilityResources.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppboyUI.ContentCards.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/Appboy.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppboyUI.InAppMessage.bundle",
-				"${TARGET_BUILD_DIR}/${UNLOCALIZED_RESOURCES_FOLDER_PATH}/AppboyUI.NewsFeed.bundle",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;

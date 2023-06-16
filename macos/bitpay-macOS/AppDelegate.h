@@ -6,4 +6,6 @@
 
 @property (nonatomic, readonly) RCTBridge *bridge;
 
+@property (nonatomic, strong) NSWindow *window;
+
 @end
