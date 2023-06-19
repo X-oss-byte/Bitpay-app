@@ -214,7 +214,7 @@ const WalletSettings = () => {
           </Setting>
           <Hr />
 
-          {/* <Setting
+          <Setting
             activeOpacity={ActiveOpacity}
             onPress={() => {
               navigation.navigate('Wallet', {
@@ -226,7 +226,7 @@ const WalletSettings = () => {
               {t('Export Transaction History')}
             </WalletSettingsTitle>
           </Setting>
-          <Hr /> */}
+          <Hr />
 
           {!key.isReadOnly ? (
             <>

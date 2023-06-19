@@ -14,12 +14,11 @@ import _ from 'lodash';
 import {APP_NAME_UPPERCASE} from '../../../../constants/config';
 import {GetPrecision} from '../../../../store/wallet/utils/currency';
 import RNFS from 'react-native-fs';
-import {PermissionsAndroid, Platform} from 'react-native';
-import Share, {ShareOptions} from 'react-native-share';
 import Papa from 'papaparse';
 import {BottomNotificationConfig} from '../../../../components/modal/bottom-notification/BottomNotification';
 import {sleep} from '../../../../utils/helper-methods';
 import {
+  dismissBottomNotificationModal,
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
 } from '../../../../store/app/app.actions';
@@ -66,39 +65,6 @@ const ExportTransactionHistory = () => {
       return '';
     }
     return dateObj.toJSON();
-  };
-
-  const isAndroidStoragePermissionGranted = (): Promise<boolean> => {
-    return new Promise(async (resolve, reject) => {
-      try {
-        const granted = await PermissionsAndroid.requestMultiple([
-          PermissionsAndroid.PERMISSIONS.READ_EXTERNAL_STORAGE,
-          PermissionsAndroid.PERMISSIONS.WRITE_EXTERNAL_STORAGE,
-        ]);
-        if (
-          granted['android.permission.READ_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED &&
-          granted['android.permission.WRITE_EXTERNAL_STORAGE'] ===
-            PermissionsAndroid.RESULTS.GRANTED
-        ) {
-          dispatch(
-            LogActions.info(
-              '[isAndroidStoragePermissionGranted]: Storage permission granted',
-            ),
-          );
-          resolve(true);
-        } else {
-          dispatch(
-            LogActions.warn(
-              '[isAndroidStoragePermissionGranted]: Storage permission denied',
-            ),
-          );
-          throw new Error('Storage permission denied');
-        }
-      } catch (e) {
-        reject(e);
-      }
-    });
   };
 
   const buildCVSFile = async () => {
@@ -197,86 +163,40 @@ const ExportTransactionHistory = () => {
     }
   };
 
-  const handleEmail = (subject: string, filePath: string) => {
-    /*
-    Mailer.mail(
-      {
-        subject,
-        isHTML: false,
-        attachments: [
-          {
-            path: filePath,
-            type: 'csv',
-          },
-        ],
-      },
-      async (error, event) => {
-        if (error) {
-          dispatch(LogActions.error('Error sending email: ' + error));
-          const err = new Error(
-            `${APP_NAME_UPPERCASE} cannot open default Email App.`,
-          );
-          await sleep(500);
-          await showErrorMessage(
-            CustomErrorMessage({
-              errMsg: BWCErrorMessage(err),
-              title: t('Uh oh, something went wrong'),
+  const downloadFile = async () => {
+    try {
+      await dispatch(startOnGoingProcessModal('LOADING'));
+      const csv = await buildCVSFile();
+      const csvFilename = `${APP_NAME_UPPERCASE}-${walletName}.csv`;
+      const filePath =
+        (RNFS.DownloadDirectoryPath || RNFS.DocumentDirectoryPath) +
+        '/' +
+        csvFilename;
+      RNFS.writeFile(filePath, csv)
+        .then(() => {
+          dispatch(dismissOnGoingProcessModal());
+          dispatch(
+            showBottomNotificationModal({
+              title: t('File downloaded'),
+              message: t('Saved file: ') + filePath,
+              type: 'success',
+              actions: [
+                {
+                  text: 'OK',
+                  action: () => {
+                    dispatch(dismissBottomNotificationModal());
+                  },
+                },
+              ],
+              enableBackdropDismiss: true,
             }),
           );
-        }
-        if (event) {
-          dispatch(LogActions.debug('Email Logs: ' + event));
-        }
-      },
-    );
-     */
-  };
-
-  const shareFile = async (csv: any, option: string) => {
-    //   try {
-    //     if (Platform.OS === 'android') {
-    //       await isAndroidStoragePermissionGranted();
-    //     }
-    //     const rootPath =
-    //       Platform.OS === 'ios'
-    //         ? RNFS.LibraryDirectoryPath
-    //         : RNFS.TemporaryDirectoryPath;
-    //     const csvFilename = `${APP_NAME_UPPERCASE}-${walletName}`;
-    //     let filePath = `${rootPath}/${csvFilename}`;
-    //     await RNFS.mkdir(filePath);
-    //     filePath += '.csv';
-    //     const opts: ShareOptions = {
-    //       title: csvFilename,
-    //       url: `file://${filePath}`,
-    //       subject: `${walletName} Transaction History`,
-    //     };
-    //     await RNFS.writeFile(filePath, csv, 'utf8');
-    //     if (option === 'download') {
-    //       await Share.open(opts);
-    //     } else {
-    //       // TODO: unsupported Mail on Dekstop app
-    //       //  handleEmail(opts.subject!, filePath);
-    //     }
-    //   } catch (err: any) {
-    //     dispatch(LogActions.debug(`[shareFile]: ${err.message}`));
-    //     if (err && err.message === 'User did not share') {
-    //       return;
-    //     } else {
-    //       throw err;
-    //     }
-    //   }
-  };
-
-  const onSubmit = async (option: string) => {
-    try {
-      dispatch(startOnGoingProcessModal('LOADING'));
-      const csv = await buildCVSFile();
-      await shareFile(csv, option);
-      dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
+        })
+        .catch(err => {
+          throw err;
+        });
     } catch (e) {
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       await showErrorMessage(
         CustomErrorMessage({
           errMsg: BWCErrorMessage(e),
@@ -300,17 +220,8 @@ const ExportTransactionHistory = () => {
         <ExportTransactionHistoryDescription>
           {t('Export your transaction history as a .csv file')}
         </ExportTransactionHistoryDescription>
-
         <ButtonContainer>
-          <Button onPress={() => onSubmit('download')}>
-            {t('Share File')}
-          </Button>
-        </ButtonContainer>
-
-        <ButtonContainer>
-          <Button onPress={() => onSubmit('email')} buttonStyle={'secondary'}>
-            {t('Send by Email')}
-          </Button>
+          <Button onPress={() => downloadFile()}>{t('Download File')}</Button>
         </ButtonContainer>
       </ScrollView>
     </ExportTransactionHistoryContainer>
