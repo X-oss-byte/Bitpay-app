@@ -14,7 +14,11 @@ import {Effect, RootState} from '../index';
 import {LogActions} from '../log';
 import {WalletActions} from '../wallet';
 import {startWalletStoreInit} from '../wallet/effects';
-import {findKeyByKeyId, findWalletByIdHashed} from '../wallet/utils/wallet';
+import {
+  findKeyByKeyId,
+  findWalletByIdHashed,
+  getAllWalletClients,
+} from '../wallet/utils/wallet';
 import {SilentPushEvent} from '../../Root';
 import {
   startUpdateAllKeyAndWalletStatus,
@@ -23,7 +27,7 @@ import {
 import {createWalletAddress} from '../wallet/effects/address/address';
 import {APP_NAME, DOWNLOAD_BITPAY_URL} from '../../constants/config';
 import {updatePortfolioBalance} from '../wallet/wallet.actions';
-import {setUserFeedback} from './app.actions';
+import {setEmailNotificationsAccepted, setUserFeedback} from './app.actions';
 // import {getStateFromPath, NavigationProp} from '@react-navigation/native';
 // import {
 //   getAvailableGiftCards,
@@ -337,6 +341,80 @@ export const isVersionUpdated = (
 
   return false;
 };
+
+export const subscribeEmailNotifications =
+  (
+    walletClient: any,
+    prefs: {email: string; language: string; unit: string},
+  ): Effect<Promise<void>> =>
+  async dispatch => {
+    walletClient.savePreferences(prefs, (err: any) => {
+      if (err) {
+        dispatch(
+          LogActions.error(
+            'Email Notifications error subscribing: ' + JSON.stringify(err),
+          ),
+        );
+      } else {
+        dispatch(
+          LogActions.info(
+            'Email Notifications success subscribing: ' +
+              walletClient.credentials.walletName,
+          ),
+        );
+      }
+    });
+  };
+
+export const unSubscribeEmailNotifications =
+  (walletClient: any): Effect<Promise<void>> =>
+  async dispatch => {
+    walletClient.savePreferences({email: ''}, (err: any) => {
+      if (err) {
+        dispatch(
+          LogActions.error(
+            'Email Notifications error unsubscribing: ' + JSON.stringify(err),
+          ),
+        );
+      } else {
+        dispatch(
+          LogActions.info(
+            'Email Notifications success unsubscribing: ' +
+              walletClient.credentials.walletName,
+          ),
+        );
+      }
+    });
+  };
+
+export const setEmailNotifications =
+  (accepted: boolean, email: string | null): Effect =>
+  (dispatch, getState) => {
+    const _email = accepted ? email : null;
+    dispatch(setEmailNotificationsAccepted(accepted, _email));
+
+    const {
+      WALLET: {keys},
+      APP,
+    } = getState();
+
+    getAllWalletClients(keys).then(walletClients => {
+      if (accepted && email) {
+        const prefs = {
+          email,
+          language: APP.defaultLanguage,
+          unit: 'btc', // deprecated
+        };
+        walletClients.forEach(walletClient => {
+          dispatch(subscribeEmailNotifications(walletClient, prefs));
+        });
+      } else {
+        walletClients.forEach(walletClient => {
+          dispatch(unSubscribeEmailNotifications(walletClient));
+        });
+      }
+    });
+  };
 
 /**
  * Open a URL with the InAppBrowser if available, else lets the device handle the URL.

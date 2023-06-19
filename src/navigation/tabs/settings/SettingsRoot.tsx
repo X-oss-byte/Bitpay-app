@@ -17,7 +17,7 @@ import {updateSettingsListConfig} from '../../../store/app/app.actions';
 import {useAppSelector, useAppDispatch} from '../../../utils/hooks';
 
 import General from './components/General';
-import Security from './components/Security';
+import Notifications from './components/Notifications';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Crypto from './components/Crypto';
@@ -69,8 +69,8 @@ export type SettingsListType =
   | 'Contacts'
   | 'Crypto'
   | 'Wallets & Keys'
-  | 'Security'
   | 'External Services'
+  | 'Notifications'
   | 'Connections'
   | 'About BitPay';
 
@@ -104,6 +104,12 @@ const SettingsHomeScreen: React.VFC<SettingsHomeProps> = ({route}) => {
         title: t('Wallets & Keys'),
         onPress: () => {},
         subListComponent: <WalletsAndKeys />,
+      },
+      {
+        id: 'Notifications',
+        title: t('Notifications'),
+        onPress: () => {},
+        subListComponent: <Notifications />,
       },
       {
         id: 'About BitPay',

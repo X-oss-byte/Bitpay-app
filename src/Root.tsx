@@ -45,6 +45,9 @@ import NetworkFeePolicySettingsStack, {
 } from './navigation/tabs/settings/NetworkFeePolicy/NetworkFeePolicyStack';
 import {WalletActions} from './store/wallet';
 import TabsStack, {TabsStackParamList} from './navigation/tabs/TabsStack';
+import NotificationsSettingsStack, {
+  NotificationsSettingsStackParamsList,
+} from './navigation/tabs/settings/notifications/NotificationsStack';
 
 // ROOT NAVIGATION CONFIG
 export type RootStackParamList = {
@@ -52,6 +55,7 @@ export type RootStackParamList = {
   Wallet: NavigatorScreenParams<WalletStackParamList>;
   GeneralSettings: NavigatorScreenParams<GeneralSettingsStackParamList>;
   Contacts: NavigatorScreenParams<ContactsStackParamList>;
+  NotificationsSettings: NavigatorScreenParams<NotificationsSettingsStackParamsList>;
   About: NavigatorScreenParams<AboutStackParamList>;
   Debug: DebugScreenParamList;
   NetworkFeePolicySettings: NavigatorScreenParams<NetworkFeePolicySettingsStackParamsList>;
@@ -75,6 +79,7 @@ export type NavScreenParams = NavigatorScreenParams<
   WalletStackParamList &
     GeneralSettingsStackParamList &
     ContactsStackParamList &
+    NotificationsSettingsStackParamsList &
     AboutStackParamList
 >;
 
@@ -327,6 +332,10 @@ export default () => {
             component={GeneralSettingsStack}
           />
           <Root.Screen name={RootStacks.CONTACTS} component={ContactsStack} />
+          <Root.Screen
+            name={RootStacks.NOTIFICATIONS_SETTINGS}
+            component={NotificationsSettingsStack}
+          />
           <Root.Screen
             name={RootStacks.NETWORK_FEE_POLICY_SETTINGS}
             component={NetworkFeePolicySettingsStack}

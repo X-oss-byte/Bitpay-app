@@ -91,14 +91,6 @@ export const setEmailNotificationsAccepted = (
   payload: {accepted, email},
 });
 
-export const showOnboardingFinishModal = (): AppActionType => ({
-  type: AppActionTypes.SHOW_ONBOARDING_FINISH_MODAL,
-});
-
-export const dismissOnboardingFinishModal = (): AppActionType => ({
-  type: AppActionTypes.DISMISS_ONBOARDING_FINISH_MODAL,
-});
-
 export const setDefaultLanguage = (lng: string): AppActionType => ({
   type: AppActionTypes.SET_DEFAULT_LANGUAGE,
   payload: lng,

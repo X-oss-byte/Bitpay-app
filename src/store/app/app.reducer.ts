@@ -18,7 +18,6 @@ import {
 } from './app.models';
 import {AppActionType, AppActionTypes} from './app.types';
 import uniqBy from 'lodash.uniqby';
-import {BiometricModalConfig} from '../../components/modal/biometric/BiometricModal';
 import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';
 import moment from 'moment';
 
@@ -32,7 +31,6 @@ export const appReduxPersistBlackList: Array<keyof AppState> = [
   'pinModalConfig',
   'showBottomNotificationModal',
   'showBiometricModal',
-  'biometricModalConfig',
   'activeModalId',
   'failedAppInit',
 ];
@@ -99,7 +97,6 @@ export interface AppState {
   showPortfolioValue: boolean;
   hideAllBalances: boolean;
   showBiometricModal: boolean;
-  biometricModalConfig: BiometricModalConfig | undefined;
   biometricLockActive: boolean;
   lockAuthorizedUntil: number | undefined;
   homeCarouselConfig: HomeCarouselConfig[] | [];
@@ -169,7 +166,6 @@ const initialState: AppState = {
   showPortfolioValue: true,
   hideAllBalances: false,
   showBiometricModal: false,
-  biometricModalConfig: undefined,
   biometricLockActive: false,
   lockAuthorizedUntil: undefined,
   homeCarouselConfig: [],
@@ -407,26 +403,6 @@ export const appReducer = (
       return {
         ...state,
         hideAllBalances: action.payload ?? !state.hideAllBalances,
-      };
-
-    case AppActionTypes.SHOW_BIOMETRIC_MODAL:
-      return {
-        ...state,
-        showBiometricModal: true,
-        biometricModalConfig: action.payload,
-      };
-
-    case AppActionTypes.DISMISS_BIOMETRIC_MODAL:
-      return {
-        ...state,
-        showBiometricModal: false,
-        biometricModalConfig: undefined,
-      };
-
-    case AppActionTypes.BIOMETRIC_LOCK_ACTIVE:
-      return {
-        ...state,
-        biometricLockActive: action.payload,
       };
 
     case AppActionTypes.LOCK_AUTHORIZED_UNTIL:
