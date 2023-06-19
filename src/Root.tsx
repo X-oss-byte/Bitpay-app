@@ -18,7 +18,7 @@ import {
 import {AppEffects} from './store/app';
 import {BitPayDarkTheme, BitPayLightTheme} from './themes/bitpay';
 import {LogActions} from './store/log';
-import {useAppDispatch, useAppSelector} from './utils/hooks';
+import {useAppDispatch, useAppSelector, useDeeplinks} from './utils/hooks';
 import i18n from 'i18next';
 
 import WalletStack, {
@@ -118,6 +118,7 @@ const Root = createStackNavigator<RootStackParamList>();
 export default () => {
   const dispatch = useAppDispatch();
   const [, rerender] = useState({});
+  const linking = useDeeplinks();
   const appColorScheme = useAppSelector(({APP}) => APP.colorScheme);
   const appLanguage = useAppSelector(({APP}) => APP.defaultLanguage);
   const failedAppInit = useAppSelector(({APP}) => APP.failedAppInit);
@@ -297,7 +298,7 @@ export default () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer ref={navigationRef} theme={theme}>
+      <NavigationContainer ref={navigationRef} theme={theme} linking={linking}>
         <Root.Navigator
           screenOptions={{
             ...baseScreenOptions,

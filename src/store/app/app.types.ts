@@ -1,17 +1,11 @@
-import {ColorSchemeName, EventSubscription} from 'react-native';
+import {ColorSchemeName} from 'react-native';
 import {BottomNotificationConfig} from '../../components/modal/bottom-notification/BottomNotification';
-import {PinModalConfig} from '../../components/modal/pin/PinModal';
 import {Network} from '../../constants';
 import {DecryptPasswordConfig} from '../../navigation/wallet/components/DecryptEnterPasswordModal';
-import {
-  AppIdentity,
-  HomeCarouselConfig,
-  HomeCarouselLayoutType,
-} from './app.models';
+import {AppIdentity} from './app.models';
 import {SettingsListType} from '../../navigation/tabs/settings/SettingsRoot';
 import {AltCurrenciesRowProps} from '../../components/list/AltCurrenciesRow';
 import {FeedbackType, ModalId} from './app.reducer';
-import {BiometricModalConfig} from '../../components/modal/biometric/BiometricModal';
 
 export enum AppActionTypes {
   NETWORK_CHANGED = 'APP/NETWORK_CHANGED',
@@ -19,7 +13,6 @@ export enum AppActionTypes {
   APP_INIT_COMPLETE = 'APP/APP_INIT_COMPLETE',
   FAILED_APP_INIT = 'APP/FAILED_APP_INIT',
   APP_READY_FOR_DEEPLINKING = 'APP/READY_FOR_DEEPLINKING',
-  APP_OPENING_WAS_TRACKED = 'APP/OPENING_WAS_TRACKED',
   SET_APP_FIRST_OPEN_EVENT_COMPLETE = 'APP/SET_APP_FIRST_OPEN_EVENT_COMPLETE',
   SET_APP_FIRST_OPEN_DATE = 'APP/SET_APP_FIRST_OPEN_DATE',
   SET_INTRO_COMPLETED = 'APP/SET_INTRO_COMPLETED',
@@ -30,7 +23,6 @@ export enum AppActionTypes {
   DISMISS_BOTTOM_NOTIFICATION_MODAL = 'APP/DISMISS_BOTTOM_NOTIFICATION_MODAL',
   RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG = 'APP/RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG',
   SET_COLOR_SCHEME = 'APP/SET_COLOR_SCHEME',
-  SET_CURRENT_ROUTE = 'APP/SET_CURRENT_ROUTE',
   SUCCESS_GENERATE_APP_IDENTITY = 'APP/SUCCESS_GENERATE_APP_IDENTITY',
   FAILED_GENERATE_APP_IDENTITY = 'APP/FAILED_GENERATE_APP_IDENTITY',
   SET_NOTIFICATIONS_ACCEPTED = 'APP/SET_NOTIFICATIONS_ACCEPTED',
@@ -43,17 +35,9 @@ export enum AppActionTypes {
   DISMISS_DECRYPT_PASSWORD_MODAL = 'APP/DISMISS_DECRYPT_PASSWORD_MODAL',
   SET_DEFAULT_LANGUAGE = 'APP/SET_DEFAULT_LANGUAGE',
   RESET_DECRYPT_PASSWORD_CONFIG = 'APP/RESET_DECRYPT_PASSWORD_CONFIG',
-  SHOW_PIN_MODAL = 'APP/SHOW_PIN_MODAL',
-  DISMISS_PIN_MODAL = 'APP/DISMISS_PIN_MODAL',
-  PIN_LOCK_ACTIVE = 'APP/PIN_LOCK_ACTIVE',
-  CURRENT_PIN = 'APP/CURRENT_PIN',
-  PIN_BANNED_UNTIL = 'APP/PIN_BANNED_UNTIL',
   SHOW_BLUR = 'APP/SHOW_BLUR',
   SHOW_PORTFOLIO_VALUE = 'APP/SHOW_PORTFOLIO_VALUE',
   TOGGLE_HIDE_ALL_BALANCES = 'APP/TOGGLE_HIDE_ALL_BALANCES',
-  SHOW_BIOMETRIC_MODAL = 'APP/SHOW_BIOMETRIC_MODAL',
-  DISMISS_BIOMETRIC_MODAL = 'APP/DISMISS_BIOMETRIC_MODAL',
-  BIOMETRIC_LOCK_ACTIVE = 'APP/BIOMETRIC_LOCK_ACTIVE',
   LOCK_AUTHORIZED_UNTIL = 'APP/LOCK_AUTHORIZED_UNTIL',
   SET_HOME_CAROUSEL_CONFIG = 'APP/SET_HOME_CAROUSEL_CONFIG',
   SET_HOME_CAROUSEL_LAYOUT_TYPE = 'APP/SET_HOME_CAROUSEL_LAYOUT_TYPE',
@@ -190,43 +174,9 @@ interface ResetDecryptPasswordConfig {
   type: typeof AppActionTypes.RESET_DECRYPT_PASSWORD_CONFIG;
 }
 
-interface ShowPinModal {
-  type: typeof AppActionTypes.SHOW_PIN_MODAL;
-  payload: PinModalConfig;
-}
 interface ShowBottomNotificationModal {
   type: typeof AppActionTypes.SHOW_BOTTOM_NOTIFICATION_MODAL;
   payload: BottomNotificationConfig;
-}
-interface DismissPinModal {
-  type: typeof AppActionTypes.DISMISS_PIN_MODAL;
-}
-
-interface PinLockActive {
-  type: typeof AppActionTypes.PIN_LOCK_ACTIVE;
-  payload: boolean;
-}
-
-interface CurrentPin {
-  type: typeof AppActionTypes.CURRENT_PIN;
-  payload: string | undefined;
-}
-
-interface PinBannedUntil {
-  type: typeof AppActionTypes.PIN_BANNED_UNTIL;
-  payload: number | undefined;
-}
-interface ShowBiometricModal {
-  type: typeof AppActionTypes.SHOW_BIOMETRIC_MODAL;
-  payload: BiometricModalConfig;
-}
-
-interface DismissBiometricModal {
-  type: typeof AppActionTypes.DISMISS_BIOMETRIC_MODAL;
-}
-interface BiometricLockActive {
-  type: typeof AppActionTypes.BIOMETRIC_LOCK_ACTIVE;
-  payload: boolean;
 }
 
 interface LockAuthorizedUntil {
@@ -325,17 +275,9 @@ export type AppActionType =
   | ShowDecryptPasswordModal
   | DismissDecryptPasswordModal
   | ResetDecryptPasswordConfig
-  | ShowPinModal
-  | DismissPinModal
-  | PinLockActive
-  | CurrentPin
-  | PinBannedUntil
   | ShowBlur
   | ShowPortfolioValue
   | ToggleHideAllBalances
-  | ShowBiometricModal
-  | DismissBiometricModal
-  | BiometricLockActive
   | LockAuthorizedUntil
   | updateSettingsListConfigType
   | AddAltCurrencyList

@@ -1,6 +1,7 @@
 import React from 'react';
-import {TouchableOpacity, View} from 'react-native';
+import {View} from 'react-native-macos';
 import {VIRTUAL_KEYBOARD_BUTTON_SIZE} from './VirtualKeyboard';
+import styled from 'styled-components/native';
 
 interface RippleProps {
   onPress: () => void;
@@ -8,6 +9,10 @@ interface RippleProps {
   onLongPress?: () => void;
   children: React.ReactNode;
 }
+
+const TouchableButton = styled.TouchableOpacity`
+  cursor: pointer;
+`;
 
 const VirtualKeyboardButtonAnimation: React.FC<RippleProps> = ({
   onPress,
@@ -18,7 +23,7 @@ const VirtualKeyboardButtonAnimation: React.FC<RippleProps> = ({
   onLongPress = onLongPress || onPress;
 
   return (
-    <TouchableOpacity
+    <TouchableButton
       activeOpacity={1}
       style={[
         {
@@ -32,7 +37,7 @@ const VirtualKeyboardButtonAnimation: React.FC<RippleProps> = ({
       ]}
       onPress={onPress}>
       <View>{children}</View>
-    </TouchableOpacity>
+    </TouchableButton>
   );
 };
 

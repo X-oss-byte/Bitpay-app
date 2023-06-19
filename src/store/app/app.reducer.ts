@@ -1,8 +1,7 @@
 import i18n from 'i18next';
-import {ColorSchemeName, EventSubscription} from 'react-native';
+import {ColorSchemeName} from 'react-native';
 import {AltCurrenciesRowProps} from '../../components/list/AltCurrenciesRow';
 import {BottomNotificationConfig} from '../../components/modal/bottom-notification/BottomNotification';
-import {PinModalConfig} from '../../components/modal/pin/PinModal';
 import {Network} from '../../constants';
 import {
   APP_NETWORK,
@@ -28,7 +27,6 @@ export const appReduxPersistBlackList: Array<keyof AppState> = [
   'onGoingProcessModalMessage',
   'showDecryptPasswordModal',
   'showPinModal',
-  'pinModalConfig',
   'showBottomNotificationModal',
   'showBiometricModal',
   'activeModalId',
@@ -87,7 +85,6 @@ export interface AppState {
   showDecryptPasswordModal: boolean;
   decryptPasswordConfig: DecryptPasswordConfig | undefined;
   showPinModal: boolean;
-  pinModalConfig: PinModalConfig | undefined;
   pinLockActive: boolean;
   currentPin: string | undefined;
   pinBannedUntil: number | undefined;
@@ -156,7 +153,6 @@ const initialState: AppState = {
   showDecryptPasswordModal: false,
   decryptPasswordConfig: undefined,
   showPinModal: false,
-  pinModalConfig: undefined,
   pinLockActive: false,
   currentPin: undefined,
   pinBannedUntil: undefined,
@@ -353,38 +349,6 @@ export const appReducer = (
       return {
         ...state,
         decryptPasswordConfig: undefined,
-      };
-
-    case AppActionTypes.SHOW_PIN_MODAL:
-      return {
-        ...state,
-        showPinModal: true,
-        pinModalConfig: action.payload,
-      };
-
-    case AppActionTypes.DISMISS_PIN_MODAL:
-      return {
-        ...state,
-        showPinModal: false,
-        pinModalConfig: undefined,
-      };
-
-    case AppActionTypes.PIN_LOCK_ACTIVE:
-      return {
-        ...state,
-        pinLockActive: action.payload,
-      };
-
-    case AppActionTypes.CURRENT_PIN:
-      return {
-        ...state,
-        currentPin: action.payload,
-      };
-
-    case AppActionTypes.PIN_BANNED_UNTIL:
-      return {
-        ...state,
-        pinBannedUntil: action.payload,
       };
 
     case AppActionTypes.SHOW_BLUR:

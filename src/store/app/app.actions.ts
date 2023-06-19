@@ -25,6 +25,10 @@ export const failedAppInit = (): AppActionType => ({
   payload: true,
 });
 
+export const appIsReadyForDeeplinking = (): AppActionType => ({
+  type: AppActionTypes.APP_READY_FOR_DEEPLINKING,
+});
+
 export const setIntroCompleted = (): AppActionType => ({
   type: AppActionTypes.SET_INTRO_COMPLETED,
 });

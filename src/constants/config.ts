@@ -15,7 +15,7 @@ export const BASE_BITPAY_URLS = {
   [Network.mainnet]: 'https://bitpay.com',
   [Network.testnet]: 'https://test.bitpay.com',
 };
-export const APP_DEEPLINK_PREFIX = 'bitpay://';
+export const APP_DEEPLINK_PREFIX = 'bitpay-ng://'; // TODO: change to bitpay://
 export const APP_UNIVERSAL_LINK_DOMAINS = [
   'link.bitpay.com',
   'link.test.bitpay.com',

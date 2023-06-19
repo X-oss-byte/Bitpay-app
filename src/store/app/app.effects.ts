@@ -1,7 +1,7 @@
 // import BitAuth from 'bitauth';
 import i18n, {t} from 'i18next';
 import {debounce} from 'lodash';
-import {Platform, Linking} from 'react-native';
+import {DeviceEventEmitter, Linking} from 'react-native';
 import {AppActions} from '.';
 import {OnGoingProcessMessages} from '../../components/modal/ongoing-process/OngoingProcess';
 import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';
@@ -19,24 +19,20 @@ import {
   findWalletByIdHashed,
   getAllWalletClients,
 } from '../wallet/utils/wallet';
-import {SilentPushEvent} from '../../Root';
+import {navigationRef, SilentPushEvent} from '../../Root';
 import {
   startUpdateAllKeyAndWalletStatus,
   startUpdateWalletStatus,
 } from '../wallet/effects/status/status';
 import {createWalletAddress} from '../wallet/effects/address/address';
-import {APP_NAME, DOWNLOAD_BITPAY_URL} from '../../constants/config';
 import {updatePortfolioBalance} from '../wallet/wallet.actions';
 import {setEmailNotificationsAccepted, setUserFeedback} from './app.actions';
 // import {getStateFromPath, NavigationProp} from '@react-navigation/native';
-// import {
-//   getAvailableGiftCards,
-//   getCategoriesWithIntegrations,
-// } from '../shop/shop.selectors';
 // import {SettingsScreens} from '../../navigation/tabs/settings/SettingsStack';
 // import {ShortcutList} from '../../constants/shortcuts';
-// import {receiveCrypto, sendCrypto} from '../wallet/effects/send/send';
 import moment from 'moment';
+import {EmitterSubscription} from 'react-native-macos';
+import {DeviceEmitterEvents} from '../../constants/device-emitter-events';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {
   try {
@@ -87,43 +83,39 @@ export const startAppInit = (): Effect => async (dispatch, getState) => {
   }
 };
 
-// const deferDeeplinksUntilAppIsReady =
-//   (): Effect<void> => (dispatch, getState) => {
-//     const {APP} = getState();
-//     let subscriptions: EmitterSubscription[] = [];
+const deferDeeplinksUntilAppIsReady =
+  (): Effect<void> => (dispatch, getState) => {
+    const {APP} = getState();
+    let subscriptions: EmitterSubscription[] = [];
 
-//     const emitIfReady = () => {
-//       if (!subscriptions.length) {
-//         dispatch(AppActions.appIsReadyForDeeplinking());
-//         DeviceEventEmitter.emit(DeviceEmitterEvents.APP_READY_FOR_DEEPLINKS);
-//       }
-//     };
+    const emitIfReady = () => {
+      if (!subscriptions.length) {
+        dispatch(AppActions.appIsReadyForDeeplinking());
+        DeviceEventEmitter.emit(DeviceEmitterEvents.APP_READY_FOR_DEEPLINKS);
+      }
+    };
 
-//     const waitForEvent = (e: DeviceEmitterEvents) => {
-//       const sub = DeviceEventEmitter.addListener(e, () => {
-//         sub.remove();
-//         subscriptions = subscriptions.filter(s => s !== sub);
+    const waitForEvent = (e: DeviceEmitterEvents) => {
+      const sub = DeviceEventEmitter.addListener(e, () => {
+        sub.remove();
+        subscriptions = subscriptions.filter(s => s !== sub);
 
-//         emitIfReady();
-//       });
+        emitIfReady();
+      });
 
-//       subscriptions.push(sub);
-//     };
+      subscriptions.push(sub);
+    };
 
-//     if (!navigationRef.isReady()) {
-//       waitForEvent(DeviceEmitterEvents.APP_NAVIGATION_READY);
-//     }
+    if (!navigationRef.isReady()) {
+      waitForEvent(DeviceEmitterEvents.APP_NAVIGATION_READY);
+    }
 
-//     if (APP.appIsLoading) {
-//       waitForEvent(DeviceEmitterEvents.APP_DATA_INITIALIZED);
-//     }
+    if (APP.appIsLoading) {
+      waitForEvent(DeviceEmitterEvents.APP_DATA_INITIALIZED);
+    }
 
-//     if (!APP.onboardingCompleted) {
-//       waitForEvent(DeviceEmitterEvents.APP_ONBOARDING_COMPLETED);
-//     }
-
-//     emitIfReady();
-//   };
+    emitIfReady();
+  };
 
 // /**
 //  * Checks to ensure that the App Identity is defined, else generates a new one.
