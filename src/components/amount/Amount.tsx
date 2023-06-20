@@ -2,7 +2,7 @@ import React, {useCallback, useEffect, useMemo, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import styled from 'styled-components/native';
 import Button, {ButtonState} from '../../components/button/Button';
-import {ScreenGutter} from '../../components/styled/Containers';
+import {CtaContainer, ScreenGutter} from '../../components/styled/Containers';
 import {BaseText} from '../../components/styled/Text';
 import VirtualKeyboard from '../../components/virtual-keyboard/VirtualKeyboard';
 import {ParseAmount} from '../../store/wallet/effects/amount/amount';
@@ -13,7 +13,7 @@ import {
 } from '../../utils/helper-methods';
 import {useAppDispatch} from '../../utils/hooks';
 import useAppSelector from '../../utils/hooks/useAppSelector';
-import {useLogger} from '../../utils/hooks/useLogger';
+import SwapButton from '../swap-button/SwapButton';
 
 const AmountContainer = styled.View`
   flex: 1;
@@ -64,14 +64,6 @@ const AmountEquivText = styled(AmountText)`
   border-radius: 15px;
 `;
 
-const WarnMsgText = styled(BaseText)`
-  margin-top: 10px;
-  font-size: 12px;
-  font-weight: 700;
-  color: ${Caution};
-  padding: 4px 8px;
-`;
-
 const CurrencySuperScript = styled.View`
   position: absolute;
   top: 10px;
@@ -83,11 +75,6 @@ const CurrencyText = styled(BaseText)`
   color: ${({theme}) => theme.colors.text};
   position: absolute;
 `;
-
-export interface Limits {
-  min?: number;
-  max?: number;
-}
 
 export interface AmountProps {
   cryptoCurrencyAbbreviation?: string;
@@ -103,7 +90,7 @@ export interface AmountProps {
   onSubmit: (amount: number) => void;
 }
 
-const Amount: React.VFC<AmountProps> = ({
+const Amount: React.FC<AmountProps> = ({
   cryptoCurrencyAbbreviation,
   fiatCurrencyAbbreviation,
   chain,
@@ -141,10 +128,12 @@ const Amount: React.VFC<AmountProps> = ({
       cryptoCurrencyAbbreviation === fiatCurrency,
   });
   const [useSendMax, setUseSendMax] = useState(false);
-  const [limits, setLimits] = useState<Limits>({
-    min: undefined,
-    max: undefined,
-  });
+
+  const swapList = useMemo(() => {
+    return cryptoCurrencyAbbreviation
+      ? [...new Set([cryptoCurrencyAbbreviation, fiatCurrency])]
+      : [fiatCurrency];
+  }, [cryptoCurrencyAbbreviation, fiatCurrency]);
 
   const {
     displayAmount,
@@ -219,13 +208,7 @@ const Amount: React.VFC<AmountProps> = ({
   }, []);
 
   const continueIsDisabled = () => {
-    if (limits.min && +amount > 0 && +amount < limits.min) {
-      return true;
-    } else if (limits.max && +amount > 0 && +amount > limits.max) {
-      return true;
-    } else {
-      return !+amount && buttonState !== 'loading'; // Default case
-    }
+    return !+amount && buttonState !== 'loading'; // Default case
   };
 
   const init = () => {
@@ -276,6 +259,28 @@ const Amount: React.VFC<AmountProps> = ({
               </AmountEquivText>
             </Row>
           ) : null}
+          <CtaContainer>
+            {swapList.length > 1 ? (
+              <SwapButton
+                swapList={swapList}
+                onChange={(toCurrency: string) => {
+                  curValRef.current = '';
+                  updateAmountRef.current('0');
+                  updateAmountConfig(current => ({
+                    ...current,
+                    currency: toCurrency,
+                    primaryIsFiat: !primaryIsFiat,
+                    displayAmount: '0',
+                    displayEquivalentAmount: primaryIsFiat
+                      ? formatFiatAmount(0, fiatCurrency, {
+                          currencyDisplay: 'symbol',
+                        })
+                      : '0',
+                  }));
+                }}
+              />
+            ) : null}
+          </CtaContainer>
         </AmountHeroContainer>
 
         <ActionContainer>

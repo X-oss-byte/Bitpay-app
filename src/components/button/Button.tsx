@@ -11,15 +11,12 @@ import {
   Midnight,
   NeutralSlate,
   SlateDark,
-  //  Success,
   White,
 } from '../../styles/colors';
 import {ActiveOpacity} from '../styled/Containers';
 import {BaseText} from '../styled/Text';
-//import * as Icons from './ButtonIcons';
-//import ButtonOverlay from './ButtonOverlay';
-//import ButtonSpinner from './ButtonSpinner';
 import {StyleProp, ViewStyle} from 'react-native';
+import {useTranslation} from 'react-i18next';
 
 export type ButtonState = 'loading' | 'success' | 'failed' | null | undefined;
 export type ButtonStyle =
@@ -55,7 +52,6 @@ interface ButtonOptionProps {
   children?: any;
 }
 
-export const DURATION = 100;
 export const BUTTON_RADIUS = 6;
 export const BUTTON_HEIGHT = 63;
 export const PILL_RADIUS = 50;
@@ -235,14 +231,14 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = props => {
     accessibilityLabel,
     children,
   } = props;
+  const {t} = useTranslation();
   const secondary = buttonStyle === 'secondary';
   const outline = buttonOutline;
   const cancel = buttonStyle === 'cancel';
   const danger = buttonStyle === 'danger';
 
   const isLoading = state === 'loading';
-  //  const isSuccess = state === 'success';
-  //  const isFailure = state === 'failed';
+  const isFailure = state === 'failed';
 
   let ButtonTypeContainer: React.FC<ButtonOptionProps>;
   let ButtonTypeText: React.FC<ButtonOptionProps>;
@@ -294,7 +290,7 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = props => {
       testID={'button'}>
       <ButtonTypeContainer
         height={height}
-        danger={danger}
+        danger={isFailure ? true : danger}
         secondary={secondary}
         outline={outline}
         cancel={cancel}
@@ -303,10 +299,12 @@ const Button: React.FC<React.PropsWithChildren<ButtonProps>> = props => {
         <ButtonTypeText
           secondary={secondary}
           cancel={cancel}
-          danger={danger}
+          danger={isFailure ? true : danger}
           disabled={isLoading ? true : disabled}
           action={action}
-          children={children}
+          children={
+            isLoading ? t('Wait...') : isFailure ? t('Failed!') : children
+          }
         />
       </ButtonTypeContainer>
     </ButtonContainer>

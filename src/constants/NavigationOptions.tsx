@@ -20,4 +20,5 @@ export const baseNavigatorOptions: StackNavigationOptions = {
 
 export const baseScreenOptions: StackNavigationOptions = {
   ...TransitionPresets.DefaultTransition,
+  animationEnabled: false,
 };

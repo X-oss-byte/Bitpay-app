@@ -4,7 +4,7 @@ import {ModalId} from '../../../store/app/app.reducer';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {useTheme} from '@react-navigation/native';
 import {Black, OledBlack, White} from '../../../styles/colors';
-import {Easing, Animated, Pressable, View} from 'react-native-macos';
+import {Animated, Pressable, View} from 'react-native';
 
 type ModalProps = {
   id: ModalId;
@@ -34,7 +34,7 @@ const BaseModal: React.FC<ModalProps> = props => {
   } = props as ModalProps;
 
   const startedAnimationValue = new Animated.Value(
-    placement === 'top' ? -10 : 10,
+    placement === 'top' ? -40 : 40,
   );
   const [animate, setAnimate] = useState(startedAnimationValue); // Initial value for scale: 0
 
@@ -43,7 +43,8 @@ const BaseModal: React.FC<ModalProps> = props => {
       if (!activeModalId || activeModalId === id) {
         if (placement === 'top' || placement === 'bottom') {
           Animated.spring(animate, {
-            toValue: 0,
+            toValue: placement === 'top' ? -5 : 0,
+            speed: 10,
             useNativeDriver: true,
           }).start();
         }

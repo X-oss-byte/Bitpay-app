@@ -310,7 +310,6 @@ const goToConfirm =
       } else {
         dispatch(dismissOnGoingProcessModal());
       }
-      await sleep(300);
       navigationRef.navigate('Wallet', {
         screen: 'Confirm',
         params: {
@@ -323,7 +322,7 @@ const goToConfirm =
           sendMax: opts?.sendMax,
         },
       });
-      sleep(300).then(() => setButtonState?.(null));
+      setButtonState?.(null);
     } catch (err: any) {
       if (setButtonState) {
         setButtonState('failed');
@@ -332,7 +331,6 @@ const goToConfirm =
       }
       const [errorMessageConfig] = await Promise.all([
         dispatch(handleCreateTxProposalError(err)),
-        sleep(400),
       ]);
       dispatch(
         showBottomNotificationModal({

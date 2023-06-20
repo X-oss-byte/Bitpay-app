@@ -1,6 +1,12 @@
 import React, {memo} from 'react';
 import styled, {css, useTheme} from 'styled-components/native';
-import {SlateDark, White} from '../../styles/colors';
+import {
+  LightBlack,
+  NeutralSlate,
+  Slate10,
+  SlateDark,
+  White,
+} from '../../styles/colors';
 import {BaseText} from '../styled/Text';
 import DeleteIcon from '../icons/delete/Delete';
 import {PixelRatio} from 'react-native';
@@ -137,11 +143,8 @@ const VirtualKeyboard: React.FC<VirtualKeyboardProps> = ({
   darkModeOnly = false,
 }) => {
   const theme = useTheme();
-  const backgroundColor =
-    darkModeOnly || theme.dark
-      ? 'rgba(255, 255, 255, 0.2)'
-      : 'rgba(0, 0, 0, 0.1)';
-  const bgColor = darkModeOnly || theme.dark ? White : '#4A4A4A';
+  const backgroundColor = darkModeOnly || theme.dark ? LightBlack : Slate10;
+  const bgColor = darkModeOnly || theme.dark ? NeutralSlate : LightBlack;
   return (
     <KeyboardContainer>
       <Row

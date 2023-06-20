@@ -1,4 +1,3 @@
-import {StackScreenProps} from '@react-navigation/stack';
 import React, {useLayoutEffect, useRef, useState} from 'react';
 import {useTranslation} from 'react-i18next';
 import styled from 'styled-components/native';
@@ -6,6 +5,8 @@ import Amount from '../../../components/amount/Amount';
 import Button, {ButtonState} from '../../../components/button/Button';
 import {HeaderRightContainer} from '../../../components/styled/Containers';
 import {WalletScreens, WalletStackParamList} from '../WalletStack';
+import {useNavigation} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/core';
 
 const HeaderContainer = styled(HeaderRightContainer)`
   justify-content: center;
@@ -33,10 +34,11 @@ export interface AmountScreenParamList {
   context?: string;
 }
 
-const AmountScreen: React.VFC<
-  StackScreenProps<WalletStackParamList, WalletScreens.AMOUNT>
-> = ({navigation, route}) => {
+const AmountScreen: React.FC = () => {
   const {t} = useTranslation();
+  const navigation = useNavigation();
+  const route =
+    useRoute<RouteProp<WalletStackParamList, WalletScreens.AMOUNT>>();
   const [buttonState, setButtonState] = useState<ButtonState>();
 
   const {

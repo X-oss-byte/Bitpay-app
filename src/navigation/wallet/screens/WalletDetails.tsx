@@ -1,6 +1,6 @@
 import {useNavigation, useTheme} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Text, TouchableOpacity, View} from 'react-native';
 import i18next from 'i18next';
 import _ from 'lodash';
 import React, {
@@ -19,7 +19,6 @@ import {
   Linking,
   RefreshControl,
   SectionList,
-  Share,
 } from 'react-native';
 import styled from 'styled-components/native';
 import Settings from '../../../components/settings/Settings';
