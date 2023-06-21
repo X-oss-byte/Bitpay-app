@@ -16,6 +16,8 @@ export const baseNavigatorOptions: StackNavigationOptions = {
   },
   headerShadowVisible: false,
   headerTitleStyle: {maxWidth: WIDTH - 150},
+  animationEnabled: false,
+  gestureEnabled: false,
 };
 
 export const baseScreenOptions: StackNavigationOptions = {

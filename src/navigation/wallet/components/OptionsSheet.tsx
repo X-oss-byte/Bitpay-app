@@ -12,13 +12,14 @@ import {Action, Black, Slate, White} from '../../../styles/colors';
 import {sleep} from '../../../utils/helper-methods';
 
 const OptionsTitleContainer = styled.View`
-  margin-bottom: 25px;
+  margin-bottom: 5px;
 `;
 
 const OptionContainer = styled.TouchableOpacity<SheetParams>`
   flex-direction: row;
   align-items: stretch;
-  padding-${({placement}) => placement}: 31px;
+  padding-${({placement}) => placement}: 20px;
+  cursor: pointer;
 `;
 
 const OptionIconContainer = styled.View`
@@ -72,7 +73,7 @@ const OptionsSheet = ({
   placement,
   options,
 }: Props) => {
-  const sheetPlacement = placement || 'bottom';
+  const sheetPlacement = placement || 'top';
   const topStyles = {
     paddingTop: Platform.OS === 'android' ? 0 : 31,
   };

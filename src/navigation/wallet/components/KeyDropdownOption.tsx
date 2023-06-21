@@ -41,6 +41,7 @@ export const OptionContainer = styled.TouchableOpacity`
   justify-content: space-between;
   overflow: hidden;
   padding: 20px;
+  cursor: pointer;
 `;
 
 export const BaseText = styled(H5)`

@@ -118,7 +118,6 @@ import {
   TRANSACTION_ICON_SIZE,
 } from '../../../constants/TransactionIcons';
 import SentBadgeSvg from '../../../../assets/img/sent-badge.svg';
-import {getGiftCardIcons} from '../../../lib/gift-cards/gift-card';
 
 export type WalletDetailsScreenParamList = {
   walletId: string;
@@ -131,9 +130,8 @@ type WalletDetailsScreenProps = StackScreenProps<
   'WalletDetails'
 >;
 
-const WalletDetailsContainer = styled.View`
+const WalletDetailsContainer = styled.SafeAreaView`
   flex: 1;
-  padding-top: 10px;
 `;
 
 const HeaderContainer = styled.View`
@@ -278,8 +276,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
   const {keys} = useAppSelector(({WALLET}) => WALLET);
   const {rates} = useAppSelector(({RATE}) => RATE);
 
-  const locationData = useAppSelector(({LOCATION}) => LOCATION.locationData);
-
   const wallets = Object.values(keys).flatMap(k => k.wallets);
 
   const contactList = useAppSelector(({CONTACT}) => CONTACT.list);
@@ -314,12 +310,17 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
       headerRight: () => (
         <Settings
           onPress={() => {
-            setShowWalletOptions(true);
+            setShowWalletOptions(!showWalletOptions);
           }}
         />
       ),
     });
-  }, [navigation, uiFormattedWallet.walletName, key.keyName]);
+  }, [
+    navigation,
+    showWalletOptions,
+    uiFormattedWallet.walletName,
+    key.keyName,
+  ]);
 
   useEffect(() => {
     setRefreshing(!!fullWalletObj.isRefreshing);

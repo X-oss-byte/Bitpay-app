@@ -122,17 +122,17 @@ const WalletListFooterText = styled(BaseText)`
 export const KeyToggle = styled(TouchableOpacity)`
   align-items: center;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 export const KeyDropdown = styled.SafeAreaView`
   background: ${({theme: {dark}}) => (dark ? LightBlack : White)};
   border-bottom-left-radius: 12px;
   border-bottom-right-radius: 12px;
-  max-height: 75%;
 `;
 
 export const KeyDropdownOptionsContainer = styled.ScrollView`
-  padding: 0 ${ScreenGutter};
+  margin-left: ${ScreenGutter};
 `;
 
 const CogIconContainer = styled.TouchableOpacity`
@@ -367,15 +367,12 @@ const KeyOverview = () => {
       return;
     }
 
-    //TODO: disabled={!hasMultipleKeys}
-    // TODO: arrow {hasMultipleKeys && <ChevronDownSvg style={{marginLeft: 10}} />}
     navigation.setOptions({
       headerTitle: () => {
         return (
           <KeyToggle
             activeOpacity={ActiveOpacity}
-            disabled={true}
-            onPress={() => setShowKeyDropdown(true)}>
+            onPress={() => setShowKeyDropdown(!showKeyDropdown)}>
             {key.methods?.isPrivKeyEncrypted() ? (
               theme.dark ? (
                 <EncryptPasswordDarkModeImg />
@@ -387,6 +384,9 @@ const KeyOverview = () => {
               <HeaderTitle style={{textAlign: 'center'}}>
                 {key?.keyName}
               </HeaderTitle>
+              {hasMultipleKeys ? (
+                <ChevronDownSvg style={{marginLeft: 10}} />
+              ) : null}
             </HeaderTitleContainer>
           </KeyToggle>
         );
@@ -419,7 +419,7 @@ const KeyOverview = () => {
                 <>
                   <Settings
                     onPress={() => {
-                      setShowKeyOptions(true);
+                      setShowKeyOptions(!showKeyOptions);
                     }}
                   />
                 </>
@@ -429,7 +429,14 @@ const KeyOverview = () => {
         );
       },
     });
-  }, [navigation, key, hasMultipleKeys, theme.dark]);
+  }, [
+    navigation,
+    showKeyDropdown,
+    showKeyOptions,
+    key,
+    hasMultipleKeys,
+    theme.dark,
+  ]);
 
   useEffect(() => {
     if (context === 'createNewMultisigKey') {
@@ -664,6 +671,7 @@ const KeyOverview = () => {
 
       <SheetModal
         isVisible={showKeyDropdown}
+        useMaxHeight={'75%'}
         placement={'top'}
         onBackdropPress={() => setShowKeyDropdown(false)}>
         <KeyDropdown>

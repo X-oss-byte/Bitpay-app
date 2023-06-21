@@ -57,7 +57,11 @@ import {
   getTx,
   handleCreateTxProposalError,
 } from '../../../store/wallet/effects/send/send';
-import {showBottomNotificationModal} from '../../../store/app/app.actions';
+import {
+  dismissOnGoingProcessModal,
+  showBottomNotificationModal,
+  showOnGoingProcessModal,
+} from '../../../store/app/app.actions';
 import {FormatAmount} from '../../../store/wallet/effects/amount/amount';
 import {
   Recipient,
@@ -221,13 +225,13 @@ const TransactionDetails = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{title}</HeaderTitle>,
     });
   }, [navigation, title]);
 
   const init = async () => {
     try {
+      dispatch(showOnGoingProcessModal('LOADING'));
       const _transaction = await dispatch(
         buildTransactionDetails({
           transaction,
@@ -237,10 +241,9 @@ const TransactionDetails = () => {
       );
       setTxs(_transaction);
       setMemo(_transaction.detailsMemo);
-      await sleep(500);
+      dispatch(dismissOnGoingProcessModal());
       setIsLoading(false);
     } catch (err) {
-      await sleep(500);
       setIsLoading(false);
       const e = err instanceof Error ? err.message : JSON.stringify(err);
       dispatch(LogActions.error('[TransactionDetails] ', e));

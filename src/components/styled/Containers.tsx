@@ -12,6 +12,7 @@ import {
   Action,
   Slate30,
   OledBlack,
+  Slate10,
 } from '../../styles/colors';
 import {BaseText} from './Text';
 
@@ -138,7 +139,9 @@ export interface SheetParams {
 }
 
 export const SheetContainer = styled.View<SheetParams>`
-  padding: 30px;
+  padding: 15px 30px;
+  border-top-color: ${({theme: {dark}}) => (dark ? LightBlack : Slate10)};
+  border-top-width: 1px;
   background-color: ${({theme}) => (theme.dark ? OledBlack : White)};
   justify-content: center;
   align-content: center;

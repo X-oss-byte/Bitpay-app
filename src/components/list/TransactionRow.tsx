@@ -13,6 +13,7 @@ const TransactionContainer = styled.TouchableOpacity`
   justify-content: center;
   align-items: center;
   height: ${TRANSACTION_ROW_HEIGHT}px;
+  cursor: pointer;
 `;
 
 const IconContainer = styled.View`
