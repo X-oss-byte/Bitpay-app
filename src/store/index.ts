@@ -2,15 +2,14 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 import {Action, applyMiddleware, combineReducers, createStore} from 'redux';
 import {composeWithDevTools} from 'redux-devtools-extension';
 import {createLogger} from 'redux-logger'; // https://github.com/LogRocket/redux-logger
-//import {getUniqueId} from 'react-native-device-info';
 import {createTransform, persistStore, persistReducer} from 'redux-persist'; // https://github.com/rt2zz/redux-persist
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
-//import {encryptTransform} from 'redux-persist-transform-encrypt'; // https://github.com/maxdeviant/redux-persist-transform-encrypt
 import thunkMiddleware, {ThunkAction} from 'redux-thunk'; // https://github.com/reduxjs/redux-thunk
 import {Selector} from 'reselect';
 import {
   bindWalletClient,
   bindWalletKeys,
+  transformCircular,
   transformContacts,
 } from './transforms/transforms';
 
@@ -50,9 +49,20 @@ import {
   RateState,
 } from './rate/rate.reducer';
 import {RateActionType} from './rate/rate.types';
-//import {LogActions} from './log';
 import {walletBackupReducer} from './wallet-backup/wallet-backup.reducer';
 import {WalletBackupActionType} from './wallet-backup/wallet-backup.types';
+import {
+  walletConnectV2Reducer,
+  walletConnectV2ReduxPersistBlackList,
+  WalletConnectV2State,
+} from './wallet-connect-v2/wallet-connect-v2.reducer';
+import {WalletConnectV2ActionType} from './wallet-connect-v2/wallet-connect-v2.types';
+import {
+  walletConnectReducer,
+  walletConnectReduxPersistBlackList,
+  WalletConnectState,
+} from './wallet-connect/wallet-connect.reducer';
+import {WalletConnectActionType} from './wallet-connect/wallet-connect.types';
 
 const basePersistConfig = {
   storage: AsyncStorage,
@@ -67,6 +77,8 @@ const reducerPersistBlackLists = {
   WALLET: walletReduxPersistBlackList,
   RATE: rateReduxPersistBlackList,
   CONTACT: ContactReduxPersistBlackList,
+  WALLET_CONNECT: walletConnectReduxPersistBlackList,
+  WALLET_CONNECT_V2: walletConnectV2ReduxPersistBlackList,
 };
 
 /*
@@ -133,6 +145,26 @@ const reducers = {
       blacklist: ContactReduxPersistBlackList,
     },
     contactReducer,
+  ),
+  WALLET_CONNECT: persistReducer<WalletConnectState, WalletConnectActionType>(
+    {
+      storage: AsyncStorage,
+      key: 'WALLET_CONNECT',
+      transforms: [transformCircular],
+      blacklist: walletConnectReduxPersistBlackList,
+    },
+    walletConnectReducer,
+  ),
+  WALLET_CONNECT_V2: persistReducer<
+    WalletConnectV2State,
+    WalletConnectV2ActionType
+  >(
+    {
+      ...basePersistConfig,
+      key: 'WALLET_CONNECT_V2',
+      blacklist: walletConnectV2ReduxPersistBlackList,
+    },
+    walletConnectV2Reducer,
   ),
 };
 

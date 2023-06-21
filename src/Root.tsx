@@ -33,7 +33,9 @@ import ContactsStack, {
 import AboutStack, {
   AboutStackParamList,
 } from './navigation/tabs/settings/about/AboutStack';
-
+import WalletConnectStack, {
+  WalletConnectStackParamList,
+} from './navigation/wallet-connect/WalletConnectStack';
 import DebugScreen, {DebugScreenParamList} from './navigation/Debug';
 import {WalletBackupActions} from './store/wallet-backup';
 import {successCreateKey} from './store/wallet/wallet.actions';
@@ -59,6 +61,7 @@ export type RootStackParamList = {
   About: NavigatorScreenParams<AboutStackParamList>;
   Debug: DebugScreenParamList;
   NetworkFeePolicySettings: NavigatorScreenParams<NetworkFeePolicySettingsStackParamsList>;
+  WalletConnect: NavigatorScreenParams<WalletConnectStackParamList>;
 };
 
 // ROOT NAVIGATION CONFIG
@@ -72,6 +75,7 @@ export enum RootStacks {
   DEBUG = 'Debug',
   NOTIFICATIONS_SETTINGS = 'NotificationsSettings',
   NETWORK_FEE_POLICY_SETTINGS = 'NetworkFeePolicySettings',
+  WALLET_CONNECT_V2 = 'WalletConnect',
 }
 
 // ROOT NAVIGATION CONFIG
@@ -80,7 +84,8 @@ export type NavScreenParams = NavigatorScreenParams<
     GeneralSettingsStackParamList &
     ContactsStackParamList &
     NotificationsSettingsStackParamsList &
-    AboutStackParamList
+    AboutStackParamList &
+    WalletConnectStackParamList
 >;
 
 declare global {
@@ -342,6 +347,10 @@ export default () => {
             component={NetworkFeePolicySettingsStack}
           />
           <Root.Screen name={RootStacks.ABOUT} component={AboutStack} />
+          <Root.Screen
+            name={RootStacks.WALLET_CONNECT_V2}
+            component={WalletConnectStack}
+          />
         </Root.Navigator>
         <OnGoingProcessModal />
         <BottomNotificationModal />

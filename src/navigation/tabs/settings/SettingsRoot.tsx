@@ -18,6 +18,7 @@ import {useAppSelector, useAppDispatch} from '../../../utils/hooks';
 
 import General from './components/General';
 import Notifications from './components/Notifications';
+import Connections from './components/Connections';
 import About from './components/About';
 import Contacts from './components/Contacts';
 import Crypto from './components/Crypto';
@@ -110,6 +111,12 @@ const SettingsHomeScreen: React.VFC<SettingsHomeProps> = ({route}) => {
         title: t('Notifications'),
         onPress: () => {},
         subListComponent: <Notifications />,
+      },
+      {
+        id: 'Connections',
+        title: t('Connections'),
+        onPress: () => {},
+        subListComponent: <Connections redirectTo={redirectTo} />,
       },
       {
         id: 'About BitPay',
