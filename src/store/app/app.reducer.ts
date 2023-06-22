@@ -399,28 +399,6 @@ export const appReducer = (
         lockAuthorizedUntil: action.payload,
       };
 
-    case AppActionTypes.SET_HOME_CAROUSEL_CONFIG:
-      if (state.homeCarouselConfig) {
-        if (Array.isArray(action.payload)) {
-          return {
-            ...state,
-            homeCarouselConfig: action.payload,
-          };
-        }
-
-        return {
-          ...state,
-          homeCarouselConfig: [...state.homeCarouselConfig, action.payload],
-        };
-      }
-      return state;
-
-    case AppActionTypes.SET_HOME_CAROUSEL_LAYOUT_TYPE:
-      return {
-        ...state,
-        homeCarouselLayoutType: action.payload,
-      };
-
     case AppActionTypes.UPDATE_SETTINGS_LIST_CONFIG:
       const item = action.payload;
       let newList = [...state.settingsListConfig];

@@ -2,7 +2,7 @@ import React, {ReactChild, useEffect} from 'react';
 import SheetModal from '../base/sheet/SheetModal';
 import {BaseText, fontFamily, H4} from '../../styled/Text';
 import styled, {css} from 'styled-components/native';
-import {useDispatch, useSelector} from 'react-redux';
+import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {AppActions} from '../../../store/app';
 import {RootState} from '../../../store';
 import {
@@ -21,7 +21,6 @@ import WarningSvg from '../../../../assets/img/warning.svg';
 import ErrorSvg from '../../../../assets/img/error.svg';
 import QuestionSvg from '../../../../assets/img/question.svg';
 import WaitSvg from '../../../../assets/img/wait.svg';
-import {sleep} from '../../../utils/helper-methods';
 import {Theme, useNavigation, useTheme} from '@react-navigation/native';
 import Markdown from 'react-native-markdown-display';
 import {resetBottomNotificationModalConfig} from '../../../store/app/app.actions';
@@ -112,13 +111,13 @@ export const BottomNotificationCta = styled(BaseText)`
 
 const BottomNotification = () => {
   const theme = useTheme();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigation = useNavigation();
-  const rootState = useSelector((state: RootState) => state);
-  const isVisible = useSelector(
+  const rootState = useAppSelector((state: RootState) => state);
+  const isVisible = useAppSelector(
     ({APP}: RootState) => APP.showBottomNotificationModal,
   );
-  const config = useSelector(
+  const config = useAppSelector(
     ({APP}: RootState) => APP.bottomNotificationModalConfig,
   );
 

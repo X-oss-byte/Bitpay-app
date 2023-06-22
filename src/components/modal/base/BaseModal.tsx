@@ -63,7 +63,7 @@ const BaseModal: React.FC<ModalProps> = props => {
       dispatch(AppActions.activeModalUpdated(null));
       onModalHide?.();
     }
-  }, [activeModalId, id, isVisible]);
+  }, [isVisible]);
   return isVisibleSafe ? (
     <>
       <Pressable
