@@ -108,7 +108,10 @@ interface Props {
 const BalanceDetailsModal = ({isVisible, closeModal, wallet}: Props) => {
   const {t} = useTranslation();
   return (
-    <SheetModal isVisible={isVisible} onBackdropPress={closeModal}>
+    <SheetModal
+      placement={'bottom'}
+      isVisible={isVisible}
+      onBackdropPress={closeModal}>
       <BalanceDetailsContainer>
         <SafeAreaView style={{height: '100%'}}>
           <ModalHeader>

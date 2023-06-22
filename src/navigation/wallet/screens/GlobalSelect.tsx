@@ -504,7 +504,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
         return (
           <HeaderTitle>
             {walletSelectModalVisible
-              ? t('Select a wallet')
+              ? t('Selecta a wallet')
               : t('Select a currency')}
           </HeaderTitle>
         );
@@ -540,30 +540,30 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
             )}
           </NoWalletsMsg>
         )}
-        <SheetModal
-          fullScreen={true}
-          isVisible={walletSelectModalVisible}
-          onBackdropPress={() => setWalletSelectModalVisible(false)}>
-          <WalletSelectMenuContainer>
-            <WalletSelectMenuBodyContainer>
-              <KeyWalletsRow
-                keyWallets={keyWallets!}
-                hideBalance={hideAllBalances}
-                onPress={onWalletSelect}
-              />
-            </WalletSelectMenuBodyContainer>
-            {/*Nested receive modal*/}
-            {receiveWallet && (
-              <ReceiveAddress
-                isVisible={showReceiveAddressBottomModal}
-                closeModal={closeModal}
-                wallet={receiveWallet}
-              />
-            )}
-          </WalletSelectMenuContainer>
-        </SheetModal>
       </View>
       {/*Receive modal if one wallet*/}
+      <SheetModal
+        placement={'bottom'}
+        isVisible={walletSelectModalVisible}
+        onBackdropPress={() => setWalletSelectModalVisible(false)}>
+        <WalletSelectMenuContainer>
+          <WalletSelectMenuBodyContainer>
+            <KeyWalletsRow
+              keyWallets={keyWallets!}
+              hideBalance={hideAllBalances}
+              onPress={onWalletSelect}
+            />
+          </WalletSelectMenuBodyContainer>
+          {/*Nested receive modal*/}
+          {receiveWallet && (
+            <ReceiveAddress
+              isVisible={showReceiveAddressBottomModal}
+              closeModal={closeModal}
+              wallet={receiveWallet}
+            />
+          )}
+        </WalletSelectMenuContainer>
+      </SheetModal>
       {receiveWallet && !walletSelectModalVisible && (
         <ReceiveAddress
           isVisible={showReceiveAddressBottomModal}

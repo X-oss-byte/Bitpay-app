@@ -805,38 +805,6 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
           </WalletAdvancedOptionsContainer>
         )}
 
-        <SheetModal
-          isVisible={associatedWalletModalVisible}
-          onBackdropPress={() => setAssociatedWalletModalVisible(false)}>
-          <AssociatedWalletSelectionModalContainer>
-            <TextAlign align={'center'}>
-              <H4>{t('Select a Wallet')}</H4>
-            </TextAlign>
-            <FlatList
-              contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
-              data={UIFormattedEvmWallets}
-              keyExtractor={keyExtractor}
-              renderItem={renderItem}
-            />
-          </AssociatedWalletSelectionModalContainer>
-        </SheetModal>
-
-        <SheetModal
-          isVisible={chainModalVisible}
-          onBackdropPress={() => setChainModalVisible(false)}>
-          <AssociatedWalletSelectionModalContainer>
-            <TextAlign align={'center'}>
-              <H4>{t('Select a Chain')}</H4>
-            </TextAlign>
-            <FlatList
-              contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
-              data={SupportedEvmCurrencyOptions}
-              keyExtractor={keyExtractor}
-              renderItem={renderChain}
-            />
-          </AssociatedWalletSelectionModalContainer>
-        </SheetModal>
-
         <ButtonContainer>
           <Button
             disabled={
@@ -855,6 +823,39 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
           </Button>
         </ButtonContainer>
       </ScrollView>
+      <SheetModal
+        placement={'bottom'}
+        isVisible={associatedWalletModalVisible}
+        onBackdropPress={() => setAssociatedWalletModalVisible(false)}>
+        <AssociatedWalletSelectionModalContainer>
+          <TextAlign align={'center'}>
+            <H4>{t('Select a Wallet')}</H4>
+          </TextAlign>
+          <FlatList
+            contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
+            data={UIFormattedEvmWallets}
+            keyExtractor={keyExtractor}
+            renderItem={renderItem}
+          />
+        </AssociatedWalletSelectionModalContainer>
+      </SheetModal>
+
+      <SheetModal
+        placement={'bottom'}
+        isVisible={chainModalVisible}
+        onBackdropPress={() => setChainModalVisible(false)}>
+        <AssociatedWalletSelectionModalContainer>
+          <TextAlign align={'center'}>
+            <H4>{t('Select a Chain')}</H4>
+          </TextAlign>
+          <FlatList
+            contentContainerStyle={{paddingTop: 20, paddingBottom: 20}}
+            data={SupportedEvmCurrencyOptions}
+            keyExtractor={keyExtractor}
+            renderItem={renderChain}
+          />
+        </AssociatedWalletSelectionModalContainer>
+      </SheetModal>
     </CreateWalletContainer>
   );
 };

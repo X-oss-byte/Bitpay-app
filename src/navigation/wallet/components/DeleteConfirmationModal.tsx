@@ -51,7 +51,7 @@ const DeleteConfirmationModal = ({
   return (
     <SheetModal
       isVisible={isVisible}
-      placement="bottom"
+      placement={'bottom'}
       onBackdropPress={onPressCancel}>
       <SheetContainer>
         <Header>

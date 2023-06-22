@@ -553,7 +553,10 @@ export const WalletSelector = ({
   }, [isVisible]);
 
   return (
-    <SheetModal isVisible={selectorVisible} onBackdropPress={onBackdropPress}>
+    <SheetModal
+      placement={'bottom'}
+      isVisible={selectorVisible}
+      onBackdropPress={onBackdropPress}>
       <WalletSelectMenuContainer>
         <WalletSelectMenuHeaderContainer currency={currency}>
           {currency ? (
