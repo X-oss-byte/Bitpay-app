@@ -77,6 +77,7 @@ import {
 } from './send/confirm/Shared';
 import {LogActions} from '../../../store/log';
 import {GetPayProDetails} from '../../../store/wallet/effects/paypro/paypro';
+import {AppActions} from '../../../store/app';
 
 const TxpDetailsContainer = styled.SafeAreaView`
   flex: 1;
@@ -213,7 +214,6 @@ const TransactionProposalDetails = () => {
   const [remainingTimeStr, setRemainingTimeStr] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [payproIsLoading, setPayproIsLoading] = useState(true);
-  const [showPaymentSentModal, setShowPaymentSentModal] = useState(false);
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [lastSigner, setLastSigner] = useState(false);
 
@@ -358,7 +358,14 @@ const TransactionProposalDetails = () => {
       await sleep(1000);
       dispatch(dismissOnGoingProcessModal());
       await sleep(600);
-      setShowPaymentSentModal(true);
+      dispatch(
+        AppActions.showPaymentSentModal({
+          onDismissModal: async () => {
+            navigation.goBack();
+          },
+          title: lastSigner ? t('Payment Sent') : t('Payment Accepted'),
+        }),
+      );
     } catch (err: any) {
       logger.error(
         `Could not broadcast Txp. Coin: ${txp.coin} - Chain: ${txp.chain} - Network: ${wallet.network} - Raw: ${txp.raw}`,
@@ -748,7 +755,14 @@ const TransactionProposalDetails = () => {
               await dispatch(publishAndSign({txp, key, wallet}));
               dispatch(dismissOnGoingProcessModal());
               await sleep(400);
-              setShowPaymentSentModal(true);
+              dispatch(
+                AppActions.showPaymentSentModal({
+                  onDismissModal: async () => {
+                    navigation.goBack();
+                  },
+                  title: lastSigner ? t('Payment Sent') : t('Payment Accepted'),
+                }),
+              );
             } catch (err) {
               await sleep(500);
               dispatch(dismissOnGoingProcessModal());
@@ -775,17 +789,6 @@ const TransactionProposalDetails = () => {
           }}
         />
       ) : null}
-
-      <PaymentSent
-        isVisible={showPaymentSentModal}
-        fullScreen={true}
-        title={lastSigner ? t('Payment Sent') : t('Payment Accepted')}
-        onCloseModal={async () => {
-          setShowPaymentSentModal(false);
-          await sleep(300);
-          navigation.goBack();
-        }}
-      />
     </TxpDetailsContainer>
   );
 };

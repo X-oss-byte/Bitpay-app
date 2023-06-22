@@ -4,6 +4,7 @@ import {BottomNotificationConfig} from '../../components/modal/bottom-notificati
 import {Network} from '../../constants';
 import {SettingsListType} from '../../navigation/tabs/settings/SettingsRoot';
 import {DecryptPasswordConfig} from '../../navigation/wallet/components/DecryptEnterPasswordModal';
+import {PaymentSentConfig} from '../../navigation/wallet/components/PaymentSent';
 import {ModalId, FeedbackType} from './app.reducer';
 import {AppActionType, AppActionTypes} from './app.types';
 
@@ -113,6 +114,21 @@ export const dismissDecryptPasswordModal = (): AppActionType => ({
 
 export const resetDecryptPasswordConfig = (): AppActionType => ({
   type: AppActionTypes.RESET_DECRYPT_PASSWORD_CONFIG,
+});
+
+export const showPaymentSentModal = (
+  PaymentSentConfig: PaymentSentConfig,
+): AppActionType => ({
+  type: AppActionTypes.SHOW_PAYMENT_SENT_MODAL,
+  payload: PaymentSentConfig,
+});
+
+export const dismissPaymentSentModal = (): AppActionType => ({
+  type: AppActionTypes.DISMISS_PAYMENT_SENT_MODAL,
+});
+
+export const resetPaymentSentConfig = (): AppActionType => ({
+  type: AppActionTypes.RESET_PAYMENT_SENT_CONFIG,
 });
 
 export const showBlur = (value: boolean): AppActionType => ({

@@ -19,6 +19,7 @@ import {AppActionType, AppActionTypes} from './app.types';
 import uniqBy from 'lodash.uniqby';
 import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';
 import moment from 'moment';
+import {PaymentSentConfig} from '../../navigation/wallet/components/PaymentSent';
 
 export const appReduxPersistBlackList: Array<keyof AppState> = [
   'appIsLoading',
@@ -84,6 +85,8 @@ export interface AppState {
   showOnboardingFinishModal: boolean;
   showDecryptPasswordModal: boolean;
   decryptPasswordConfig: DecryptPasswordConfig | undefined;
+  showPaymentSentModal: boolean;
+  paymentSentConfig: PaymentSentConfig | undefined;
   showPinModal: boolean;
   pinLockActive: boolean;
   currentPin: string | undefined;
@@ -152,6 +155,8 @@ const initialState: AppState = {
   showOnboardingFinishModal: false,
   showDecryptPasswordModal: false,
   decryptPasswordConfig: undefined,
+  showPaymentSentModal: false,
+  paymentSentConfig: undefined,
   showPinModal: false,
   pinLockActive: false,
   currentPin: undefined,
@@ -349,6 +354,25 @@ export const appReducer = (
       return {
         ...state,
         decryptPasswordConfig: undefined,
+      };
+
+    case AppActionTypes.SHOW_PAYMENT_SENT_MODAL:
+      return {
+        ...state,
+        showPaymentSentModal: true,
+        paymentSentConfig: action.payload,
+      };
+
+    case AppActionTypes.DISMISS_PAYMENT_SENT_MODAL:
+      return {
+        ...state,
+        showPaymentSentModal: false,
+      };
+
+    case AppActionTypes.RESET_PAYMENT_SENT_CONFIG:
+      return {
+        ...state,
+        paymentSentConfig: undefined,
       };
 
     case AppActionTypes.SHOW_BLUR:

@@ -1,14 +1,9 @@
 import React, {useEffect} from 'react';
-import {useDispatch, useSelector} from 'react-redux';
+import {useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import styled from 'styled-components/native';
 import {AppActions} from '../../../store/app';
-import {
-  ActionContainer,
-  HEIGHT,
-  ScreenGutter,
-  WIDTH,
-} from '../../../components/styled/Containers';
+import {ActionContainer, HEIGHT} from '../../../components/styled/Containers';
 import {LightBlack, White} from '../../../styles/colors';
 import yup from '../../../lib/yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -20,6 +15,7 @@ import {Keyboard} from 'react-native';
 import {sleep} from '../../../utils/helper-methods';
 import {useTranslation} from 'react-i18next';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
+import {useAppDispatch} from '../../../utils/hooks';
 
 const DecryptFormContainer = styled.View`
   background: ${({theme: {dark}}) => (dark ? LightBlack : White)};
@@ -58,7 +54,7 @@ export interface DecryptPasswordConfig {
 
 const DecryptEnterPasswordModal = () => {
   const {t} = useTranslation();
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const isVisible = useSelector(
     ({APP}: RootState) => APP.showDecryptPasswordModal,
   );

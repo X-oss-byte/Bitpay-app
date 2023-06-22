@@ -50,6 +50,7 @@ import {
   walletConnectRejectCallRequest,
 } from '../../../store/wallet-connect/wallet-connect.effects';
 import {startSendPayment} from '../../../store/wallet/effects/send/send';
+import {AppActions} from '../../../store/app';
 
 const HeaderRightContainer = styled.View`
   margin-right: 15px;
@@ -85,7 +86,6 @@ const WalletConnectConfirm = () => {
     recipient,
   } = route.params;
   const key = useAppSelector(({WALLET}) => WALLET.keys[wallet.keyId]);
-  const [showPaymentSentModal, setShowPaymentSentModal] = useState(false);
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
 
   const {
@@ -120,7 +120,13 @@ const WalletConnectConfirm = () => {
       }
       dispatch(dismissOnGoingProcessModal());
       await sleep(1000);
-      setShowPaymentSentModal(true);
+      dispatch(
+        AppActions.showPaymentSentModal({
+          onDismissModal: async () => {
+            navigation.goBack();
+          },
+        }),
+      );
     } catch (err) {
       dispatch(dismissOnGoingProcessModal());
       await sleep(500);
@@ -245,14 +251,6 @@ const WalletConnectConfirm = () => {
         title={t('Slide to approve')}
         onSwipeComplete={approveCallRequest}
         forceReset={resetSwipeButton}
-      />
-
-      <PaymentSent
-        isVisible={showPaymentSentModal}
-        onCloseModal={() => {
-          setShowPaymentSentModal(false);
-          navigation.goBack();
-        }}
       />
     </ConfirmContainer>
   );

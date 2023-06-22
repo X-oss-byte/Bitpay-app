@@ -11,6 +11,7 @@ import {ThemeProvider} from 'styled-components/native';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
 import OnGoingProcessModal from './components/modal/ongoing-process/OngoingProcess';
 import DecryptEnterPasswordModal from './navigation/wallet/components/DecryptEnterPasswordModal';
+import PaymentSent from './navigation/wallet/components/PaymentSent';
 import {
   baseNavigatorOptions,
   baseScreenOptions,
@@ -355,6 +356,7 @@ export default () => {
         <OnGoingProcessModal />
         <BottomNotificationModal />
         <DecryptEnterPasswordModal />
+        <PaymentSent />
       </NavigationContainer>
     </ThemeProvider>
   );

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import styled from 'styled-components/native';
 import {Success, White} from '../../../styles/colors';
 import {WIDTH} from '../../../components/styled/Containers';
@@ -6,6 +6,10 @@ import PaymentCompleteSvg from '../../../../assets/img/wallet/payment-complete.s
 import {BaseText} from '../../../components/styled/Text';
 import {useTranslation} from 'react-i18next';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
+import {useAppDispatch} from '../../../utils/hooks';
+import {useSelector} from 'react-redux';
+import {RootState} from '../../../store';
+import {AppActions} from '../../../store/app';
 
 const PaymentSentContainer = styled.View`
   flex: 1;
@@ -42,24 +46,34 @@ const CloseText = styled(BaseText)`
   color: ${White};
 `;
 
-interface PaymentSentModal {
-  isVisible: boolean;
-  fullScreen?: boolean;
-  onCloseModal: () => void;
+export interface PaymentSentConfig {
+  onDismissModal: () => void;
   title?: string;
 }
 
-const PaymentSent = ({
-  isVisible,
-  onCloseModal,
-  title,
-  fullScreen,
-}: PaymentSentModal) => {
+const PaymentSent = () => {
+  const dispatch = useAppDispatch();
   const {t} = useTranslation();
+
+  const isVisible = useSelector(({APP}: RootState) => APP.showPaymentSentModal);
+  const paymentSentConfig = useSelector(
+    ({APP}: RootState) => APP.paymentSentConfig,
+  );
+
+  const {onDismissModal, title} = paymentSentConfig || {};
+
+  const onCloseModal = () => {
+    dispatch(AppActions.dismissPaymentSentModal());
+    setTimeout(() => {
+      dispatch(AppActions.resetPaymentSentConfig());
+    }, 500); // Wait for modal to close
+    onDismissModal && onDismissModal();
+  };
+
   return (
     <SheetModal
       isVisible={isVisible}
-      fullScreen={fullScreen}
+      fullScreen={true}
       onBackdropPress={onCloseModal}>
       <PaymentSentContainer>
         <PaymentSentHero>

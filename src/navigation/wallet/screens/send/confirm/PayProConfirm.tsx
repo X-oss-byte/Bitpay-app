@@ -105,7 +105,6 @@ const PayProConfirm = () => {
   const [recipient, setRecipient] = useState(_recipient);
   const [txDetails, updateTxDetails] = useState(_txDetails);
   const [txp, updateTxp] = useState(_txp);
-  const [showPaymentSentModal, setShowPaymentSentModal] = useState(false);
   const {fee, sendingFrom, subTotal, total} = txDetails || {};
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [disableSwipeSendButton, setDisableSwipeSendButton] = useState(false);
@@ -215,7 +214,20 @@ const PayProConfirm = () => {
       : null;
     dispatch(dismissOnGoingProcessModal());
     await sleep(400);
-    setShowPaymentSentModal(true);
+    dispatch(
+      AppActions.showPaymentSentModal({
+        onDismissModal: async () => {
+          navigation.dispatch(StackActions.popToTop());
+          navigation.navigate('Wallet', {
+            screen: 'WalletDetails',
+            params: {
+              walletId: wallet!.id,
+              key,
+            },
+          });
+        },
+      }),
+    );
   };
 
   const showError = ({
@@ -320,23 +332,6 @@ const PayProConfirm = () => {
               await sleep(100);
               navigation.goBack();
             }
-          }}
-        />
-
-        <PaymentSent
-          isVisible={showPaymentSentModal}
-          fullScreen={true}
-          onCloseModal={async () => {
-            navigation.dispatch(StackActions.popToTop());
-            navigation.navigate('Wallet', {
-              screen: 'WalletDetails',
-              params: {
-                walletId: wallet!.id,
-                key,
-              },
-            });
-            await sleep(0);
-            setShowPaymentSentModal(false);
           }}
         />
       </ConfirmScrollView>

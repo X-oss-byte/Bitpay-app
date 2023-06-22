@@ -70,6 +70,7 @@ import {
   IsERCToken,
 } from '../../../../../store/wallet/utils/currency';
 import SendingToERC20Warning from '../../../components/SendingToERC20Warning';
+import {AppActions} from '../../../../../store/app';
 
 const VerticalPadding = styled.View`
   padding: ${ScreenGutter} 0;
@@ -135,7 +136,6 @@ const Confirm = () => {
   const {isoCode} = useAppSelector(({APP}) => APP.defaultAltCurrency);
 
   const key = allKeys[wallet?.keyId!];
-  const [showPaymentSentModal, setShowPaymentSentModal] = useState(false);
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [showTransactionLevel, setShowTransactionLevel] = useState(false);
   const [enableRBF, setEnableRBF] = useState(enableReplaceByFee);
@@ -476,7 +476,23 @@ const Confirm = () => {
             await dispatch(startSendPayment({txp, key, wallet, recipient}));
             dispatch(dismissOnGoingProcessModal());
             await sleep(500);
-            setShowPaymentSentModal(true);
+            dispatch(
+              AppActions.showPaymentSentModal({
+                onDismissModal: async () => {
+                  navigation.dispatch(StackActions.popToTop());
+                  navigation.dispatch(
+                    StackActions.replace('WalletDetails', {
+                      walletId: wallet!.id,
+                      key,
+                    }),
+                  );
+                },
+                title:
+                  wallet.credentials.n > 1
+                    ? t('Proposal created')
+                    : t('Payment Sent'),
+              }),
+            );
           } catch (err) {
             dispatch(dismissOnGoingProcessModal());
             await sleep(500);
@@ -529,45 +545,6 @@ const Confirm = () => {
           wallet={wallet}
         />
       ) : null}
-      <PaymentSent
-        isVisible={showPaymentSentModal}
-        fullScreen={true}
-        title={
-          wallet.credentials.n > 1 ? t('Proposal created') : t('Payment Sent')
-        }
-        onCloseModal={async () => {
-          setShowPaymentSentModal(false);
-          if (recipient.type === 'coinbase') {
-            navigation.dispatch(
-              CommonActions.reset({
-                index: 2,
-                routes: [
-                  {
-                    name: 'Tabs',
-                    params: {screen: 'Home'},
-                  },
-                  {
-                    name: 'Coinbase',
-                    params: {
-                      screen: 'CoinbaseRoot',
-                    },
-                  },
-                ],
-              }),
-            );
-          } else {
-            navigation.dispatch(StackActions.popToTop());
-            navigation.dispatch(
-              StackActions.replace('WalletDetails', {
-                walletId: wallet!.id,
-                key,
-              }),
-            );
-            await sleep(0);
-            setShowPaymentSentModal(false);
-          }
-        }}
-      />
     </ConfirmContainer>
   );
 };

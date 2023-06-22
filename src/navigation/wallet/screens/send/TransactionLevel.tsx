@@ -459,7 +459,7 @@ const TransactionLevel = ({
                 </FeeLevelStepsHeaderSubTitle>
 
                 {feeOptions.map((fee, i) => (
-                  <Setting>
+                  <Setting key={i}>
                     <SettingTitle>{fee.uiLevel}</SettingTitle>
                     <Checkbox
                       radio={true}

@@ -2,6 +2,7 @@ import {ColorSchemeName} from 'react-native';
 import {BottomNotificationConfig} from '../../components/modal/bottom-notification/BottomNotification';
 import {Network} from '../../constants';
 import {DecryptPasswordConfig} from '../../navigation/wallet/components/DecryptEnterPasswordModal';
+import {PaymentSentConfig} from '../../navigation/wallet/components/PaymentSent';
 import {AppIdentity} from './app.models';
 import {SettingsListType} from '../../navigation/tabs/settings/SettingsRoot';
 import {AltCurrenciesRowProps} from '../../components/list/AltCurrenciesRow';
@@ -33,8 +34,11 @@ export enum AppActionTypes {
   DISMISS_ONBOARDING_FINISH_MODAL = 'APP/DISMISS_ONBOARDING_FINISH_MODAL',
   SHOW_DECRYPT_PASSWORD_MODAL = 'APP/SHOW_DECRYPT_PASSWORD_MODAL',
   DISMISS_DECRYPT_PASSWORD_MODAL = 'APP/DISMISS_DECRYPT_PASSWORD_MODAL',
-  SET_DEFAULT_LANGUAGE = 'APP/SET_DEFAULT_LANGUAGE',
   RESET_DECRYPT_PASSWORD_CONFIG = 'APP/RESET_DECRYPT_PASSWORD_CONFIG',
+  SHOW_PAYMENT_SENT_MODAL = 'APP/SHOW_PAYMENT_SENT_MODAL',
+  DISMISS_PAYMENT_SENT_MODAL = 'APP/DISMISS_PAYMENT_SENT_MODAL',
+  RESET_PAYMENT_SENT_CONFIG = 'APP/RESET_PAYMENT_SENT_CONFIG',
+  SET_DEFAULT_LANGUAGE = 'APP/SET_DEFAULT_LANGUAGE',
   SHOW_BLUR = 'APP/SHOW_BLUR',
   SHOW_PORTFOLIO_VALUE = 'APP/SHOW_PORTFOLIO_VALUE',
   TOGGLE_HIDE_ALL_BALANCES = 'APP/TOGGLE_HIDE_ALL_BALANCES',
@@ -174,6 +178,19 @@ interface ResetDecryptPasswordConfig {
   type: typeof AppActionTypes.RESET_DECRYPT_PASSWORD_CONFIG;
 }
 
+interface ShowPaymentSentModal {
+  type: typeof AppActionTypes.SHOW_PAYMENT_SENT_MODAL;
+  payload: PaymentSentConfig;
+}
+
+interface DismissPaymentSentModal {
+  type: typeof AppActionTypes.DISMISS_PAYMENT_SENT_MODAL;
+}
+
+interface ResetPaymentSentConfig {
+  type: typeof AppActionTypes.RESET_PAYMENT_SENT_CONFIG;
+}
+
 interface ShowBottomNotificationModal {
   type: typeof AppActionTypes.SHOW_BOTTOM_NOTIFICATION_MODAL;
   payload: BottomNotificationConfig;
@@ -275,6 +292,9 @@ export type AppActionType =
   | ShowDecryptPasswordModal
   | DismissDecryptPasswordModal
   | ResetDecryptPasswordConfig
+  | ShowPaymentSentModal
+  | DismissPaymentSentModal
+  | ResetPaymentSentConfig
   | ShowBlur
   | ShowPortfolioValue
   | ToggleHideAllBalances

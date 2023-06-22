@@ -63,6 +63,7 @@ import {BottomNotificationConfig} from '../../../components/modal/bottom-notific
 import SwipeButton from '../../../components/swipe-button/SwipeButton';
 import {publishAndSignMultipleProposals} from '../../../store/wallet/effects/send/send';
 import {TransactionIcons} from '../../../constants/TransactionIcons';
+import {AppActions} from '../../../store/app';
 
 const NotificationsContainer = styled.SafeAreaView`
   flex: 1;
@@ -115,7 +116,6 @@ const TransactionProposalNotifications = () => {
     ? keys[keyId].wallets
     : Object.values(keys).flatMap(k => k.wallets);
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
-  const [showPaymentSentModal, setShowPaymentSentModal] = useState(false);
   const [paymentSendModalTitle, setPaymentSendModalTitle] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [allTxps, setAllTxps] = useState(
@@ -596,7 +596,12 @@ const TransactionProposalNotifications = () => {
                     : t('Proposal signed');
                 setPaymentSendModalTitle(title);
                 await sleep(400);
-                setShowPaymentSentModal(true);
+                dispatch(
+                  AppActions.showPaymentSentModal({
+                    onDismissModal: async () => {},
+                    title: paymentSendModalTitle,
+                  }),
+                );
               }
               setSelectingProposalsWalletId('');
               setTxpsToSign([]);
@@ -624,15 +629,6 @@ const TransactionProposalNotifications = () => {
           }}
         />
       ) : null}
-      <PaymentSent
-        isVisible={showPaymentSentModal}
-        fullScreen={true}
-        onCloseModal={async () => {
-          setShowPaymentSentModal(false);
-          await sleep(300);
-        }}
-        title={paymentSendModalTitle}
-      />
     </NotificationsContainer>
   );
 };
