@@ -504,7 +504,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
         return (
           <HeaderTitle>
             {walletSelectModalVisible
-              ? t('Selecta a wallet')
+              ? t('Select a wallet')
               : t('Select a currency')}
           </HeaderTitle>
         );
