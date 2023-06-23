@@ -1,7 +1,6 @@
-import React, {useEffect} from 'react';
+import React from 'react';
 import styled from 'styled-components/native';
 import {Success, White} from '../../../styles/colors';
-import {WIDTH} from '../../../components/styled/Containers';
 import PaymentCompleteSvg from '../../../../assets/img/wallet/payment-complete.svg';
 import {BaseText} from '../../../components/styled/Text';
 import {useTranslation} from 'react-i18next';

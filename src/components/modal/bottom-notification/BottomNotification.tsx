@@ -24,7 +24,6 @@ import WaitSvg from '../../../../assets/img/wait.svg';
 import {Theme, useNavigation, useTheme} from '@react-navigation/native';
 import Markdown from 'react-native-markdown-display';
 import {resetBottomNotificationModalConfig} from '../../../store/app/app.actions';
-import {HEIGHT} from '../../styled/Containers';
 
 export interface BottomNotificationConfig {
   type: 'success' | 'info' | 'warning' | 'error' | 'question' | 'wait';
@@ -59,7 +58,7 @@ const BottomNotificationContainer = styled.View`
   padding: 25px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  max-height: ${HEIGHT - 100}px;
+  max-height: 500px;
 `;
 
 const Row = styled.View`

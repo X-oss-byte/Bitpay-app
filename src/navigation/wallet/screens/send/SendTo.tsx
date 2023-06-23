@@ -3,7 +3,7 @@ import {BaseText, HeaderTitle, Link} from '../../../../components/styled/Text';
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Clipboard from '@react-native-community/clipboard';
-import {ScreenGutter, WIDTH} from '../../../../components/styled/Containers';
+import {ScreenGutter} from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
 import {
   LightBlack,
@@ -27,7 +27,6 @@ import {
   CheckIfLegacyBCH,
   ValidateURI,
 } from '../../../../store/wallet/utils/validations';
-import {View} from 'react-native';
 import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import {GetPayProUrl} from '../../../../store/wallet/utils/decode-uri';
@@ -98,31 +97,25 @@ const SafeAreaView = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0px 8px;
   margin-left: ${ScreenGutter};
+  width: 100%;
 `;
 
 const HeaderSearchContainer = styled.View`
   padding: ${ScreenGutter};
 `;
 
-const horizontalPadding = 20;
 const SearchBox = styled(BoxInput)`
-  width: ${WIDTH - horizontalPadding * 2}px;
+  width: 100%;
   font-size: 16px;
   position: relative;
-`;
-
-const SearchContainer = styled.View`
-  padding: 0 ${horizontalPadding}px;
-  margin: 20px 0;
 `;
 
 const PasteClipboardContainer = styled.TouchableOpacity`
   display: flex;
   flex-direction: row;
   justify-content: center;
-  padding: 10px;
+  margin-top: 10px;
 `;
 
 export const ContactTitleContainer = styled.View`
@@ -507,18 +500,16 @@ const SendTo = () => {
   return (
     <SafeAreaView>
       <HeaderSearchContainer>
-        <SearchContainer>
-          <SearchBox
-            type={t('search')}
-            placeholder={t('Search contact or enter address')}
-            placeholderTextColor={placeHolderTextColor}
-            value={searchInput}
-            onChangeText={(text: string) => {
-              setSearchInput(text);
-              onSearchInputChange(text);
-            }}
-          />
-        </SearchContainer>
+        <SearchBox
+          type={t('search')}
+          placeholder={t('Search contact or enter address')}
+          placeholderTextColor={placeHolderTextColor}
+          value={searchInput}
+          onChangeText={(text: string) => {
+            setSearchInput(text);
+            onSearchInputChange(text);
+          }}
+        />
 
         {clipboardData ? (
           <PasteClipboardContainer
@@ -566,15 +557,13 @@ const SendTo = () => {
           </>
         ) : null}
 
-        <View style={{marginTop: 10}}>
-          <KeyWalletsRow
-            keyWallets={keyWallets}
-            hideBalance={hideAllBalances}
-            onPress={(selectedWallet: KeyWallet) => {
-              onSendToWallet(selectedWallet);
-            }}
-          />
-        </View>
+        <KeyWalletsRow
+          keyWallets={keyWallets}
+          hideBalance={hideAllBalances}
+          onPress={(selectedWallet: KeyWallet) => {
+            onSendToWallet(selectedWallet);
+          }}
+        />
       </ScrollView>
 
       <OptionsSheet

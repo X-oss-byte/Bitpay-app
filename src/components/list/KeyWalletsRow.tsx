@@ -3,7 +3,7 @@ import styled from 'styled-components/native';
 import {ScrollView, View} from 'react-native';
 import {BaseText} from '../styled/Text';
 import KeySvg from '../../../assets/img/key.svg';
-import {LightBlack, SlateDark, White} from '../../styles/colors';
+import {LightBlack, Slate10, SlateDark, White} from '../../styles/colors';
 import {Wallet} from '../../store/wallet/wallet.models';
 import {WalletRowProps} from './WalletRow';
 import WalletRow from './WalletRow';
@@ -15,8 +15,7 @@ interface KeyWalletsRowContainerProps {
 
 const KeyWalletsRowContainer = styled.View<KeyWalletsRowContainerProps>`
   border-bottom-width: ${({isLast}) => (isLast ? 0 : 1)}px;
-  border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : '#ECEFFD')};
-  border-bottom-width: 0;
+  border-bottom-color: ${({theme: {dark}}) => (dark ? LightBlack : Slate10)};
 `;
 
 interface KeyNameContainerProps {
@@ -24,7 +23,7 @@ interface KeyNameContainerProps {
 }
 
 const KeyWalletsScrollView = styled.ScrollView`
-  padding: 0px 5px;
+  padding: 0 5px;
 `;
 
 const KeyNameContainer = styled.View<KeyNameContainerProps>`

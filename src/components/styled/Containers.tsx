@@ -1,5 +1,5 @@
 import React from 'react';
-import {Dimensions, Text} from 'react-native';
+import {Text} from 'react-native';
 import styled, {css} from 'styled-components/native';
 import {
   Feather,
@@ -15,8 +15,6 @@ import {
   Slate10,
 } from '../../styles/colors';
 import {BaseText} from './Text';
-
-export const {height: HEIGHT, width: WIDTH} = Dimensions.get('window');
 
 export const ScreenGutter = '15px';
 export const ActiveOpacity = 0.75;
@@ -39,17 +37,17 @@ export const HeaderTitleContainer = styled.View`
 `;
 
 export const TitleContainer = styled.View`
-  width: ${WIDTH * 0.75}px;
+  width: 75%;
 `;
 
 export const TextContainer = styled.View`
   margin-top: 10px;
   padding: 10px;
-  width: ${WIDTH * 0.9}px;
+  width: 90%;
 `;
 
 export const SubTextContainer = styled.View`
-  width: ${WIDTH * 0.8}px;
+  width: 80%;
   margin-top: 10px;
 `;
 
@@ -153,8 +151,7 @@ export const SheetContainer = styled.View<SheetParams>`
     placement === 'top' ? 'bottom' : 'top'}-right-radius: ${({
   fullScreen,
 }: SheetParams) => (fullScreen ? 0 : '17px')};
-  max-height: ${({fullScreen}: SheetParams) =>
-    fullScreen ? '100%' : HEIGHT - 100 + 'px'};
+  max-height: ${({fullScreen}: SheetParams) => (fullScreen ? '100%' : '500px')};
 `;
 
 // Settings List
@@ -378,7 +375,7 @@ export const NoResultsContainer = styled.View`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: ${HEIGHT - 300}px;
+  min-height: 300px;
   padding: 20px 40px;
 `;
 

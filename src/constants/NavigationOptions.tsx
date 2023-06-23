@@ -4,7 +4,6 @@ import {
   TransitionPresets,
 } from '@react-navigation/stack';
 import Back from '../components/back/Back';
-import {WIDTH} from '../components/styled/Containers';
 
 export const baseNavigatorOptions: StackNavigationOptions = {
   headerBackImage: () => <Back opacity={1} />,
@@ -15,7 +14,6 @@ export const baseNavigatorOptions: StackNavigationOptions = {
     backgroundColor: 'transparent',
   },
   headerShadowVisible: false,
-  headerTitleStyle: {maxWidth: WIDTH - 150},
   animationEnabled: false,
   gestureEnabled: false,
 };

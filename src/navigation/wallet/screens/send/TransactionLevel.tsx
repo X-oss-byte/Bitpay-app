@@ -28,7 +28,6 @@ import {
   Setting,
   SettingTitle,
   SheetContainer,
-  WIDTH,
 } from '../../../../components/styled/Containers';
 import SheetModal from '../../../../components/modal/base/sheet/SheetModal';
 import Button from '../../../../components/button/Button';
@@ -96,46 +95,8 @@ const ErrorText = styled(BaseText)`
   margin-top: 4px;
 `;
 
-export const FeeLevelStepContainer = styled.View<{length: number}>`
-  /* Circle size + horizontal gutter */
-  width: ${({length}) => (WIDTH - (CIRCLE_SIZE + 36)) / length}px;
-`;
-
 export const FeeLevelStep = styled.View<{isLast?: boolean}>`
   flex-direction: row;
-`;
-
-export const FeeLevelStepCircle = styled.Pressable<{
-  isActive: boolean;
-  backgroundColor: string;
-  isDisabled?: boolean;
-}>`
-  background-color: ${({backgroundColor}) => backgroundColor};
-  width: ${CIRCLE_SIZE}px;
-  height: ${CIRCLE_SIZE}px;
-  border-width: ${({isActive}) => (isActive ? '3px' : 0)};
-  border-color: ${White};
-  border-radius: 50px;
-  transform: ${({isActive}) => (isActive ? 'scale(1.3)' : 'scale(1)')};
-  z-index: 1;
-  opacity: ${({isDisabled}) => (isDisabled ? 0.7 : 1)};
-`;
-
-export const FeeLevelStepLine = styled.View<{backgroundColor: string}>`
-  background-color: ${({backgroundColor}) => backgroundColor};
-  flex-grow: 1;
-  height: 2px;
-  align-self: center;
-`;
-
-export const FeeLevelStepBottomLabel = styled(H7)`
-  color: ${({theme: {dark}}) => (dark ? White : SlateDark)};
-`;
-
-export const FeeLevelStepTopLabel = styled(H7)<{length: number}>`
-  text-align: center;
-  left: -50%;
-  width: ${({length}) => (WIDTH + (length - 1 + CIRCLE_SIZE)) / length}px;
 `;
 
 const TxSpeedParagraph = styled(Paragraph)`

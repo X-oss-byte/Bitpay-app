@@ -3,7 +3,7 @@ import {useSelector} from 'react-redux';
 import {RootState} from '../../../store';
 import styled from 'styled-components/native';
 import {AppActions} from '../../../store/app';
-import {ActionContainer, HEIGHT} from '../../../components/styled/Containers';
+import {ActionContainer} from '../../../components/styled/Containers';
 import {LightBlack, White} from '../../../styles/colors';
 import yup from '../../../lib/yup';
 import {yupResolver} from '@hookform/resolvers/yup';
@@ -22,7 +22,7 @@ const DecryptFormContainer = styled.View`
   padding: 25px;
   border-top-left-radius: 10px;
   border-top-right-radius: 10px;
-  max-height: ${HEIGHT - 100}px;
+  max-height: 500px;
 `;
 
 const schema = yup.object().shape({

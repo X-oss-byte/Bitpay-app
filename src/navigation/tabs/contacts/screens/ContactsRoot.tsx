@@ -10,11 +10,7 @@ import AddressBookIcon from '../../../../../assets/img/tab-icons/contacts.svg';
 import AddContactIcon from '../../../../../assets/img/addcontact-icon.svg';
 import AddContactIconWhite from '../../../../../assets/img/addcontact-icon-white.svg';
 import Button from '../../../../components/button/Button';
-import {
-  ActiveOpacity,
-  HEIGHT,
-  WIDTH,
-} from '../../../../components/styled/Containers';
+import {ActiveOpacity} from '../../../../components/styled/Containers';
 import {BaseText, H4, HeaderTitle} from '../../../../components/styled/Text';
 import {SlateDark, White, LightBlack, Cloud} from '../../../../styles/colors';
 import BoxInput from '../../../../components/form/BoxInput';
@@ -83,7 +79,7 @@ const SectionHeaderContainer = styled.View<{justifyContent?: string}>`
 
 const horizontalPadding = 20;
 const SearchBox = styled(BoxInput)`
-  width: ${WIDTH - horizontalPadding * 2}px;
+  width: 100%;
   font-size: 16px;
   position: relative;
 `;
@@ -101,7 +97,7 @@ const NoResultsContainer = styled.View`
   display: flex;
   flex-direction: column;
   align-items: center;
-  min-height: ${HEIGHT - 300}px;
+  min-height: 500px;
   padding-top: 20px;
 `;
 
@@ -114,7 +110,7 @@ const Hr = styled.View`
   border-bottom-color: ${({theme}) => (theme.dark ? LightBlack : Cloud)};
   border-bottom-width: 1px;
   margin: 0 ${horizontalPadding}px;
-  width: ${WIDTH - horizontalPadding * 2}px;
+  width: 100%;
 `;
 
 interface HideableViewProps {
