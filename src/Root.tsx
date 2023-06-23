@@ -47,6 +47,9 @@ import NetworkFeePolicySettingsStack, {
   NetworkFeePolicySettingsStackParamsList,
 } from './navigation/tabs/settings/NetworkFeePolicy/NetworkFeePolicyStack';
 import {WalletActions} from './store/wallet';
+import OnboardingStack, {
+  OnboardingStackParamList,
+} from './navigation/onboarding/OnboardingStack';
 import TabsStack, {TabsStackParamList} from './navigation/tabs/TabsStack';
 import NotificationsSettingsStack, {
   NotificationsSettingsStackParamsList,
@@ -54,6 +57,7 @@ import NotificationsSettingsStack, {
 
 // ROOT NAVIGATION CONFIG
 export type RootStackParamList = {
+  Onboarding: NavigatorScreenParams<OnboardingStackParamList>;
   Tabs: NavigatorScreenParams<TabsStackParamList>;
   Wallet: NavigatorScreenParams<WalletStackParamList>;
   GeneralSettings: NavigatorScreenParams<GeneralSettingsStackParamList>;
@@ -67,6 +71,7 @@ export type RootStackParamList = {
 
 // ROOT NAVIGATION CONFIG
 export enum RootStacks {
+  ONBOARDING = 'Onboarding',
   TABS = 'Tabs',
   WALLET = 'Wallet',
   CONTACTS = 'Contacts',
@@ -81,7 +86,8 @@ export enum RootStacks {
 
 // ROOT NAVIGATION CONFIG
 export type NavScreenParams = NavigatorScreenParams<
-  WalletStackParamList &
+  OnboardingStackParamList &
+    WalletStackParamList &
     GeneralSettingsStackParamList &
     ContactsStackParamList &
     NotificationsSettingsStackParamsList &
@@ -125,6 +131,9 @@ export default () => {
   const dispatch = useAppDispatch();
   const [, rerender] = useState({});
   const linking = useDeeplinks();
+  const onboardingCompleted = useAppSelector(
+    ({APP}) => APP.onboardingCompleted,
+  );
   const appColorScheme = useAppSelector(({APP}) => APP.colorScheme);
   const appLanguage = useAppSelector(({APP}) => APP.defaultLanguage);
   const failedAppInit = useAppSelector(({APP}) => APP.failedAppInit);
@@ -300,7 +309,9 @@ export default () => {
   const theme = scheme === 'dark' ? BitPayDarkTheme : BitPayLightTheme;
 
   // ROOT STACKS AND GLOBAL COMPONENTS
-  const initialRoute = RootStacks.TABS;
+  const initialRoute = onboardingCompleted
+    ? RootStacks.TABS
+    : RootStacks.ONBOARDING;
 
   return (
     <ThemeProvider theme={theme}>
@@ -319,6 +330,10 @@ export default () => {
               gestureEnabled: false,
               animationEnabled: false,
             }}
+          />
+          <Root.Screen
+            name={RootStacks.ONBOARDING}
+            component={OnboardingStack}
           />
           <Root.Screen
             name={RootStacks.TABS}

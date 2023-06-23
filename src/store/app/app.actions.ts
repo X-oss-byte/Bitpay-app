@@ -101,6 +101,14 @@ export const setDefaultLanguage = (lng: string): AppActionType => ({
   payload: lng,
 });
 
+export const showOnboardingFinishModal = (): AppActionType => ({
+  type: AppActionTypes.SHOW_ONBOARDING_FINISH_MODAL,
+});
+
+export const dismissOnboardingFinishModal = (): AppActionType => ({
+  type: AppActionTypes.DISMISS_ONBOARDING_FINISH_MODAL,
+});
+
 export const showDecryptPasswordModal = (
   decryptPasswordConfig: DecryptPasswordConfig,
 ): AppActionType => ({

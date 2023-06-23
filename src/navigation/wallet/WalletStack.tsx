@@ -73,6 +73,8 @@ import ExportTransactionHistory from './screens/wallet-settings/ExportTransactio
 import ClearTransactionHistoryCache from './screens/wallet-settings/ClearTransactionHistoryCache';
 
 export type WalletStackParamList = {
+  OnboardingStart: undefined;
+  CreateKey: undefined;
   CurrencySelection: CurrencySelectionParamList;
   WalletCurrencyTokenSelectionScreen: CurrencyTokenSelectionScreenParamList;
   AddWallet: AddWalletParamList;

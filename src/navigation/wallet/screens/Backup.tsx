@@ -41,7 +41,11 @@ export const backupRedirect = ({
   walletTermsAccepted: boolean;
   key?: Key;
 }) => {
-  if (context === 'keySettings') {
+  if (context === 'onboarding') {
+    navigation.navigate('Onboarding', {
+      screen: 'TermsOfUse',
+    });
+  } else if (context === 'keySettings') {
     navigation.navigate('Wallet', {screen: 'KeySettings', params: {key}});
   } else if (context === 'settings') {
     navigation.navigate('Tabs', {screen: 'Settings', params: {key}});

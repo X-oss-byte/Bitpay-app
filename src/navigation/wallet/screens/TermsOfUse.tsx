@@ -11,13 +11,23 @@ import {setWalletTermsAccepted} from '../../../store/wallet/wallet.actions';
 import {Key} from '../../../store/wallet/wallet.models';
 import TermsBox from '../components/TermsBox';
 import {useAppDispatch} from '../../../utils/hooks';
-import {WalletScreens, WalletStackParamList} from '../WalletStack';
 import {Linking, ScrollView} from 'react-native';
+import {
+  OnboardingScreens,
+  OnboardingStackParamList,
+} from '../../onboarding/OnboardingStack';
+import {setOnboardingCompleted} from '../../../store/app/app.actions';
 
-type TermsOfUseScreenProps = StackScreenProps<
-  WalletStackParamList,
-  WalletScreens.TERMS_OF_USE
->;
+export interface TermsOfUseParamList {
+  context?: 'TOUOnly';
+  key?: Key;
+}
+
+export interface TermsOfUseModel {
+  id: number;
+  statement: ReactElement;
+  accessibilityLabel: string;
+}
 
 export interface TermsOfUseParamList {
   context?: 'TOUOnly';
@@ -62,7 +72,9 @@ const TermsContainer = styled.View`
   padding: 20px 10px 100px;
 `;
 
-const TermsOfUse: React.FC<TermsOfUseScreenProps> = ({route}) => {
+const TermsOfUse: React.FC<
+  StackScreenProps<OnboardingStackParamList, OnboardingScreens.TERMS_OF_USE>
+> = ({route}) => {
   const {t} = useTranslation();
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
@@ -168,8 +180,13 @@ const TermsOfUse: React.FC<TermsOfUseScreenProps> = ({route}) => {
                 }),
               );
             } else {
-              navigation.navigate('Tabs', {screen: 'Home'});
+              navigation.dispatch(
+                StackActions.replace('Tabs', {
+                  screen: 'Home',
+                }),
+              );
             }
+            dispatch(setOnboardingCompleted());
           }}
           buttonStyle={'primary'}
           disabled={agreed.length !== termsList.length}>
