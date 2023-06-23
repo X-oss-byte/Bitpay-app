@@ -23,7 +23,6 @@ const SeeAllLink = styled(Link)`
 const PlusIconContainer = styled.View`
   flex-direction: row;
   align-items: center;
-  margin-top: 15px;
 `;
 
 const Contacts = () => {
