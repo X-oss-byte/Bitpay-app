@@ -31,7 +31,7 @@ import {setEmailNotificationsAccepted, setUserFeedback} from './app.actions';
 // import {SettingsScreens} from '../../navigation/tabs/settings/SettingsStack';
 // import {ShortcutList} from '../../constants/shortcuts';
 import moment from 'moment';
-import {EmitterSubscription} from 'react-native-macos';
+import {EmitterSubscription} from 'react-native';
 import {DeviceEmitterEvents} from '../../constants/device-emitter-events';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {

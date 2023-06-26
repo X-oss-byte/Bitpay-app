@@ -1,12 +1,19 @@
 import {
   createNavigationContainerRef,
   NavigationContainer,
+  NavigationState,
   NavigatorScreenParams,
 } from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import debounce from 'lodash.debounce';
 import React, {useEffect, useMemo, useState} from 'react';
-import {Appearance, AppState, AppStateStatus} from 'react-native';
+import {
+  Appearance,
+  AppState,
+  AppStateStatus,
+  DeviceEventEmitter,
+  Linking,
+} from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
 import OnGoingProcessModal from './components/modal/ongoing-process/OngoingProcess';
@@ -19,7 +26,12 @@ import {
 import {AppEffects} from './store/app';
 import {BitPayDarkTheme, BitPayLightTheme} from './themes/bitpay';
 import {LogActions} from './store/log';
-import {useAppDispatch, useAppSelector, useDeeplinks} from './utils/hooks';
+import {
+  useAppDispatch,
+  useAppSelector,
+  useDeeplinks,
+  useUrlEventHandler,
+} from './utils/hooks';
 import i18n from 'i18next';
 
 import WalletStack, {
@@ -54,6 +66,7 @@ import TabsStack, {TabsStackParamList} from './navigation/tabs/TabsStack';
 import NotificationsSettingsStack, {
   NotificationsSettingsStackParamsList,
 } from './navigation/tabs/settings/notifications/NotificationsStack';
+import {DeviceEmitterEvents} from './constants/device-emitter-events';
 
 // ROOT NAVIGATION CONFIG
 export type RootStackParamList = {
@@ -131,6 +144,7 @@ export default () => {
   const dispatch = useAppDispatch();
   const [, rerender] = useState({});
   const linking = useDeeplinks();
+  const urlEventHandler = useUrlEventHandler();
   const onboardingCompleted = useAppSelector(
     ({APP}) => APP.onboardingCompleted,
   );
@@ -204,6 +218,21 @@ export default () => {
         dispatch(WalletBackupActions.successBackupUpWalletKeys(newKeyBackup));
       }, 1500),
     [],
+  );
+
+  const debouncedOnStateChange = useMemo(
+    () =>
+      debounce((state: NavigationState | undefined) => {
+        if (state) {
+          const parentRoute = state.routes[state.index];
+          if (parentRoute.state) {
+            dispatch(
+              LogActions.info(`Navigation event... ${parentRoute.name}`),
+            );
+          }
+        }
+      }, 300),
+    [dispatch],
   );
 
   // MAIN APP INIT
@@ -315,7 +344,19 @@ export default () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <NavigationContainer ref={navigationRef} theme={theme} linking={linking}>
+      <NavigationContainer
+        ref={navigationRef}
+        theme={theme}
+        linking={linking}
+        onReady={async () => {
+          DeviceEventEmitter.emit(DeviceEmitterEvents.APP_NAVIGATION_READY);
+
+          if (onboardingCompleted) {
+            const url = await Linking.getInitialURL();
+            await urlEventHandler({url: url});
+          }
+        }}
+        onStateChange={debouncedOnStateChange}>
         <Root.Navigator
           screenOptions={{
             ...baseScreenOptions,
