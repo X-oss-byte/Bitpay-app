@@ -244,6 +244,7 @@ const TransactionDetails = () => {
       dispatch(dismissOnGoingProcessModal());
       setIsLoading(false);
     } catch (err) {
+      dispatch(dismissOnGoingProcessModal());
       setIsLoading(false);
       const e = err instanceof Error ? err.message : JSON.stringify(err);
       dispatch(LogActions.error('[TransactionDetails] ', e));

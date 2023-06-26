@@ -1,9 +1,4 @@
-import {
-  RouteProp,
-  useNavigation,
-  useRoute,
-  useTheme,
-} from '@react-navigation/native';
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import {
   CurrencyColumn,
@@ -33,7 +28,7 @@ import {
   TransactionProposal,
   Wallet,
 } from '../../../store/wallet/wallet.models';
-import {RefreshControl, SectionList, View} from 'react-native';
+import {SectionList, View} from 'react-native';
 import TransactionProposalRow from '../../../components/list/TransactionProposalRow';
 import {Air, LightBlack} from '../../../styles/colors';
 import {sleep} from '../../../utils/helper-methods';
@@ -56,14 +51,13 @@ import {
   WrongPasswordError,
 } from '../components/ErrorMessages';
 import Checkbox from '../../../components/checkbox/Checkbox';
-import PaymentSent from '../components/PaymentSent';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {BWCErrorMessage} from '../../../constants/BWCError';
 import {BottomNotificationConfig} from '../../../components/modal/bottom-notification/BottomNotification';
-import SwipeButton from '../../../components/swipe-button/SwipeButton';
 import {publishAndSignMultipleProposals} from '../../../store/wallet/effects/send/send';
 import {TransactionIcons} from '../../../constants/TransactionIcons';
 import {AppActions} from '../../../store/app';
+import Button from '../../../components/button/Button';
 
 const NotificationsContainer = styled.SafeAreaView`
   flex: 1;
@@ -101,6 +95,11 @@ const CheckBoxContainer = styled.View`
   margin-right: 15px;
 `;
 
+const ButtonContainer = styled.View`
+  padding: 0 ${ScreenGutter};
+  margin: 15px 0;
+`;
+
 const TransactionProposalNotifications = () => {
   const {
     params: {walletId, keyId},
@@ -115,7 +114,6 @@ const TransactionProposalNotifications = () => {
   const wallets = keyId
     ? keys[keyId].wallets
     : Object.values(keys).flatMap(k => k.wallets);
-  const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [paymentSendModalTitle, setPaymentSendModalTitle] = useState('');
   const [refreshing, setRefreshing] = useState(false);
   const [allTxps, setAllTxps] = useState(
@@ -523,17 +521,6 @@ const TransactionProposalNotifications = () => {
     updatePendingProposals();
   }, [keys]);
 
-  useEffect(() => {
-    if (!resetSwipeButton) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      setResetSwipeButton(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [resetSwipeButton]);
-
   return (
     <NotificationsContainer>
       <SectionList
@@ -557,77 +544,74 @@ const TransactionProposalNotifications = () => {
       />
 
       {txpsToSign && Object.values(txpsToSign)[0] ? (
-        <SwipeButton
-          title={t('Sign selected')}
-          forceReset={resetSwipeButton}
-          onSwipeComplete={async () => {
-            try {
-              dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
-              await sleep(400);
-              const wallet = findWalletById(
-                wallets,
-                selectingProposalsWalletId,
-              ) as Wallet;
-              const key = keys[wallet.keyId];
-              const data = (await dispatch<any>(
-                publishAndSignMultipleProposals({
-                  txps: Object.values(txpsToSign),
-                  key,
-                  wallet,
-                }),
-              )) as (TransactionProposal | Error)[];
-              dispatch(dismissOnGoingProcessModal());
-              await sleep(400);
-              const count = countSuccessAndFailed(data);
-              if (count.failed > 0) {
-                const errMsg = `There was problem while trying to sign ${count.failed} of your transactions proposals. Please, try again`;
-                await showErrorMessage(
-                  CustomErrorMessage({
-                    errMsg,
-                    title: t('Uh oh, something went wrong'),
+        <ButtonContainer>
+          <Button
+            buttonStyle={'primary'}
+            onPress={async () => {
+              try {
+                dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
+                const wallet = findWalletById(
+                  wallets,
+                  selectingProposalsWalletId,
+                ) as Wallet;
+                const key = keys[wallet.keyId];
+                const data = (await dispatch<any>(
+                  publishAndSignMultipleProposals({
+                    txps: Object.values(txpsToSign),
+                    key,
+                    wallet,
                   }),
-                );
-              }
-
-              if (count.success > 0) {
-                const title =
-                  count.success > 1
-                    ? t('proposals signed', {sucess: count.success})
-                    : t('Proposal signed');
-                setPaymentSendModalTitle(title);
-                await sleep(400);
-                dispatch(
-                  AppActions.showPaymentSentModal({
-                    onDismissModal: async () => {},
-                    title: paymentSendModalTitle,
-                  }),
-                );
-              }
-              setSelectingProposalsWalletId('');
-              setTxpsToSign([]);
-              setTxpChecked({});
-              setResetSwipeButton(true);
-            } catch (err) {
-              dispatch(dismissOnGoingProcessModal());
-              await sleep(500);
-              setResetSwipeButton(true);
-              switch (err) {
-                case 'invalid password':
-                  dispatch(showBottomNotificationModal(WrongPasswordError()));
-                  break;
-                case 'password canceled':
-                  break;
-                default:
+                )) as (TransactionProposal | Error)[];
+                dispatch(dismissOnGoingProcessModal());
+                const count = countSuccessAndFailed(data);
+                if (count.failed > 0) {
+                  const errMsg = `There was problem while trying to sign ${count.failed} of your transactions proposals. Please, try again`;
                   await showErrorMessage(
                     CustomErrorMessage({
-                      errMsg: BWCErrorMessage(err),
+                      errMsg,
                       title: t('Uh oh, something went wrong'),
                     }),
                   );
+                }
+
+                if (count.success > 0) {
+                  const title =
+                    count.success > 1
+                      ? t('proposals signed', {sucess: count.success})
+                      : t('Proposal signed');
+                  setPaymentSendModalTitle(title);
+                  await sleep(400);
+                  dispatch(
+                    AppActions.showPaymentSentModal({
+                      onDismissModal: async () => {},
+                      title: paymentSendModalTitle,
+                    }),
+                  );
+                }
+                setSelectingProposalsWalletId('');
+                setTxpsToSign([]);
+                setTxpChecked({});
+              } catch (err) {
+                dispatch(dismissOnGoingProcessModal());
+                switch (err) {
+                  case 'invalid password':
+                    dispatch(showBottomNotificationModal(WrongPasswordError()));
+                    break;
+                  case 'password canceled':
+                    break;
+                  default:
+                    await showErrorMessage(
+                      CustomErrorMessage({
+                        errMsg: BWCErrorMessage(err),
+                        title: t('Uh oh, something went wrong'),
+                      }),
+                    );
+                }
               }
-            }
-          }}
-        />
+            }}>
+            {t('Sign selected')}
+          </Button>
+        </ButtonContainer>
       ) : null}
     </NotificationsContainer>
   );

@@ -43,7 +43,10 @@ import SendToPill from '../components/SendToPill';
 import {SUPPORTED_CURRENCIES} from '../../../constants/currencies';
 import {CurrencyListIcons} from '../../../constants/SupportedCurrencyOptions';
 import DefaultSvg from '../../../../assets/img/currencies/default.svg';
-import {showBottomNotificationModal} from '../../../store/app/app.actions';
+import {
+  showBottomNotificationModal,
+  showOnGoingProcessModal,
+} from '../../../store/app/app.actions';
 import SwipeButton from '../../../components/swipe-button/SwipeButton';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {dismissOnGoingProcessModal} from '../../../store/app/app.actions';
@@ -84,7 +87,7 @@ const TxpDetailsContainer = styled.SafeAreaView`
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0px 8px;
+  padding: 0 8px;
   margin-left: ${ScreenGutter};
 `;
 
@@ -141,6 +144,11 @@ const MemoMsgText = styled(BaseText)`
   color: #9b9bab;
   margin-top: 10px;
   justify-content: flex-start;
+`;
+
+const ButtonContainer = styled.View`
+  padding: 0 ${ScreenGutter};
+  margin: 15px 0;
 `;
 
 const TimelineList = ({actions}: {actions: TxActions[]}) => {
@@ -235,6 +243,7 @@ const TransactionProposalDetails = () => {
         navigation.goBack();
         return;
       }
+      dispatch(showOnGoingProcessModal('LOADING'));
       const _transaction = await dispatch(
         buildTransactionDetails({
           transaction,
@@ -247,10 +256,10 @@ const TransactionProposalDetails = () => {
         _transaction.actions.filter((a: any) => a?.type === 'accept').length ===
           _transaction.requiredSignatures - 1,
       );
-      await sleep(500);
+      dispatch(dismissOnGoingProcessModal());
       setIsLoading(false);
     } catch (err) {
-      await sleep(500);
+      dispatch(dismissOnGoingProcessModal());
       setIsLoading(false);
       const e = err instanceof Error ? err.message : JSON.stringify(err);
       dispatch(LogActions.error('[TransactionProposalDetails] ', e));
@@ -741,53 +750,57 @@ const TransactionProposalDetails = () => {
       !key.isReadOnly &&
       (!txp.payProUrl ||
         (payProDetails && !payproIsLoading && !paymentExpired)) ? (
-        <SwipeButton
-          title={lastSigner ? t('Slide to send') : t('Slide to accept')}
-          forceReset={resetSwipeButton}
-          onSwipeComplete={async () => {
-            try {
-              dispatch(
-                startOnGoingProcessModal(
-                  lastSigner ? 'SENDING_PAYMENT' : 'ACCEPTING_PAYMENT',
-                ),
-              );
-              await sleep(400);
-              await dispatch(publishAndSign({txp, key, wallet}));
-              dispatch(dismissOnGoingProcessModal());
-              await sleep(400);
-              dispatch(
-                AppActions.showPaymentSentModal({
-                  onDismissModal: async () => {
-                    navigation.goBack();
-                  },
-                  title: lastSigner ? t('Payment Sent') : t('Payment Accepted'),
-                }),
-              );
-            } catch (err) {
-              await sleep(500);
-              dispatch(dismissOnGoingProcessModal());
-              await sleep(500);
-              setResetSwipeButton(true);
-              switch (err) {
-                case 'invalid password':
-                  dispatch(showBottomNotificationModal(WrongPasswordError()));
-                  break;
-                case 'password canceled':
-                  break;
-                case 'biometric check failed':
-                  setResetSwipeButton(true);
-                  break;
-                default:
-                  await showErrorMessage(
-                    CustomErrorMessage({
-                      errMsg: BWCErrorMessage(err),
-                      title: t('Uh oh, something went wrong'),
-                    }),
-                  );
+        <ButtonContainer>
+          <Button
+            buttonStyle={'primary'}
+            onPress={async () => {
+              try {
+                dispatch(
+                  startOnGoingProcessModal(
+                    lastSigner ? 'SENDING_PAYMENT' : 'ACCEPTING_PAYMENT',
+                  ),
+                );
+                await sleep(400);
+                await dispatch(publishAndSign({txp, key, wallet}));
+                dispatch(dismissOnGoingProcessModal());
+                await sleep(400);
+                dispatch(
+                  AppActions.showPaymentSentModal({
+                    onDismissModal: async () => {
+                      navigation.goBack();
+                    },
+                    title: lastSigner
+                      ? t('Payment Sent')
+                      : t('Payment Accepted'),
+                  }),
+                );
+              } catch (err) {
+                await sleep(500);
+                dispatch(dismissOnGoingProcessModal());
+                await sleep(500);
+                setResetSwipeButton(true);
+                switch (err) {
+                  case 'invalid password':
+                    dispatch(showBottomNotificationModal(WrongPasswordError()));
+                    break;
+                  case 'password canceled':
+                    break;
+                  case 'biometric check failed':
+                    setResetSwipeButton(true);
+                    break;
+                  default:
+                    await showErrorMessage(
+                      CustomErrorMessage({
+                        errMsg: BWCErrorMessage(err),
+                        title: t('Uh oh, something went wrong'),
+                      }),
+                    );
+                }
               }
-            }
-          }}
-        />
+            }}>
+            {lastSigner ? t('Click to send') : t('Click to accept')}
+          </Button>
+        </ButtonContainer>
       ) : null}
     </TxpDetailsContainer>
   );
