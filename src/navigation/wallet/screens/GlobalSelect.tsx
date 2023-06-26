@@ -17,7 +17,7 @@ import {
   keyExtractor,
   sleep,
 } from '../../../utils/helper-methods';
-import {FlatList, Pressable, View} from 'react-native';
+import {FlatList, View} from 'react-native';
 import GlobalSelectRow from '../../../components/list/GlobalSelectRow';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 import {ScreenGutter} from '../../../components/styled/Containers';
@@ -29,12 +29,7 @@ import KeyWalletsRow, {
 import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import {LightBlack, White} from '../../../styles/colors';
-import {
-  H4,
-  TextAlign,
-  BaseText,
-  HeaderTitle,
-} from '../../../components/styled/Text';
+import {BaseText, HeaderTitle} from '../../../components/styled/Text';
 import {RouteProp, useRoute} from '@react-navigation/core';
 import {WalletScreens, WalletStackParamList} from '../WalletStack';
 import {useNavigation} from '@react-navigation/native';

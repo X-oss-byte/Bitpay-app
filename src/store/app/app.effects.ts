@@ -33,6 +33,7 @@ import {setEmailNotificationsAccepted, setUserFeedback} from './app.actions';
 import moment from 'moment';
 import {EmitterSubscription} from 'react-native';
 import {DeviceEmitterEvents} from '../../constants/device-emitter-events';
+import {walletConnectInit} from '../wallet-connect/wallet-connect.effects';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {
   try {
@@ -43,29 +44,25 @@ export const startAppInit = (): Effect => async (dispatch, getState) => {
       ),
     );
 
-    //dispatch(deferDeeplinksUntilAppIsReady());
+    dispatch(deferDeeplinksUntilAppIsReady());
 
     const {APP, WALLET} = getState();
-    const {network, pinLockActive, biometricLockActive, colorScheme} = APP;
+    const {network, colorScheme} = APP;
 
     WALLET.initLogs.forEach(log => dispatch(log));
 
     dispatch(LogActions.debug(`Network: ${network}`));
     dispatch(LogActions.debug(`Theme: ${colorScheme || 'system'}`));
 
-    dispatch(startWalletStoreInit());
-
-    //dispatch(LocationEffects.getLocationData());
-
-    //dispatch(showBlur(pinLockActive || biometricLockActive));
+    await dispatch(startWalletStoreInit());
+    dispatch(walletConnectInit());
 
     dispatch(AppActions.successAppInit());
+    DeviceEventEmitter.emit(DeviceEmitterEvents.APP_DATA_INITIALIZED);
     dispatch(AppActions.appInitCompleted());
+    DeviceEventEmitter.emit(DeviceEmitterEvents.APP_INIT_COMPLETED);
 
-    //await sleep(500);
     dispatch(LogActions.info('Initialized app successfully.'));
-    dispatch(LogActions.debug(`Pin Lock Active: ${pinLockActive}`));
-    dispatch(LogActions.debug(`Biometric Lock Active: ${biometricLockActive}`));
   } catch (err: unknown) {
     let errorStr;
     if (err instanceof Error) {
@@ -112,6 +109,10 @@ const deferDeeplinksUntilAppIsReady =
 
     if (APP.appIsLoading) {
       waitForEvent(DeviceEmitterEvents.APP_DATA_INITIALIZED);
+    }
+
+    if (!APP.onboardingCompleted) {
+      waitForEvent(DeviceEmitterEvents.APP_ONBOARDING_COMPLETED);
     }
 
     emitIfReady();

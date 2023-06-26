@@ -11,12 +11,13 @@ import {setWalletTermsAccepted} from '../../../store/wallet/wallet.actions';
 import {Key} from '../../../store/wallet/wallet.models';
 import TermsBox from '../components/TermsBox';
 import {useAppDispatch} from '../../../utils/hooks';
-import {Linking, ScrollView} from 'react-native';
+import {DeviceEventEmitter, Linking, ScrollView} from 'react-native';
 import {
   OnboardingScreens,
   OnboardingStackParamList,
 } from '../../onboarding/OnboardingStack';
 import {setOnboardingCompleted} from '../../../store/app/app.actions';
+import {DeviceEmitterEvents} from '../../../constants/device-emitter-events';
 
 export interface TermsOfUseParamList {
   context?: 'TOUOnly';
@@ -187,6 +188,9 @@ const TermsOfUse: React.FC<
               );
             }
             dispatch(setOnboardingCompleted());
+            DeviceEventEmitter.emit(
+              DeviceEmitterEvents.APP_ONBOARDING_COMPLETED,
+            );
           }}
           buttonStyle={'primary'}
           disabled={agreed.length !== termsList.length}>
