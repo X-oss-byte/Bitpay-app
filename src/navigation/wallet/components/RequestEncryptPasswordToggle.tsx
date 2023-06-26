@@ -10,7 +10,6 @@ import {
 import {WalletActions} from '../../../store/wallet';
 import {useLogger} from '../../../utils/hooks/useLogger';
 import {DecryptError, WrongPasswordError} from './ErrorMessages';
-import {sleep} from '../../../utils/helper-methods';
 import {useTranslation} from 'react-i18next';
 import {useAppDispatch} from '../../../utils/hooks';
 
@@ -42,7 +41,6 @@ const RequestEncryptPasswordToggle = ({currentKey: key}: {currentKey: Key}) => {
         );
         setPasswordToggle(false);
         dispatch(AppActions.dismissDecryptPasswordModal());
-        await sleep(500);
         dispatch(
           showBottomNotificationModal({
             type: 'success',
@@ -65,12 +63,10 @@ const RequestEncryptPasswordToggle = ({currentKey: key}: {currentKey: Key}) => {
       } catch (e) {
         console.log(`Decrypt Error: ${e}`);
         dispatch(AppActions.dismissDecryptPasswordModal());
-        await sleep(500); // Wait to close Decrypt Password modal
         dispatch(showBottomNotificationModal(WrongPasswordError()));
       }
     } else {
       dispatch(AppActions.dismissDecryptPasswordModal());
-      await sleep(500); // Wait to close Decrypt Password modal
       dispatch(showBottomNotificationModal(DecryptError()));
       logger.debug('Missing Key Error');
     }

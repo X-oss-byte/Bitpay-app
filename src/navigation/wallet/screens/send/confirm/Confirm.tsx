@@ -1,5 +1,5 @@
 import React, {useState, useEffect, useCallback, useLayoutEffect} from 'react';
-import {useNavigation, useRoute, CommonActions} from '@react-navigation/native';
+import {useNavigation, useRoute} from '@react-navigation/native';
 import {RouteProp, StackActions} from '@react-navigation/core';
 import {WalletStackParamList} from '../../../WalletStack';
 import {useAppDispatch, useAppSelector} from '../../../../../utils/hooks';
@@ -10,13 +10,11 @@ import {
   Utxo,
   Wallet,
 } from '../../../../../store/wallet/wallet.models';
-import SwipeButton from '../../../../../components/swipe-button/SwipeButton';
 import {
   createProposalAndBuildTxDetails,
   handleCreateTxProposalError,
   startSendPayment,
 } from '../../../../../store/wallet/effects/send/send';
-import PaymentSent from '../../../components/PaymentSent';
 import {formatFiatAmount, sleep} from '../../../../../utils/helper-methods';
 import {
   openUrlWithInAppBrowser,
@@ -61,7 +59,7 @@ import {
   InfoTriangle,
   ScreenGutter,
 } from '../../../../../components/styled/Containers';
-import {Alert, TouchableOpacity, View} from 'react-native';
+import {Alert, TouchableOpacity} from 'react-native';
 import {GetFeeOptions} from '../../../../../store/wallet/effects/fee/fee';
 import {Memo} from './Memo';
 import {toFiat} from '../../../../../store/wallet/utils/wallet';
@@ -71,10 +69,12 @@ import {
 } from '../../../../../store/wallet/utils/currency';
 import SendingToERC20Warning from '../../../components/SendingToERC20Warning';
 import {AppActions} from '../../../../../store/app';
+import Button from '../../../../../components/button/Button';
 
 const VerticalPadding = styled.View`
   padding: ${ScreenGutter} 0;
 `;
+
 export interface ConfirmParamList {
   wallet: Wallet;
   recipient: Recipient;
@@ -106,6 +106,11 @@ export const SettingTitle = styled(BaseText)`
   letter-spacing: 0;
   text-align: left;
   margin-right: 5px;
+`;
+
+const ButtonContainer = styled.View`
+  padding: 0 ${ScreenGutter};
+  margin: 15px 0;
 `;
 
 const Confirm = () => {
@@ -466,57 +471,55 @@ const Confirm = () => {
           network={wallet.credentials.network}
         />
       </ConfirmScrollView>
-      <SwipeButton
-        title={speedup ? t('Speed Up') : t('Slide to send')}
-        forceReset={resetSwipeButton}
-        onSwipeComplete={async () => {
-          try {
-            dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
-            await sleep(500);
-            await dispatch(startSendPayment({txp, key, wallet, recipient}));
-            dispatch(dismissOnGoingProcessModal());
-            await sleep(500);
-            dispatch(
-              AppActions.showPaymentSentModal({
-                onDismissModal: async () => {
-                  navigation.dispatch(StackActions.popToTop());
-                  navigation.dispatch(
-                    StackActions.replace('WalletDetails', {
-                      walletId: wallet!.id,
-                      key,
+      <ButtonContainer>
+        <Button
+          buttonStyle={'primary'}
+          onPress={async () => {
+            try {
+              dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
+              await dispatch(startSendPayment({txp, key, wallet, recipient}));
+              dispatch(dismissOnGoingProcessModal());
+              dispatch(
+                AppActions.showPaymentSentModal({
+                  onDismissModal: async () => {
+                    navigation.dispatch(StackActions.popToTop());
+                    navigation.dispatch(
+                      StackActions.replace('WalletDetails', {
+                        walletId: wallet!.id,
+                        key,
+                      }),
+                    );
+                  },
+                  title:
+                    wallet.credentials.n > 1
+                      ? t('Proposal created')
+                      : t('Payment Sent'),
+                }),
+              );
+            } catch (err) {
+              dispatch(dismissOnGoingProcessModal());
+              switch (err) {
+                case 'invalid password':
+                  dispatch(showBottomNotificationModal(WrongPasswordError()));
+                  break;
+                case 'password canceled':
+                  break;
+                case 'biometric check failed':
+                  setResetSwipeButton(true);
+                  break;
+                default:
+                  await showErrorMessage(
+                    CustomErrorMessage({
+                      errMsg: BWCErrorMessage(err),
+                      title: t('Uh oh, something went wrong'),
                     }),
                   );
-                },
-                title:
-                  wallet.credentials.n > 1
-                    ? t('Proposal created')
-                    : t('Payment Sent'),
-              }),
-            );
-          } catch (err) {
-            dispatch(dismissOnGoingProcessModal());
-            await sleep(500);
-            setResetSwipeButton(true);
-            switch (err) {
-              case 'invalid password':
-                dispatch(showBottomNotificationModal(WrongPasswordError()));
-                break;
-              case 'password canceled':
-                break;
-              case 'biometric check failed':
-                setResetSwipeButton(true);
-                break;
-              default:
-                await showErrorMessage(
-                  CustomErrorMessage({
-                    errMsg: BWCErrorMessage(err),
-                    title: t('Uh oh, something went wrong'),
-                  }),
-                );
+              }
             }
-          }
-        }}
-      />
+          }}>
+          {speedup ? t('Speed Up') : t('Click to send')}
+        </Button>
+      </ButtonContainer>
 
       {isTxLevelAvailable() ? (
         <TransactionLevel

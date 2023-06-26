@@ -98,7 +98,6 @@ const SafeAreaView = styled.SafeAreaView`
 
 const ScrollView = styled.ScrollView`
   margin-left: ${ScreenGutter};
-  width: 100%;
 `;
 
 const HeaderSearchContainer = styled.View`
