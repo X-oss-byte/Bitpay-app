@@ -23,7 +23,6 @@ import {
 import {WrongPasswordError} from '../../navigation/wallet/components/ErrorMessages';
 import {LogActions} from '../log';
 import {t} from 'i18next';
-import {checkBiometricForSending} from '../wallet/effects/send/send';
 import {IsERCToken} from '../wallet/utils/currency';
 import {EVM_BLOCKCHAIN_ID, PROTOCOL_NAME} from '../../constants/config';
 import {startOnGoingProcessModal} from '../app/app.effects';
@@ -397,18 +396,9 @@ const getPrivKey =
     return new Promise(async (resolve, reject) => {
       try {
         const {keys} = getState().WALLET;
-        const {biometricLockActive} = getState().APP;
         const key: Key = keys[keyId];
 
         let password: string | undefined;
-
-        if (biometricLockActive) {
-          try {
-            await dispatch(checkBiometricForSending());
-          } catch (error) {
-            return reject(error);
-          }
-        }
 
         if (key.isPrivKeyEncrypted) {
           password = await dispatch(getDecryptPassword(key));

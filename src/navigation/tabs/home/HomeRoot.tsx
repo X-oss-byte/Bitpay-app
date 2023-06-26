@@ -72,21 +72,6 @@ const HomeRoot = () => {
     [priceHistory],
   );
 
-  // TODO: click to refresh balance
-  const onRefresh = async () => {
-    try {
-      dispatch(getPriceHistory(defaultAltCurrency.isoCode));
-      await dispatch(startGetRates({force: true}));
-      await Promise.all([
-        dispatch(startUpdateAllKeyAndWalletStatus({force: true})),
-        sleep(1000),
-      ]);
-      dispatch(updatePortfolioBalance());
-    } catch (err) {
-      dispatch(showBottomNotificationModal(BalanceUpdateError()));
-    }
-  };
-
   const onPressTxpBadge = useMemo(
     () => () => {
       navigation.navigate('Wallet', {
@@ -121,10 +106,10 @@ const HomeRoot = () => {
             <HomeSection style={{marginBottom: 20}}>
               <LinkingButtons
                 receive={{
-                  cta: () => dispatch(receiveCrypto(navigation, 'HomeRoot')),
+                  cta: () => dispatch(receiveCrypto(navigation)),
                 }}
                 send={{
-                  cta: () => dispatch(sendCrypto('HomeRoot')),
+                  cta: () => dispatch(sendCrypto()),
                 }}
               />
             </HomeSection>

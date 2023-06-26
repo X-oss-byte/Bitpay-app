@@ -8,10 +8,13 @@ import {
   calculatePercentageDifference,
   formatFiatAmount,
 } from '../../../../utils/helper-methods';
-import InfoSvg from '../../../../../assets/img/info.svg';
+import RefreshSvg from '../../../../../assets/img/refresh.svg';
 import {useAppSelector} from '../../../../utils/hooks';
 import Percentage from '../../../../components/percentage/Percentage';
 import {useTranslation} from 'react-i18next';
+import {DeviceEventEmitter} from 'react-native';
+import {DeviceEmitterEvents} from '../../../../constants/device-emitter-events';
+import Button from '../../../../components/button/Button';
 
 const PortfolioContainer = styled.View`
   justify-content: center;
@@ -62,11 +65,17 @@ const PortfolioBalance = () => {
     portfolioBalance.lastDay,
   );
 
+  const onUpdateBalance = () => {
+    DeviceEventEmitter.emit(DeviceEmitterEvents.WALLET_BALANCE_UPDATED);
+  };
+
   return (
     <PortfolioContainer>
       <PortfolioBalanceHeader>
         <PortfolioBalanceTitle>{t('Portfolio Balance')}</PortfolioBalanceTitle>
-        <InfoSvg width={12} height={12} />
+        <Button buttonType={'link'} height={28} onPress={onUpdateBalance}>
+          <RefreshSvg width={12} height={12} />
+        </Button>
       </PortfolioBalanceHeader>
       {!hideAllBalances ? (
         <>

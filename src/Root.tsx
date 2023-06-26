@@ -13,6 +13,7 @@ import {
   AppStateStatus,
   DeviceEventEmitter,
   Linking,
+  NativeEventEmitter,
 } from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
@@ -51,7 +52,10 @@ import WalletConnectStack, {
 } from './navigation/wallet-connect/WalletConnectStack';
 import DebugScreen, {DebugScreenParamList} from './navigation/Debug';
 import {WalletBackupActions} from './store/wallet-backup';
-import {successCreateKey} from './store/wallet/wallet.actions';
+import {
+  successCreateKey,
+  updatePortfolioBalance,
+} from './store/wallet/wallet.actions';
 import {bootstrapKey, bootstrapWallets} from './store/transforms/transforms';
 import {Key, Wallet} from './store/wallet/wallet.models';
 import {Keys} from './store/wallet/wallet.reducer';
@@ -67,6 +71,10 @@ import NotificationsSettingsStack, {
   NotificationsSettingsStackParamsList,
 } from './navigation/tabs/settings/notifications/NotificationsStack';
 import {DeviceEmitterEvents} from './constants/device-emitter-events';
+import {getPriceHistory, startGetRates} from './store/wallet/effects';
+import {startUpdateAllKeyAndWalletStatus} from './store/wallet/effects/status/status';
+import {showBottomNotificationModal} from './store/app/app.actions';
+import {BalanceUpdateError} from './navigation/wallet/components/ErrorMessages';
 
 // ROOT NAVIGATION CONFIG
 export type RootStackParamList = {
@@ -151,6 +159,7 @@ export default () => {
   const appColorScheme = useAppSelector(({APP}) => APP.colorScheme);
   const appLanguage = useAppSelector(({APP}) => APP.defaultLanguage);
   const failedAppInit = useAppSelector(({APP}) => APP.failedAppInit);
+  const defaultAltCurrency = useAppSelector(({APP}) => APP.defaultAltCurrency);
 
   const {keys, expectedKeyLengthChange} = useAppSelector(({WALLET}) => WALLET);
   const backupKeys = useAppSelector(({WALLET_BACKUP}) => WALLET_BACKUP.keys);
@@ -315,6 +324,25 @@ export default () => {
       recoverKeys({backupKeys, keys});
     }
   }, [dispatch, keys, previousKeysLength, expectedKeyLengthChange]);
+
+  // Update balance
+  useEffect(() => {
+    const onRefresh = async () => {
+      try {
+        dispatch(getPriceHistory(defaultAltCurrency.isoCode));
+        await dispatch(startGetRates({force: true}));
+        await dispatch(startUpdateAllKeyAndWalletStatus({force: true}));
+        dispatch(updatePortfolioBalance());
+      } catch (err) {
+        dispatch(showBottomNotificationModal(BalanceUpdateError()));
+      }
+    };
+    DeviceEventEmitter.addListener(
+      DeviceEmitterEvents.WALLET_BALANCE_UPDATED,
+      onRefresh,
+    );
+    return () => DeviceEventEmitter.removeAllListeners();
+  }, [dispatch, defaultAltCurrency]);
 
   // THEME
   useEffect(() => {

@@ -20,7 +20,6 @@ import {
   JsonRpcResult,
 } from '@json-rpc-tools/utils';
 import {Key, Wallet} from '../wallet/wallet.models';
-import {checkBiometricForSending} from '../wallet/effects/send/send';
 import {
   dismissDecryptPasswordModal,
   showBottomNotificationModal,
@@ -511,18 +510,9 @@ const getPrivKey =
     return new Promise(async (resolve, reject) => {
       try {
         const {keys} = getState().WALLET;
-        const {biometricLockActive} = getState().APP;
         const key: Key = keys[wallet.keyId];
 
         let password: string | undefined;
-
-        if (biometricLockActive) {
-          try {
-            await dispatch(checkBiometricForSending());
-          } catch (error) {
-            return reject(error);
-          }
-        }
 
         if (key.isPrivKeyEncrypted) {
           password = await new Promise<string>((_resolve, _reject) => {

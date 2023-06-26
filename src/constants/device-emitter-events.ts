@@ -28,7 +28,14 @@ export enum DeviceEmitterEvents {
    * Triggered when Dosh SDK has finished initialization.
    */
   DOSH_INITIALIZED = 'DOSH_INITIALIZED',
-  GIFT_CARD_REDEEMED = 'GIFT_CARD_REDEEMED',
+
+  /**
+   * Triggered when app is loading transaction history.
+   */
   WALLET_LOAD_HISTORY = 'WALLET_LOAD_HISTORY',
-  PUSH_NOTIFICATIONS = 'PUSH_NOTIFICATIONS',
+
+  /**
+   * Triggered when app is updating the user's wallet balance.
+   */
+  WALLET_BALANCE_UPDATED = 'WALLET_BALANCE_UPDATED',
 }

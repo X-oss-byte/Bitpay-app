@@ -38,10 +38,8 @@ import {
   GeneralError,
 } from '../../../../navigation/wallet/components/ErrorMessages';
 import {BWCErrorMessage, getErrorName} from '../../../../constants/BWCError';
-import {Invoice} from '../../../shop/shop.models';
 import {GetPayProDetails, HandlePayPro, PayProOptions} from '../paypro/paypro';
 import {
-  checkingBiometricForSending,
   dismissBottomNotificationModal,
   dismissDecryptPasswordModal,
   dismissOnGoingProcessModal,
@@ -57,17 +55,43 @@ import {t} from 'i18next';
 import {startOnGoingProcessModal} from '../../../app/app.effects';
 import {LogActions} from '../../../log';
 import _ from 'lodash';
-import {
-  authOptionalConfigObject,
-  BiometricErrorNotification,
-  TO_HANDLE_ERRORS,
-} from '../../../../constants/BiometricError';
-import {Platform} from 'react-native';
 import {Rates} from '../../../rate/rate.models';
 import {getCoinAndChainFromCurrencyCode} from '../../../../navigation/bitpay-id/utils/bitpay-id-utils';
 import {navigationRef} from '../../../../Root';
-import {WalletScreens} from '../../../../navigation/wallet/WalletStack';
 import {keyBackupRequired} from '../../../../navigation/tabs/home/components/Crypto';
+
+export interface InvoiceMinerFee {
+  satoshisPerByte: number;
+  totalFee: number;
+}
+
+export interface Invoice {
+  id: string;
+  url: string;
+  buyerProvidedInfo?: {
+    selectedTransactionCurrency?: string;
+  };
+  exchangeRates: any;
+  minerFees: {[currency: string]: InvoiceMinerFee};
+  paymentSubtotals: {[currency: string]: number};
+  paymentTotals: {[currency: string]: number};
+  paymentDisplayTotals: {[currency: string]: string};
+  price: number;
+  amountPaid: number;
+  displayAmountPaid: string;
+  nonPayProPaymentReceived?: boolean;
+  transactionCurrency: string;
+  status: 'new' | 'paid' | 'confirmed' | 'complete' | 'expired' | 'invalid';
+  expirationTime: number;
+  merchantName: string;
+  currency: string;
+  oauth?: {
+    coinbase?: {
+      enabled: boolean;
+      threshold: number;
+    };
+  };
+}
 
 export const createProposalAndBuildTxDetails =
   (
@@ -888,17 +912,6 @@ export const publishAndSign =
   }): Effect<Promise<Partial<TransactionProposal> | void>> =>
   async (dispatch, getState) => {
     return new Promise(async (resolve, reject) => {
-      const {
-        APP: {biometricLockActive},
-      } = getState();
-
-      if (biometricLockActive && !signingMultipleProposals) {
-        try {
-          await dispatch(checkBiometricForSending());
-        } catch (error) {
-          return reject(error);
-        }
-      }
       if (key.isPrivKeyEncrypted && !signingMultipleProposals) {
         try {
           password = await new Promise<string>((_resolve, _reject) => {
@@ -1022,22 +1035,12 @@ export const publishAndSignMultipleProposals =
     wallet: Wallet;
     recipient?: Recipient;
   }): Effect<Promise<(Partial<TransactionProposal> | void)[]>> =>
-  async (dispatch, getState) => {
+  async dispatch => {
     return new Promise(async (resolve, reject) => {
       try {
         const signingMultipleProposals = true;
         let password: string;
-        const {
-          APP: {biometricLockActive},
-        } = getState();
 
-        if (biometricLockActive) {
-          try {
-            await dispatch(checkBiometricForSending());
-          } catch (error) {
-            return reject(error);
-          }
-        }
         if (key.isPrivKeyEncrypted) {
           try {
             password = await new Promise<string>((_resolve, _reject) => {
@@ -1492,90 +1495,40 @@ export const showNoWalletsModal =
     );
   };
 
-export const checkBiometricForSending =
-  (): Effect<Promise<any>> => async dispatch => {
-    // preventing for asking biometric again when the app goes to background ( ios only )
-    if (Platform.OS === 'ios') {
-      dispatch(checkingBiometricForSending(true));
-    }
-    return TouchID.authenticate(
-      'Authentication Check',
-      authOptionalConfigObject,
-    )
-      .then(success => {
-        if (success) {
-          return Promise.resolve();
-        } else {
-          return Promise.reject('biometric check failed');
-        }
-      })
-      .catch(error => {
-        if (error.code && TO_HANDLE_ERRORS[error.code]) {
-          const err = TO_HANDLE_ERRORS[error.code];
-          dispatch(
-            showBottomNotificationModal(BiometricErrorNotification(err)),
-          );
-        }
-        return Promise.reject('biometric check failed');
-      });
-  };
+export const sendCrypto = (): Effect<void> => (dispatch, getState) => {
+  const keys = getState().WALLET.keys;
+  const walletsWithBalance = Object.values(keys)
+    .filter(key => key.backupComplete)
+    .flatMap(key => key.wallets)
+    .filter(wallet => !wallet.hideWallet && wallet.isComplete())
+    .filter(wallet => wallet.balance.sat > 0);
 
-export const sendCrypto =
-  (loggerContext: string): Effect<void> =>
-  (dispatch, getState) => {
-    const keys = getState().WALLET.keys;
-    const walletsWithBalance = Object.values(keys)
-      .filter(key => key.backupComplete)
-      .flatMap(key => key.wallets)
-      .filter(wallet => !wallet.hideWallet && wallet.isComplete())
-      .filter(wallet => wallet.balance.sat > 0);
-
-    if (!walletsWithBalance.length) {
-      dispatch(
-        showBottomNotificationModal({
-          type: 'warning',
-          title: t('No funds available'),
-          message: t('You do not have any funds to send.'),
-          enableBackdropDismiss: true,
-          actions: [
-            {
-              text: t('Add funds'),
-              action: () => {
-                navigationRef.navigate('Wallet', {
-                  screen: WalletScreens.AMOUNT,
-                  params: {
-                    onAmountSelected: (amount: string) => {
-                      navigationRef.navigate('BuyCrypto', {
-                        screen: 'BuyCryptoRoot',
-                        params: {
-                          amount: Number(amount),
-                        },
-                      });
-                    },
-                    context: 'buyCrypto',
-                  },
-                });
-              },
-              primary: true,
-            },
-            {
-              text: t('Got It'),
-              action: () => null,
-              primary: false,
-            },
-          ],
-        }),
-      );
-    } else {
-      navigationRef.navigate('Wallet', {
-        screen: 'GlobalSelect',
-        params: {context: 'send'},
-      });
-    }
-  };
+  if (!walletsWithBalance.length) {
+    dispatch(
+      showBottomNotificationModal({
+        type: 'warning',
+        title: t('No funds available'),
+        message: t('You do not have any funds to send.'),
+        enableBackdropDismiss: true,
+        actions: [
+          {
+            text: t('Got It'),
+            action: () => null,
+            primary: false,
+          },
+        ],
+      }),
+    );
+  } else {
+    navigationRef.navigate('Wallet', {
+      screen: 'GlobalSelect',
+      params: {context: 'send'},
+    });
+  }
+};
 
 export const receiveCrypto =
-  (navigation: NavigationProp<any>, loggerContext: string): Effect<void> =>
+  (navigation: NavigationProp<any>): Effect<void> =>
   (dispatch, getState) => {
     const keys = getState().WALLET.keys;
     if (Object.keys(keys).length === 0) {
