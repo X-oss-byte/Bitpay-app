@@ -3,6 +3,8 @@ import {
   Black,
   LightBlack,
   NeutralSlate,
+  Slate10,
+  Slate30,
   SlateDark,
   White,
 } from './colors';
@@ -20,14 +22,10 @@ export const ScreenOptions = (
   return {
     swipeEnabled: false,
     tabBarIndicatorStyle: {
-      height: 46,
-      borderRadius: 50,
-      backgroundColor: Action,
-      width: width,
-      margin: gutter,
+      display: 'none',
     },
-    tabBarActiveTintColor: White,
-    tabBarInactiveTintColor: dark ? White : SlateDark,
+    tabBarActiveTintColor: dark ? White : Action,
+    tabBarInactiveTintColor: dark ? SlateDark : Slate30,
     tabBarPressColor: dark ? Black : NeutralSlate,
     tabBarLabelStyle: {
       fontSize: 16,

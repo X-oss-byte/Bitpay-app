@@ -82,12 +82,13 @@ import {useTranslation} from 'react-i18next';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 
 const ContentView = styled(ScrollView)`
-  padding: 0px 8px;
+  padding: 0 8px;
+  margin-top: 20px;
   margin-left: ${ScreenGutter};
 `;
 
 const PasswordParagraph = styled(BaseText)`
-  margin: 0px 20px 20px 20px;
+  margin: 0 20px 20px 20px;
   color: ${({theme}) => theme.colors.description};
 `;
 

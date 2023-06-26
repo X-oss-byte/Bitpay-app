@@ -36,6 +36,7 @@ import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 const BWCProvider = BwcProvider.getInstance();
 
 const ContentView = styled(ScrollView)`
+  flex: 1;
   margin: 0 ${ScreenGutter};
 `;
 
