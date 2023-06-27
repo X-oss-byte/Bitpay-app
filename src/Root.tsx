@@ -13,7 +13,6 @@ import {
   AppStateStatus,
   DeviceEventEmitter,
   Linking,
-  NativeEventEmitter,
 } from 'react-native';
 import {ThemeProvider} from 'styled-components/native';
 import BottomNotificationModal from './components/modal/bottom-notification/BottomNotification';
@@ -73,7 +72,11 @@ import NotificationsSettingsStack, {
 import {DeviceEmitterEvents} from './constants/device-emitter-events';
 import {getPriceHistory, startGetRates} from './store/wallet/effects';
 import {startUpdateAllKeyAndWalletStatus} from './store/wallet/effects/status/status';
-import {showBottomNotificationModal} from './store/app/app.actions';
+import {
+  dismissOnGoingProcessModal,
+  showBottomNotificationModal,
+  showOnGoingProcessModal,
+} from './store/app/app.actions';
 import {BalanceUpdateError} from './navigation/wallet/components/ErrorMessages';
 
 // ROOT NAVIGATION CONFIG
@@ -151,6 +154,7 @@ const Root = createStackNavigator<RootStackParamList>();
 export default () => {
   const dispatch = useAppDispatch();
   const [, rerender] = useState({});
+  const [isLoading, setIsLoading] = useState(false);
   const linking = useDeeplinks();
   const urlEventHandler = useUrlEventHandler();
   const onboardingCompleted = useAppSelector(
@@ -327,30 +331,55 @@ export default () => {
 
   // Update balance
   useEffect(() => {
-    const onRefresh = async () => {
+    const onRefresh = async (silent?: boolean) => {
       try {
+        if (isLoading) {
+          return;
+        }
+        setIsLoading(true);
+        if (!silent) {
+          dispatch(showOnGoingProcessModal('LOADING'));
+        }
         dispatch(getPriceHistory(defaultAltCurrency.isoCode));
         await dispatch(startGetRates({force: true}));
         await dispatch(startUpdateAllKeyAndWalletStatus({force: true}));
         dispatch(updatePortfolioBalance());
+        dispatch(dismissOnGoingProcessModal());
+        setIsLoading(false);
       } catch (err) {
+        dispatch(dismissOnGoingProcessModal());
         dispatch(showBottomNotificationModal(BalanceUpdateError()));
+        setIsLoading(false);
       }
     };
     DeviceEventEmitter.addListener(
-      DeviceEmitterEvents.WALLET_BALANCE_UPDATED,
+      DeviceEmitterEvents.WALLET_UPDATE_BALANCE,
       onRefresh,
     );
-    return () => DeviceEventEmitter.removeAllListeners();
-  }, [dispatch, defaultAltCurrency]);
+    return () =>
+      DeviceEventEmitter.removeAllListeners(
+        DeviceEmitterEvents.WALLET_UPDATE_BALANCE,
+      );
+  }, [dispatch, defaultAltCurrency, isLoading]);
+
+  const updateBalanceDebounce = debounce(
+    () => {
+      DeviceEventEmitter.emit(DeviceEmitterEvents.WALLET_UPDATE_BALANCE, true);
+    },
+    10000,
+    {leading: true, trailing: false},
+  );
 
   // THEME
   useEffect(() => {
     function onAppStateChange(status: AppStateStatus) {
       // status === 'active' when the app goes from background to foreground,
-      // if no app scheme set, rerender in case the system theme has changed
-      if (status === 'active' && !appColorScheme) {
-        rerender({});
+      if (status === 'active') {
+        updateBalanceDebounce();
+        // if no app scheme set, rerender in case the system theme has changed
+        if (!appColorScheme) {
+          rerender({});
+        }
       }
     }
 

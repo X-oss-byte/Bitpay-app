@@ -66,7 +66,7 @@ const PortfolioBalance = () => {
   );
 
   const onUpdateBalance = () => {
-    DeviceEventEmitter.emit(DeviceEmitterEvents.WALLET_BALANCE_UPDATED);
+    DeviceEventEmitter.emit(DeviceEmitterEvents.WALLET_UPDATE_BALANCE);
   };
 
   return (

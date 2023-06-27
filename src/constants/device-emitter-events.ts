@@ -37,5 +37,5 @@ export enum DeviceEmitterEvents {
   /**
    * Triggered when app is updating the user's wallet balance.
    */
-  WALLET_BALANCE_UPDATED = 'WALLET_BALANCE_UPDATED',
+  WALLET_UPDATE_BALANCE = 'WALLET_UPDATE_BALANCE',
 }
