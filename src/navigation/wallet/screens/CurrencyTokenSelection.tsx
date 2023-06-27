@@ -1,3 +1,4 @@
+import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {StackScreenProps} from '@react-navigation/stack';
 import React, {
   useCallback,
@@ -7,7 +8,7 @@ import React, {
   useState,
 } from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, FlatList} from 'react-native';
+import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
 import styled, {useTheme} from 'styled-components/native';
 import Button from '../../../components/button/Button';
 import {
@@ -18,6 +19,7 @@ import {
   TokensHeading,
 } from '../../../components/list/CurrencySelectionRow';
 import {
+  ActiveOpacity,
   CtaContainer,
   ScreenGutter,
 } from '../../../components/styled/Containers';
@@ -34,6 +36,7 @@ import {
   CurrencySelectionMode,
   SearchContainer,
 } from './CurrencySelection';
+import Back from '../../../components/back/Back';
 
 export type CurrencyTokenSelectionScreenParamList = {
   key?: Key;
@@ -73,12 +76,14 @@ const styles = StyleSheet.create({
 
 const keyExtractor = (item: CurrencySelectionItem) => item.id;
 
-const CurrencyTokenSelectionScreen: React.VFC<
-  StackScreenProps<WalletStackParamList, WalletScreens.CURRENCY_TOKEN_SELECTION>
-> = ({navigation, route}) => {
+const CurrencyTokenSelectionScreen = () => {
+  const {params} =
+    useRoute<
+      RouteProp<WalletStackParamList, WalletScreens.CURRENCY_TOKEN_SELECTION>
+    >();
   const {t} = useTranslation();
   const theme = useTheme();
-  const {params} = route;
+  const navigation = useNavigation();
   const {onCtaPress, ctaTitle, selectedCurrencies} =
     params.contextHandler() || {};
   const [chain, setChain] = useState(params.currency);
@@ -310,6 +315,16 @@ const CurrencyTokenSelectionScreen: React.VFC<
             chain: t(chain.currencyName),
           })}
         </HeaderTitle>
+      ),
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{marginLeft: 10}}
+          activeOpacity={ActiveOpacity}
+          onPressIn={() => {
+            navigation.goBack();
+          }}>
+          <Back opacity={1} />
+        </TouchableOpacity>
       ),
     });
   }, [navigation, t, chain.currencyName]);
