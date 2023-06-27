@@ -92,7 +92,6 @@ const RecoveryPhrase: React.FC<RecoveryPhraseScreenProps> = ({route}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{t('Recovery Phrase')}</HeaderTitle>,
       headerLeft: () => (
         <TouchableOpacity

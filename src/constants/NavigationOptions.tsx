@@ -15,7 +15,6 @@ export const baseNavigatorOptions: StackNavigationOptions = {
   },
   headerShadowVisible: false,
   animationEnabled: false,
-  gestureEnabled: false,
 };
 
 export const baseScreenOptions: StackNavigationOptions = {

@@ -105,7 +105,6 @@ const VerifyPhrase: React.FC<VerifyPhraseScreenProps> = ({route}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{t('Verify your Phrase')}</HeaderTitle>,
       headerRight: () => (
         <HeaderRightContainer>

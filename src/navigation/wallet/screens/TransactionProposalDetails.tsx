@@ -232,7 +232,6 @@ const TransactionProposalDetails = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{title}</HeaderTitle>,
     });
   }, [navigation, title]);

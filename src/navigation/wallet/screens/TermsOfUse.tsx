@@ -144,7 +144,6 @@ const TermsOfUse: React.FC<
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{t('Important')}</HeaderTitle>,
       headerLeft: () => null,
       headerRight: () => null,

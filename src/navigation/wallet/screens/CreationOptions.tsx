@@ -36,7 +36,6 @@ const CreationOptions: React.FC<CreationOptionsScreenProps> = () => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerTitle: () => <HeaderTitle>{t('Select an option')}</HeaderTitle>,
       headerTitleAlign: 'center',
     });

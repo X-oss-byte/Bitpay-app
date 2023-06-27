@@ -53,7 +53,6 @@ const CreateOrImportKey: React.FC<
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerLeft: () => null,
       headerRight: () => (
         <HeaderRightContainer>

@@ -99,7 +99,6 @@ const BackupScreen: React.FC<BackupScreenProps> = ({route}) => {
 
   useLayoutEffect(() => {
     navigation.setOptions({
-      gestureEnabled: false,
       headerLeft: () => null,
       headerRight: () => (
         <HeaderRightContainer>

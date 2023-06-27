@@ -425,7 +425,6 @@ export default () => {
             component={DebugScreen}
             options={{
               ...baseNavigatorOptions,
-              gestureEnabled: false,
               animationEnabled: false,
             }}
           />
@@ -433,20 +432,8 @@ export default () => {
             name={RootStacks.ONBOARDING}
             component={OnboardingStack}
           />
-          <Root.Screen
-            name={RootStacks.TABS}
-            component={TabsStack}
-            options={{
-              gestureEnabled: false,
-            }}
-          />
-          <Root.Screen
-            options={{
-              gestureEnabled: false,
-            }}
-            name={RootStacks.WALLET}
-            component={WalletStack}
-          />
+          <Root.Screen name={RootStacks.TABS} component={TabsStack} />
+          <Root.Screen name={RootStacks.WALLET} component={WalletStack} />
           <Root.Screen
             name={RootStacks.GENERAL_SETTINGS}
             component={GeneralSettingsStack}
