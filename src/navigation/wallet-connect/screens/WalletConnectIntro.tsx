@@ -9,7 +9,10 @@ import {
   ScrollView,
   WalletConnectContainer,
 } from '../styled/WalletConnectContainers';
-import {openUrlWithInAppBrowser} from '../../../store/app/app.effects';
+import {
+  openUrlWithInAppBrowser,
+  startOnGoingProcessModal,
+} from '../../../store/app/app.effects';
 import {useTranslation} from 'react-i18next';
 import {BottomNotificationConfig} from '../../../components/modal/bottom-notification/BottomNotification';
 import {
@@ -28,6 +31,7 @@ import {Controller, useForm} from 'react-hook-form';
 import {yupResolver} from '@hookform/resolvers/yup';
 import yup from '../../../lib/yup';
 import BoxInput from '../../../components/form/BoxInput';
+import {walletConnectV2OnSessionProposal} from '../../../store/wallet-connect-v2/wallet-connect-v2.effects';
 
 export type WalletConnectIntroParamList = {
   uri?: string;
@@ -114,7 +118,7 @@ const WalletConnectIntro = () => {
             control={control}
             render={({field: {onChange, onBlur, value}}) => (
               <BoxInput
-                placeholder={'Wallet connect URI'}
+                placeholder={'WalletConnect URI'}
                 label={t('URI')}
                 onBlur={onBlur}
                 onChangeText={async (data: string) => {
@@ -127,11 +131,14 @@ const WalletConnectIntro = () => {
                         setDappUri(data);
                         showWalletSelector();
                       } else {
-                        // temporarily disabled
-                        const errMsg = t(
-                          'Connection cannot be established. WalletConnect version 2 is still under development.',
-                        );
-                        throw new Error(errMsg);
+                        dispatch(startOnGoingProcessModal('LOADING'));
+                        const _proposal = (await dispatch<any>(
+                          walletConnectV2OnSessionProposal(data),
+                        )) as any;
+                        setDappProposal(_proposal);
+                        dispatch(dismissOnGoingProcessModal());
+                        await sleep(500);
+                        showWalletSelectorV2();
                       }
                     }
                   } catch (e: any) {
