@@ -1,8 +1,14 @@
 import React from 'react';
 import {Color, Rect, Svg, Ellipse, Circle} from 'react-native-svg';
 import styled, {useTheme} from 'styled-components/native';
-import {LightBlack, NeutralSlate, SlateDark, White} from '../../styles/colors';
-import {ActiveOpacity, HeaderRightContainer} from '../styled/Containers';
+import {
+  LightBlack,
+  NeutralSlate,
+  OledBlack,
+  SlateDark,
+  White,
+} from '../../styles/colors';
+import {HeaderRightContainer} from '../styled/Containers';
 interface SettingsSvgProps {
   color: Color | undefined;
   background: Color | undefined;
@@ -19,20 +25,14 @@ const SettingsSvg: React.FC<SettingsSvgProps> = ({color, background}) => {
   );
 };
 
-const SettingsSvgContainer = styled.TouchableOpacity`
-  transform: scale(1.1);
-`;
-
 const Settings = ({onPress}: {onPress: () => void}) => {
   const theme = useTheme();
   const color = theme.dark ? White : SlateDark;
-  const background = theme.dark ? LightBlack : NeutralSlate;
+  const background = theme.dark ? OledBlack : White;
 
   return (
-    <HeaderRightContainer>
-      <SettingsSvgContainer activeOpacity={ActiveOpacity} onPress={onPress}>
-        <SettingsSvg color={color} background={background} />
-      </SettingsSvgContainer>
+    <HeaderRightContainer onPress={onPress}>
+      <SettingsSvg color={color} background={background} />
     </HeaderRightContainer>
   );
 };

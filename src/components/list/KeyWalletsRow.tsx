@@ -74,7 +74,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
   hideBalance,
 }: KeyWalletProps<T>) => {
   return (
-    <KeyWalletsScrollView>
+    <>
       {keyWallets.map((key, keyIndex) => (
         <KeyWalletsRowContainer
           key={key.key}
@@ -105,7 +105,7 @@ const KeyWalletsRow = <T extends WalletRowType>({
           ))}
         </KeyWalletsRowContainer>
       ))}
-    </KeyWalletsScrollView>
+    </>
   );
 };
 

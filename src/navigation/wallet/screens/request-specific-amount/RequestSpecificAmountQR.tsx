@@ -6,7 +6,7 @@ import {
   Paragraph,
 } from '../../../../components/styled/Text';
 import React, {useEffect, useLayoutEffect, useState} from 'react';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {CommonActions, useNavigation, useRoute} from '@react-navigation/native';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../../WalletStack';
 import styled from 'styled-components/native';
@@ -28,28 +28,21 @@ import {
 } from '../../../../store/wallet/effects/amount/amount';
 import {useAppDispatch} from '../../../../utils/hooks';
 import {useTranslation} from 'react-i18next';
+import Button from '../../../../components/button/Button';
 
-const SpecificAmtQRContainer = styled.SafeAreaView`
-  flex: 1;
-`;
-
-const ScrollView = styled.ScrollView`
-  padding: 0px 8px;
-  margin-left: ${ScreenGutter};
+const Container = styled.View`
+  padding: 0 ${ScreenGutter};
 `;
 
 const ParagraphContainer = styled.View`
-  margin: 10px 0 20px;
+  margin: 10px 0;
 `;
 
 const QRContainer = styled.View`
-  margin-top: 20px;
   align-items: center;
   flex-direction: column;
   padding: 25px;
-  border-radius: 12px;
   background-color: ${({theme: {dark}}) => (dark ? LightBlack : White)};
-  min-height: 390px;
   justify-content: center;
 `;
 
@@ -92,12 +85,6 @@ const CopyImgContainer = styled.View`
   justify-content: center;
 `;
 
-const ShareIconContainer = styled.TouchableOpacity`
-  padding-top: 10px;
-  transform: scale(1.1);
-  padding-right: 15px;
-`;
-
 const RequestSpecificAmountQR = () => {
   const {t} = useTranslation();
   const route =
@@ -108,6 +95,8 @@ const RequestSpecificAmountQR = () => {
     currencyAbbreviation,
     network,
     chain,
+    id,
+    keyId,
   } = wallet;
   const navigation = useNavigation();
   const dispatch = useAppDispatch();
@@ -120,6 +109,37 @@ const RequestSpecificAmountQR = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{walletName}</HeaderTitle>,
+      headerLeft: null,
+      headerRight: () => (
+        <Button
+          style={{marginRight: 10}}
+          buttonType={'pill'}
+          buttonStyle={'cancel'}
+          onPress={() => {
+            navigation.dispatch(
+              CommonActions.reset({
+                index: 1,
+                routes: [
+                  {
+                    name: 'KeyOverview',
+                    params: {
+                      id: keyId,
+                    },
+                  },
+                  {
+                    name: 'WalletDetails',
+                    params: {
+                      walletId: id,
+                      key: keyId,
+                    },
+                  },
+                ],
+              }),
+            );
+          }}>
+          {t('Close')}
+        </Button>
+      ),
     });
   }, [navigation, walletName, qrValue]);
 
@@ -178,60 +198,46 @@ const RequestSpecificAmountQR = () => {
   }, [copied]);
 
   return (
-    <SpecificAmtQRContainer>
-      <ScrollView>
-        <H5>{t('Payment Request')}</H5>
-        <ParagraphContainer>
-          <Paragraph>
-            {t('Share this QR code to receive in your wallet .', {
-              amountUnitStr: formattedAmountObj?.amountUnitStr,
-              walletName: wallet.walletName || wallet.credentials.walletName,
-            })}
-          </Paragraph>
-        </ParagraphContainer>
+    <Container>
+      <H5>{t('Payment Request')}</H5>
+      <ParagraphContainer>
+        <Paragraph>
+          {t('Share this QR code to receive in your wallet .', {
+            amountUnitStr: formattedAmountObj?.amountUnitStr,
+            walletName: wallet.walletName || wallet.credentials.walletName,
+          })}
+        </Paragraph>
+      </ParagraphContainer>
 
-        <QRContainer
-          style={[
-            {
-              shadowColor: '#000',
-              shadowOffset: {width: -2, height: 4},
-              shadowOpacity: 0.1,
-              shadowRadius: 5,
-              borderRadius: 12,
-              elevation: 3,
-            },
-          ]}>
-          {qrValue ? (
-            <>
-              <QRHeader>
-                {t('Receive ') + formattedAmountObj?.amountUnitStr}
-              </QRHeader>
-              <CopyToClipboard onPress={copyToClipboard} activeOpacity={0.7}>
-                <CopyImgContainer>
-                  {!copied ? <CopySvg width={17} /> : <CopiedSvg width={17} />}
-                </CopyImgContainer>
-                <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
-                  {qrValue}
-                </AddressText>
-              </CopyToClipboard>
+      <QRContainer>
+        {qrValue ? (
+          <>
+            <QRHeader>
+              {t('Receive ') + formattedAmountObj?.amountUnitStr}
+            </QRHeader>
+            <CopyToClipboard onPress={copyToClipboard} activeOpacity={0.7}>
+              <CopyImgContainer>
+                {!copied ? <CopySvg width={17} /> : <CopiedSvg width={17} />}
+              </CopyImgContainer>
+              <AddressText numberOfLines={1} ellipsizeMode={'tail'}>
+                {qrValue}
+              </AddressText>
+            </CopyToClipboard>
 
-              <QRCodeContainer>
-                <QRCode value={qrValue} size={200} />
-              </QRCodeContainer>
-            </>
-          ) : loading ? (
-            <QRHeader>{t('Generating Address...')}</QRHeader>
-          ) : (
-            <>
-              <GhostSvg />
-              <QRHeader>
-                {t('Something went wrong. Please try again.')}
-              </QRHeader>
-            </>
-          )}
-        </QRContainer>
-      </ScrollView>
-    </SpecificAmtQRContainer>
+            <QRCodeContainer>
+              <QRCode value={qrValue} size={200} />
+            </QRCodeContainer>
+          </>
+        ) : loading ? (
+          <QRHeader>{t('Generating Address...')}</QRHeader>
+        ) : (
+          <>
+            <GhostSvg />
+            <QRHeader>{t('Something went wrong. Please try again.')}</QRHeader>
+          </>
+        )}
+      </QRContainer>
+    </Container>
   );
 };
 

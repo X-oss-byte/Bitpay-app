@@ -8,7 +8,6 @@ import React, {
 } from 'react';
 import styled from 'styled-components/native';
 import {
-  ActiveOpacity,
   CtaContainer,
   ScreenGutter,
 } from '../../../components/styled/Containers';
@@ -25,7 +24,6 @@ import {
   ImageRequireSource,
   ImageSourcePropType,
   ListRenderItem,
-  TouchableOpacity,
 } from 'react-native';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {useNavigation} from '@react-navigation/native';
@@ -52,7 +50,6 @@ import CurrencySelectionSearchInput from '../components/CurrencySelectionSearchI
 import CurrencySelectionNoResults from '../components/CurrencySelectionNoResults';
 import {orderBy} from 'lodash';
 import {LightBlack, White} from '../../../styles/colors';
-import Back from '../../../components/back/Back';
 
 type CurrencySelectionScreenProps = StackScreenProps<
   WalletStackParamList,
@@ -536,16 +533,6 @@ const CurrencySelection: React.FC<CurrencySelectionScreenProps> = ({route}) => {
         <HeaderTitle>{headerTitle || t('Select Currencies')}</HeaderTitle>
       ),
       headerTitleAlign: 'center',
-      headerLeft: () => (
-        <TouchableOpacity
-          style={{marginLeft: 10}}
-          activeOpacity={ActiveOpacity}
-          onPressIn={() => {
-            navigation.goBack();
-          }}>
-          <Back opacity={1} />
-        </TouchableOpacity>
-      ),
     });
   }, [navigation, t, context, headerTitle]);
 

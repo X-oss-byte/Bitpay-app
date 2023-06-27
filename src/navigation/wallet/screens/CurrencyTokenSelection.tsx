@@ -1,5 +1,4 @@
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
-import {StackScreenProps} from '@react-navigation/stack';
 import React, {
   useCallback,
   useLayoutEffect,
@@ -8,7 +7,7 @@ import React, {
   useState,
 } from 'react';
 import {useTranslation} from 'react-i18next';
-import {StyleSheet, FlatList, TouchableOpacity} from 'react-native';
+import {StyleSheet, FlatList} from 'react-native';
 import styled, {useTheme} from 'styled-components/native';
 import Button from '../../../components/button/Button';
 import {
@@ -19,7 +18,6 @@ import {
   TokensHeading,
 } from '../../../components/list/CurrencySelectionRow';
 import {
-  ActiveOpacity,
   CtaContainer,
   ScreenGutter,
 } from '../../../components/styled/Containers';
@@ -36,7 +34,6 @@ import {
   CurrencySelectionMode,
   SearchContainer,
 } from './CurrencySelection';
-import Back from '../../../components/back/Back';
 
 export type CurrencyTokenSelectionScreenParamList = {
   key?: Key;
@@ -57,6 +54,7 @@ const SearchContainerLinkRow = styled.View`
 
 const ListContainer = styled.View`
   flex-shrink: 1;
+  margin-left: ${ScreenGutter};
   padding-bottom: ${ScreenGutter};
 `;
 
@@ -315,16 +313,6 @@ const CurrencyTokenSelectionScreen = () => {
             chain: t(chain.currencyName),
           })}
         </HeaderTitle>
-      ),
-      headerLeft: () => (
-        <TouchableOpacity
-          style={{marginLeft: 10}}
-          activeOpacity={ActiveOpacity}
-          onPressIn={() => {
-            navigation.goBack();
-          }}>
-          <Back opacity={1} />
-        </TouchableOpacity>
       ),
     });
   }, [navigation, t, chain.currencyName]);

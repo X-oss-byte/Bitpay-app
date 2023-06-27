@@ -74,17 +74,16 @@ const InputContainer = styled.View<{hideInput?: boolean}>`
 `;
 
 const ActionContainer = styled.View`
-  margin-top: 30px;
+  margin: 30px 0;
 `;
 
 const Container = styled.SafeAreaView`
   flex: 1;
 `;
 
-const ContainerScroll = styled.View`
-  width: 100%;
-  height: 100%;
-  padding: 20px ${ScreenGutter};
+const ContainerScroll = styled.ScrollView`
+  padding: 0 8px;
+  margin-left: ${ScreenGutter};
 `;
 
 const AddressBadge = styled.View`

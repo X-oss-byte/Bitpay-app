@@ -29,6 +29,7 @@ const Refresh = styled.TouchableOpacity<{isBch?: boolean}>`
   align-items: center;
   justify-content: center;
   margin-top: ${({isBch}) => (isBch ? '10px' : '0')};
+  cursor: pointer;
 `;
 
 const BchHeaderAction = styled.TouchableOpacity<{isActive: boolean}>`

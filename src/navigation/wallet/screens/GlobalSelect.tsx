@@ -79,8 +79,8 @@ export const WalletSelectMenuHeaderIconContainer = styled.View`
   padding-right: 0px;
 `;
 
-export const WalletSelectMenuBodyContainer = styled.View`
-  padding-left: ${ScreenGutter};
+export const WalletSelectMenuBodyContainer = styled.ScrollView`
+  margin-left: ${ScreenGutter};
 `;
 
 const NoWalletsMsg = styled(BaseText)`
@@ -377,6 +377,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
           params: {wallet},
         });
       } else {
+        setWalletSelectModalVisible(false);
         setReceiveWallet(wallet);
         setShowReceiveAddressBottomModal(true);
       }
@@ -540,6 +541,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
       <SheetModal
         placement={'bottom'}
         isVisible={walletSelectModalVisible}
+        useMaxHeight={'70%'}
         onBackdropPress={() => setWalletSelectModalVisible(false)}>
         <WalletSelectMenuContainer>
           <WalletSelectMenuBodyContainer>
@@ -549,14 +551,6 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
               onPress={onWalletSelect}
             />
           </WalletSelectMenuBodyContainer>
-          {/*Nested receive modal*/}
-          {receiveWallet && (
-            <ReceiveAddress
-              isVisible={showReceiveAddressBottomModal}
-              closeModal={closeModal}
-              wallet={receiveWallet}
-            />
-          )}
         </WalletSelectMenuContainer>
       </SheetModal>
       {receiveWallet && !walletSelectModalVisible && (

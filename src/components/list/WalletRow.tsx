@@ -14,7 +14,6 @@ import {Network} from '../../constants';
 import {TransactionProposal} from '../../store/wallet/wallet.models';
 import NestedArrowIcon from '../nested-arrow/NestedArrow';
 import {getProtocolName} from '../../utils/helper-methods';
-import {Platform} from 'react-native';
 
 const BadgeContainer = styled.View`
   margin-left: 3px;

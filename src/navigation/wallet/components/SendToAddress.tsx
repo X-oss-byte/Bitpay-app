@@ -265,32 +265,6 @@ const SendToAddress = () => {
               onSearchInputChange(text);
             }}
           />
-          <TouchableOpacity
-            activeOpacity={ActiveOpacity}
-            onPress={() => {
-              navigation.navigate('Scan', {
-                screen: 'Root',
-                params: {
-                  onScanComplete: data => {
-                    try {
-                      if (data) {
-                        validateData(data);
-                      }
-                    } catch (err) {
-                      const e =
-                        err instanceof Error
-                          ? err.message
-                          : JSON.stringify(err);
-                      dispatch(
-                        LogActions.error('[OpenScanner SendToAddress] ', e),
-                      );
-                    }
-                  },
-                },
-              });
-            }}>
-            <ScanSvg />
-          </TouchableOpacity>
         </SearchContainer>
         {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
 

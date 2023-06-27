@@ -19,7 +19,7 @@ import {BaseText} from './Text';
 export const ScreenGutter = '15px';
 export const ActiveOpacity = 0.75;
 // Nav
-export const HeaderRightContainer = styled.View`
+export const HeaderRightContainer = styled.Pressable`
   height: 40px;
   margin-right: 10px;
   cursor: pointer;
@@ -137,7 +137,7 @@ export interface SheetParams {
 }
 
 export const SheetContainer = styled.View<SheetParams>`
-  padding: 15px 30px;
+  padding: 15px 20px;
   border-top-color: ${({theme: {dark}}) => (dark ? LightBlack : Slate10)};
   border-top-width: 1px;
   background-color: ${({theme}) => (theme.dark ? OledBlack : White)};
@@ -387,7 +387,7 @@ export const NoResultsDescription = styled(BaseText)`
   font-size: 16px;
 `;
 
-export const ProposalBadgeContainer = styled.TouchableOpacity`
+export const ProposalBadgeContainer = styled.Pressable`
   background: ${Action};
   border-radius: 10px;
   height: 30px;
@@ -395,4 +395,5 @@ export const ProposalBadgeContainer = styled.TouchableOpacity`
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
 `;

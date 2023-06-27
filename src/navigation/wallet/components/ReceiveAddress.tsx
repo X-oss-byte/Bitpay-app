@@ -57,7 +57,7 @@ import {
 export const BchAddressTypes = ['Cash Address', 'Legacy'];
 
 const ReceiveAddressContainerScroll = styled.ScrollView`
-  padding: 0px 8px;
+  padding: 0 8px;
   margin-left: ${ScreenGutter};
 `;
 
@@ -222,6 +222,7 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
     const prefix = 'Could not create address';
 
     try {
+      setLoading(true);
       const walletAddress = (await dispatch<any>(
         createWalletAddress({wallet, newAddress}),
       )) as string;
@@ -238,6 +239,7 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
         setAddress(walletAddress);
       }
     } catch (createAddressErr: any) {
+      setLoading(false);
       switch (createAddressErr?.type) {
         case 'INVALID_ADDRESS_GENERATED':
           logger.error(createAddressErr.error);
@@ -333,7 +335,7 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
             />
           ) : null}
 
-          {address ? (
+          {address && !loading ? (
             <>
               <CopyToClipboard
                 onPress={copyToClipboard}

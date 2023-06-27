@@ -140,7 +140,8 @@ export const Exp = (props: ExponentProps) => {
 
 // Nav
 /**
- * Intended to be used with translucent StatusBar (Android) when no header is desired but still want to clear the StatusBar height.
+ * Intended to be used with translucent StatusBar (Android) when no header is desired but still want to clear the
+ * StatusBar height.
  */
 export const ZeroHeightHeader = styled.View`
   background-color: ${({theme}) => theme.colors.background};
@@ -188,7 +189,8 @@ export const Badge = styled(BaseText)`
   text-align: center;
   padding: 1px 2px;
   border-radius: 2.4px;
-  border: 1px solid;
+  border-width: 1px;
+  border-style: solid;
   border-color: ${({theme: {dark}}) => (dark ? LuckySevens : Slate30)};
   color: ${({theme: {dark}}) => (dark ? Slate30 : SlateDark)};
 `;

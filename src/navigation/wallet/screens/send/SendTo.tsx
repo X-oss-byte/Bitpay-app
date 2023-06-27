@@ -273,12 +273,12 @@ const SendTo = () => {
         assetOptions.length ? (
           <Settings
             onPress={() => {
-              setShowWalletOptions(true);
+              setShowWalletOptions(!showWalletOptions);
             }}
           />
         ) : null,
     });
-  });
+  }, [navigation, showWalletOptions]);
 
   const keyWallets: KeyWalletsRowProps<KeyWallet>[] = BuildKeyWalletRow(
     keys,
@@ -567,7 +567,7 @@ const SendTo = () => {
 
       <OptionsSheet
         isVisible={showWalletOptions}
-        closeModal={() => setShowWalletOptions(false)}
+        closeModal={() => setShowWalletOptions(!showWalletOptions)}
         options={assetOptions}
       />
     </SafeAreaView>

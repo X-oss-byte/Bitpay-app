@@ -37,12 +37,7 @@ import {startUpdateAllWalletStatusForKey} from '../../../store/wallet/effects/st
 import {updatePortfolioBalance} from '../../../store/wallet/wallet.actions';
 import {Wallet, Status} from '../../../store/wallet/wallet.models';
 import {Rates} from '../../../store/rate/rate.models';
-import {
-  LightBlack,
-  NeutralSlate,
-  SlateDark,
-  White,
-} from '../../../styles/colors';
+import {LightBlack, SlateDark, White} from '../../../styles/colors';
 import {
   convertToFiat,
   formatFiatAmount,
@@ -136,7 +131,6 @@ export const KeyDropdownOptionsContainer = styled.ScrollView`
 `;
 
 const CogIconContainer = styled.TouchableOpacity`
-  background-color: ${({theme: {dark}}) => (dark ? LightBlack : NeutralSlate)};
   border-radius: 50px;
   justify-content: center;
   align-items: center;
