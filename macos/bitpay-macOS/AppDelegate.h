@@ -8,4 +8,9 @@
 
 @property (nonatomic, strong) NSWindow *window;
 
+-(IBAction)openHelp:(id)senderId;
+-(IBAction)openReportIssue:(id)senderId;
+-(IBAction)openPrivacyPolicy:(id)senderId;
+-(IBAction)openTOU:(id)senderId;
+
 @end

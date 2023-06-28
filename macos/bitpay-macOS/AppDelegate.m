@@ -62,4 +62,28 @@
   return [[RCTBundleURLProvider sharedSettings] jsBundleURLForBundleRoot:@"index"]; // .jsbundle;
 }
 
+- (IBAction)openHelp:(id)senderId
+{
+  NSURL *url = [NSURL URLWithString:@"https://support.bitpay.com/hc/en-us"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (IBAction)openReportIssue:(id)senderId
+{
+  NSURL *url = [NSURL URLWithString:@"https://bitpay.com/request-help/wizard?category=wallet"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (IBAction)openPrivacyPolicy:(id)senderId
+{
+  NSURL *url = [NSURL URLWithString:@"https://bitpay.com/about/privacy"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
+- (IBAction)openTOU:(id)senderId
+{
+  NSURL *url = [NSURL URLWithString:@"https://bitpay.com/legal/terms-of-use/#wallet-terms-of-use"];
+  [[NSWorkspace sharedWorkspace] openURL:url];
+}
+
 @end
