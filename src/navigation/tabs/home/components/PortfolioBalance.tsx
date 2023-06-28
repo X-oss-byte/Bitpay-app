@@ -24,12 +24,11 @@ const PortfolioContainer = styled.View`
 
 const PortfolioBalanceHeader = styled.View`
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   align-items: center;
 `;
 
 const PortfolioBalanceTitle = styled(BaseText)`
-  margin-right: 5px;
   font-size: 14px;
   color: ${({theme: {dark}}) => (dark ? White : SlateDark)};
 `;

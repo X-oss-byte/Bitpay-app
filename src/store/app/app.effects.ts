@@ -33,7 +33,6 @@ import {setEmailNotificationsAccepted, setUserFeedback} from './app.actions';
 import moment from 'moment';
 import {EmitterSubscription} from 'react-native';
 import {DeviceEmitterEvents} from '../../constants/device-emitter-events';
-import {walletConnectInit} from '../wallet-connect/wallet-connect.effects';
 import {walletConnectV2Init} from '../wallet-connect-v2/wallet-connect-v2.effects';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {
@@ -57,9 +56,7 @@ export const startAppInit = (): Effect => async (dispatch, getState) => {
 
     await dispatch(startWalletStoreInit());
 
-    // TODO: enable WC after testing
-    // dispatch(walletConnectInit());
-    // dispatch(walletConnectV2Init());
+    dispatch(walletConnectV2Init());
 
     dispatch(AppActions.successAppInit());
     DeviceEventEmitter.emit(DeviceEmitterEvents.APP_DATA_INITIALIZED);

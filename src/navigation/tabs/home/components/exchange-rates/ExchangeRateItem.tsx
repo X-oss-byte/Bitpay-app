@@ -24,7 +24,7 @@ import {
 import {View} from 'react-native';
 import {useAppSelector} from '../../../../../utils/hooks';
 
-const RowContainer = styled.TouchableOpacity`
+const RowContainer = styled.View`
   flex-direction: row;
   align-items: center;
   margin: 10px 0;

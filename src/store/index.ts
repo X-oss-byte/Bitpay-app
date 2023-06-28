@@ -9,7 +9,6 @@ import {Selector} from 'reselect';
 import {
   bindWalletClient,
   bindWalletKeys,
-  transformCircular,
   transformContacts,
 } from './transforms/transforms';
 
@@ -57,12 +56,6 @@ import {
   WalletConnectV2State,
 } from './wallet-connect-v2/wallet-connect-v2.reducer';
 import {WalletConnectV2ActionType} from './wallet-connect-v2/wallet-connect-v2.types';
-import {
-  walletConnectReducer,
-  walletConnectReduxPersistBlackList,
-  WalletConnectState,
-} from './wallet-connect/wallet-connect.reducer';
-import {WalletConnectActionType} from './wallet-connect/wallet-connect.types';
 
 const basePersistConfig = {
   storage: AsyncStorage,
@@ -77,7 +70,6 @@ const reducerPersistBlackLists = {
   WALLET: walletReduxPersistBlackList,
   RATE: rateReduxPersistBlackList,
   CONTACT: ContactReduxPersistBlackList,
-  WALLET_CONNECT: walletConnectReduxPersistBlackList,
   WALLET_CONNECT_V2: walletConnectV2ReduxPersistBlackList,
 };
 
@@ -145,15 +137,6 @@ const reducers = {
       blacklist: ContactReduxPersistBlackList,
     },
     contactReducer,
-  ),
-  WALLET_CONNECT: persistReducer<WalletConnectState, WalletConnectActionType>(
-    {
-      storage: AsyncStorage,
-      key: 'WALLET_CONNECT',
-      transforms: [transformCircular],
-      blacklist: walletConnectReduxPersistBlackList,
-    },
-    walletConnectReducer,
   ),
   WALLET_CONNECT_V2: persistReducer<
     WalletConnectV2State,

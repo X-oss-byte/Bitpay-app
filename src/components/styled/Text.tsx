@@ -200,6 +200,7 @@ export const ProposalBadge = styled(BaseText)`
   font-size: 14px;
   font-style: normal;
   font-weight: 400;
+  text-align: center;
 `;
 
 export const ImportTitle = styled(BaseText)`

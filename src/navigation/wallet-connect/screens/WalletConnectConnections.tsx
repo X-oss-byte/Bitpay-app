@@ -4,7 +4,6 @@ import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import styled from 'styled-components/native';
 import {BaseText, H5} from '../../../components/styled/Text';
 import {SlateDark, White} from '../../../styles/colors';
-import GhostSvg from '../../../../assets/img/ghost-straight-face.svg';
 import AddConnection from '../../../components/add/Add';
 import {HeaderTitle} from '../styled/WalletConnectText';
 import {
@@ -14,7 +13,7 @@ import {
   ItemNoteTouchableContainer,
   ItemTitleContainer,
 } from '../styled/WalletConnectContainers';
-import {Platform, ScrollView, View} from 'react-native';
+import {Platform, View} from 'react-native';
 import Connections from '../components/Connections';
 import {useTranslation} from 'react-i18next';
 import {Image} from 'react-native';
@@ -31,23 +30,13 @@ import {CustomErrorMessage} from '../../wallet/components/ErrorMessages';
 import {BWCErrorMessage} from '../../../constants/BWCError';
 import {
   walletConnectV2OnDeleteSession,
-  walletConnectV2OnSessionProposal,
   walletConnectV2OnUpdateSession,
 } from '../../../store/wallet-connect-v2/wallet-connect-v2.effects';
-import {isValidWalletConnectUri} from '../../../store/wallet/utils/validations';
-import {parseUri} from '@walletconnect/utils';
-import {
-  IWCConnector,
-  IWCCustomData,
-} from '../../../store/wallet-connect/wallet-connect.models';
-import {findWalletById} from '../../../store/wallet/utils/wallet';
-import WCV1WalletSelector from '../components/WCV1WalletSelector';
-import {walletConnectKillSession} from '../../../store/wallet-connect/wallet-connect.effects';
 import WCV2WalletSelector from '../components/WCV2WalletSelector';
 import {WCV2SessionType} from '../../../store/wallet-connect-v2/wallet-connect-v2.models';
 import PlusIcon from '../../../components/plus/Plus';
-import {AddButton} from '../../wallet/screens/CreateMultisig';
 import {ScreenGutter} from '../../../components/styled/Containers';
+import { AddButton } from '../../wallet/screens/CreateMultisig';
 
 const ConnectionsContainer = styled.View`
   flex: 1;
@@ -71,25 +60,10 @@ const AddConnectionContainer = styled.TouchableOpacity`
   margin-right: 15px;
 `;
 
-const EmptyListContainer = styled.View`
-  justify-content: space-between;
-  align-items: center;
-  margin-top: 50px;
-`;
 
 const WalletConnectConnections = () => {
   const {t} = useTranslation();
   const navigation = useNavigation();
-  // version 1
-  const connectors: IWCConnector[] = useAppSelector(
-    ({WALLET_CONNECT}) => WALLET_CONNECT.connectors,
-  );
-  const [walletSelectorModalVisible, setWalletSelectorModalVisible] =
-    useState(false);
-  const showWalletSelector = () => setWalletSelectorModalVisible(true);
-  const hideWalletSelector = () => setWalletSelectorModalVisible(false);
-  const [dappUri, setDappUri] = useState<string>();
-
   // version 2
   const sessions: WCV2SessionType[] = useAppSelector(
     ({WALLET_CONNECT_V2}) => WALLET_CONNECT_V2.sessions,
@@ -108,12 +82,10 @@ const WalletConnectConnections = () => {
   const ConnectionItem = ({
     peerName,
     peerIcon,
-    peerId,
     session,
   }: {
     peerName: string;
     peerIcon: string;
-    peerId?: string;
     session?: WCV2SessionType;
   }) => {
     return (
@@ -161,8 +133,6 @@ const WalletConnectConnections = () => {
                                 pairingTopic,
                               ),
                             );
-                          } else {
-                            await dispatch(walletConnectKillSession(peerId!));
                           }
                         } catch (e) {
                           await showErrorMessage(
@@ -200,44 +170,8 @@ const WalletConnectConnections = () => {
             onPress={() => {
               navigation.navigate('WalletConnect', {
                 screen: 'Root',
-                params: {uri: undefined},
+                params: {},
               });
-
-              // navigation.navigate('Scan', {
-              //   screen: 'Root',
-              //   params: {
-              //     onScanComplete: async data => {
-              //       try {
-              //         if (isValidWalletConnectUri(data)) {
-              //           const {version} = parseUri(data);
-              //           if (version === 1) {
-              //             await sleep(500);
-              //             setDappUri(data);
-              //             showWalletSelector();
-              //           } else {
-              //             // temporarily disabled
-              //             const errMsg = t(
-              //               'Connection cannot be established. WalletConnect version 2 is still under development.',
-              //             );
-              //             throw new Error(errMsg);
-              //           }
-              //         }
-              //       } catch (e: any) {
-              //         setDappUri(undefined);
-              //         setDappProposal(undefined);
-              //         setSessionToUpdate(undefined);
-              //         dispatch(dismissOnGoingProcessModal());
-              //         await sleep(500);
-              //         await showErrorMessage(
-              //           CustomErrorMessage({
-              //             errMsg: BWCErrorMessage(e),
-              //             title: t('Uh oh, something went wrong'),
-              //           }),
-              //         );
-              //       }
-              //     },
-              //   },
-              // });
             }}>
             <AddConnection opacity={1} />
           </AddConnectionContainer>
@@ -253,12 +187,6 @@ const WalletConnectConnections = () => {
     },
     [dispatch],
   );
-
-  const getWallet = (customData?: IWCCustomData) => {
-    return customData && allKeys[customData.keyId]
-      ? findWalletById(allKeys[customData.keyId].wallets, customData.walletId)
-      : undefined;
-  };
 
   return (
     <ConnectionsContainer>
@@ -292,37 +220,6 @@ const WalletConnectConnections = () => {
               );
             })
           : null}
-
-        {connectors.length
-          ? connectors.map((_connector, index: number) => {
-              const {connector, customData} = _connector;
-              const {peerMeta, peerId} = connector;
-              const {name, icons} = peerMeta || {};
-              return (
-                <View style={{marginVertical: 15}} key={index.toString()}>
-                  {name && icons ? (
-                    <ConnectionItem
-                      peerIcon={icons[0]}
-                      peerName={name}
-                      peerId={peerId}
-                    />
-                  ) : null}
-                  <Connections
-                    wallet={getWallet(customData)}
-                    key={index.toString()}
-                    peerId={peerId}
-                  />
-                </View>
-              );
-            })
-          : null}
-
-        {!sessions.length && !connectors.length ? (
-          <EmptyListContainer>
-            <H5>{t("It's a ghost town in here")}</H5>
-            <GhostSvg style={{marginTop: 20}} />
-          </EmptyListContainer>
-        ) : null}
 
         {dappProposal || sessionToUpdate ? (
           <WCV2WalletSelector
@@ -363,14 +260,6 @@ const WalletConnectConnections = () => {
                 }
               }
             }}
-          />
-        ) : null}
-
-        {dappUri ? (
-          <WCV1WalletSelector
-            isVisible={walletSelectorModalVisible}
-            dappUri={dappUri}
-            onBackdropPress={hideWalletSelector}
           />
         ) : null}
       </ConnectiosScrollContainer>

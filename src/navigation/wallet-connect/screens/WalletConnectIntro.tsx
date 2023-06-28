@@ -1,9 +1,8 @@
-import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
+import {RouteProp, useRoute} from '@react-navigation/native';
 import React, {useCallback, useEffect, useState} from 'react';
 import {TouchableOpacity} from 'react-native';
 import {useAppDispatch} from '../../../utils/hooks';
 import styled from 'styled-components/native';
-import Button from '../../../components/button/Button';
 import {Link, Paragraph} from '../../../components/styled/Text';
 import {
   ScrollView,
@@ -24,7 +23,6 @@ import {CustomErrorMessage} from '../../wallet/components/ErrorMessages';
 import {BWCErrorMessage} from '../../../constants/BWCError';
 import {isValidWalletConnectUri} from '../../../store/wallet/utils/validations';
 import {parseUri} from '@walletconnect/utils';
-import WCV1WalletSelector from '../components/WCV1WalletSelector';
 import WCV2WalletSelector from '../components/WCV2WalletSelector';
 import {SignClientTypes} from '@walletconnect/types';
 import {Controller, useForm} from 'react-hook-form';
@@ -34,7 +32,6 @@ import BoxInput from '../../../components/form/BoxInput';
 import {walletConnectV2OnSessionProposal} from '../../../store/wallet-connect-v2/wallet-connect-v2.effects';
 
 export type WalletConnectIntroParamList = {
-  uri?: string;
   proposal?: SignClientTypes.EventArguments['session_proposal'];
 };
 
@@ -52,23 +49,15 @@ const schema = yup.object().shape({
 const WalletConnectIntro = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const navigation = useNavigation();
   const {
     control,
-    handleSubmit,
     formState: {errors},
   } = useForm<{uri: string}>({resolver: yupResolver(schema)});
 
   const route = useRoute<RouteProp<{params: WalletConnectIntroParamList}>>();
-  // version 1
-  const {uri, proposal} = route.params || {};
-  const [dappUri, setDappUri] = useState<string>();
-  const [walletSelectorModalVisible, setWalletSelectorModalVisible] =
-    useState(false);
-  const showWalletSelector = () => setWalletSelectorModalVisible(true);
-  const hideWalletSelector = () => setWalletSelectorModalVisible(false);
-
+  
   // version 2
+  const {proposal} = route.params || {};
   const [dappProposal, setDappProposal] = useState<any>();
   const [walletSelectorV2ModalVisible, setWalletSelectorV2ModalVisible] =
     useState(false);
@@ -82,13 +71,6 @@ const WalletConnectIntro = () => {
     },
     [dispatch],
   );
-
-  useEffect(() => {
-    if (uri) {
-      setDappUri(uri);
-      showWalletSelector();
-    }
-  }, [uri]);
 
   useEffect(() => {
     if (proposal) {
@@ -127,9 +109,10 @@ const WalletConnectIntro = () => {
                     if (isValidWalletConnectUri(data)) {
                       const {version} = parseUri(data);
                       if (version === 1) {
-                        await sleep(500);
-                        setDappUri(data);
-                        showWalletSelector();
+                        const errMsg = t(
+                          'The uri corresponds to WalletConnect v1.0 which has now been shut down on June 28.',
+                        );
+                        throw new Error(errMsg);
                       } else {
                         dispatch(startOnGoingProcessModal('LOADING'));
                         const _proposal = (await dispatch<any>(
@@ -142,7 +125,6 @@ const WalletConnectIntro = () => {
                       }
                     }
                   } catch (e: any) {
-                    setDappUri(undefined);
                     setDappProposal(undefined);
                     dispatch(dismissOnGoingProcessModal());
                     await sleep(500);
@@ -168,13 +150,6 @@ const WalletConnectIntro = () => {
           isVisible={walletSelectorV2ModalVisible}
           proposal={dappProposal}
           onBackdropPress={hideWalletSelectorV2}
-        />
-      ) : null}
-      {dappUri ? (
-        <WCV1WalletSelector
-          isVisible={walletSelectorModalVisible}
-          dappUri={dappUri}
-          onBackdropPress={hideWalletSelector}
         />
       ) : null}
     </WalletConnectContainer>
