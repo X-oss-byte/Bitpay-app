@@ -101,6 +101,7 @@ const ScrollView = styled.ScrollView`
 `;
 
 const HeaderSearchContainer = styled.View`
+  margin: 10px 0;
   padding: ${ScreenGutter};
 `;
 

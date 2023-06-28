@@ -1,13 +1,15 @@
-import React, {useLayoutEffect, useState} from 'react';
-import styled from 'styled-components/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
-import {ScreenOptions} from '../../../styles/tabNavigator';
-import {H5, H7, HeaderTitle} from '../../../components/styled/Text';
+import React, {useCallback, useLayoutEffect, useMemo, useState} from 'react';
+import styled, {useTheme} from 'styled-components/native';
+import {
+  BaseText,
+  H5,
+  H7,
+  HeaderTitle,
+  SubText,
+} from '../../../components/styled/Text';
 import {RouteProp, useNavigation, useRoute} from '@react-navigation/native';
 import {useTranslation} from 'react-i18next';
 import {WalletStackParamList} from '../WalletStack';
-import SendToAddress from '../components/SendToAddress';
-import SendToContact from '../components/SendToContact';
 import {
   Recipient,
   TransactionOptionsContext,
@@ -16,11 +18,14 @@ import {
 } from '../../../store/wallet/wallet.models';
 import {CurrencyImage} from '../../../components/currency-image/CurrencyImage';
 import {
+  CtaContainer as _CtaContainer,
   ActiveOpacity,
   Hr,
   ScreenGutter,
+  SearchContainer,
+  SearchInput,
 } from '../../../components/styled/Containers';
-import {TouchableOpacity} from 'react-native';
+import {FlatList, TouchableOpacity, View} from 'react-native';
 import WalletIcons from '../components/WalletIcons';
 import _ from 'lodash';
 import AmountModal from '../../../components/amount/AmountModal';
@@ -33,10 +38,62 @@ import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
 } from '../../../store/app/app.actions';
-import {useAppDispatch} from '../../../utils/hooks';
+import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import Back from '../../../components/back/Back';
 import Button from '../../../components/button/Button';
+import KeyWalletsRow, {
+  KeyWallet,
+  KeyWalletsRowProps,
+} from '../../../components/list/KeyWalletsRow';
+import debounce from 'lodash.debounce';
+import {
+  CheckIfLegacyBCH,
+  ValidateURI,
+} from '../../../store/wallet/utils/validations';
+import {
+  ExtractBitPayUriAddress,
+  ExtractUriAmount,
+} from '../../../store/wallet/utils/decode-uri';
+import {Effect, RootState} from '../../../store';
+import {
+  createWalletAddress,
+  GetCoinAndNetwork,
+  TranslateToBchCashAddress,
+} from '../../../store/wallet/effects/address/address';
+import {APP_NAME_UPPERCASE} from '../../../constants/config';
+import {BchLegacyAddressInfo, Mismatch} from '../components/ErrorMessages';
+import {Caution, NeutralSlate, Slate30} from '../../../styles/colors';
+import {
+  BuildKeyWalletRow,
+  ContactTitle,
+  ContactTitleContainer,
+} from './send/SendTo';
+import {LogActions} from '../../../store/log';
+import ContactsSvg from '../../../../assets/img/tab-icons/contacts.svg';
+import ContactRow from '../../../components/list/ContactRow';
+
+const ValidDataTypes: string[] = [
+  'BitcoinAddress',
+  'BitcoinCashAddress',
+  'DogecoinAddress',
+  'LitecoinAddress',
+  'BitcoinUri',
+  'BitcoinCashUri',
+  'DogecoinUri',
+  'LitecoinUri',
+];
+
+const CtaContainer = styled(_CtaContainer)`
+  padding: 10px 16px;
+`;
+
+const ErrorText = styled(BaseText)`
+  color: ${Caution};
+  font-size: 12px;
+  font-weight: 500;
+  padding: 5px 0 0 0;
+`;
 
 const CloseButton = styled.Pressable`
   margin-left: ${ScreenGutter};
@@ -48,6 +105,18 @@ export type SendToOptionsParamList = {
   wallet: Wallet;
   context: string;
 };
+
+const ScrollViewContainer = styled.ScrollView`
+  margin-left: ${ScreenGutter};
+`;
+
+const RecipientListContainer = styled.View`
+  margin-top: 10px;
+  margin-bottom: 25px;
+  padding: 0 ${ScreenGutter};
+  max-height: 150px;
+  min-height: 35px;
+`;
 
 export const RecipientRowContainer = styled.View`
   align-items: center;
@@ -75,6 +144,11 @@ interface RecipientListProps {
   setAmount: () => void;
   context: string;
 }
+
+const SendToAddressContainer = styled.View`
+  margin-top: 20px;
+  padding: 0 15px;
+`;
 
 export const RecipientList: React.FC<RecipientListProps> = ({
   recipient,
@@ -167,10 +241,14 @@ export const SendToOptionsContext =
 const SendToOptions = () => {
   const {t} = useTranslation();
   const dispatch = useAppDispatch();
-  const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
+  const theme = useTheme();
+  const placeHolderTextColor = theme.dark ? NeutralSlate : Slate30;
   const {params} = useRoute<RouteProp<WalletStackParamList, 'SendToOptions'>>();
-  const {wallet} = params;
+  const {wallet, context} = params;
+  const {currencyAbbreviation, id, network, chain} = wallet;
+  const [searchInput, setSearchInput] = useState('');
+  const [errorMessage, setErrorMessage] = useState('');
   const [recipientList, setRecipientList] = useState<Recipient[]>([]);
   const [recipientAmount, setRecipientAmount] = useState<{
     showModal: boolean;
@@ -178,6 +256,31 @@ const SendToOptions = () => {
     index?: number;
     updateRecipient?: boolean;
   }>({showModal: false});
+  const allContacts = useAppSelector(({CONTACT}: RootState) => CONTACT.list);
+  const {defaultAltCurrency, hideAllBalances} = useAppSelector(({APP}) => APP);
+  const {keys} = useAppSelector(({WALLET}: RootState) => WALLET);
+  const {rates} = useAppSelector(({RATE}) => RATE);
+  const keyWallets: KeyWalletsRowProps<KeyWallet>[] = BuildKeyWalletRow(
+    keys,
+    id,
+    currencyAbbreviation,
+    chain,
+    network,
+    defaultAltCurrency.isoCode,
+    searchInput,
+    rates,
+    dispatch,
+  );
+
+  const contacts = useMemo(() => {
+    return allContacts.filter(
+      contact =>
+        contact.coin === currencyAbbreviation.toLowerCase() &&
+        contact.network === network &&
+        (contact.name.toLowerCase().includes(searchInput.toLowerCase()) ||
+          contact.email?.toLowerCase().includes(searchInput.toLowerCase())),
+    );
+  }, [allContacts, searchInput, network, currencyAbbreviation]);
 
   const setRecipientListContext = (
     recipient: Recipient,
@@ -289,6 +392,140 @@ const SendToOptions = () => {
     });
   };
 
+  const BchLegacyAddressInfoDismiss = (searchText: string) => {
+    try {
+      const cashAddr = TranslateToBchCashAddress(
+        searchText.replace(/^(bitcoincash:|bchtest:)/, ''),
+      );
+      setSearchInput(cashAddr);
+      validateData(cashAddr);
+    } catch (error) {
+      dispatch(showBottomNotificationModal(Mismatch(onErrorMessageDismiss)));
+    }
+  };
+
+  const onErrorMessageDismiss = () => {
+    setSearchInput('');
+  };
+
+  const checkCoinAndNetwork =
+    (data: any): Effect<boolean> =>
+    dispatch => {
+      const addrData = GetCoinAndNetwork(data, network, chain);
+      const isValid =
+        chain === addrData?.coin.toLowerCase() && addrData?.network === network;
+
+      if (isValid) {
+        return true;
+      } else {
+        // @ts-ignore
+        if (currencyAbbreviation === 'bch' && network === addrData?.network) {
+          const isLegacy = CheckIfLegacyBCH(data);
+          if (isLegacy) {
+            const appName = APP_NAME_UPPERCASE;
+
+            dispatch(
+              showBottomNotificationModal(
+                BchLegacyAddressInfo(appName, () => {
+                  BchLegacyAddressInfoDismiss(data);
+                }),
+              ),
+            );
+          } else {
+            dispatch(
+              showBottomNotificationModal(Mismatch(onErrorMessageDismiss)),
+            );
+          }
+        } else {
+          dispatch(
+            showBottomNotificationModal(Mismatch(onErrorMessageDismiss)),
+          );
+        }
+      }
+      return false;
+    };
+
+  const validateData = async (text: string) => {
+    const data = ValidateURI(text);
+    if (ValidDataTypes.includes(data?.type)) {
+      if (dispatch(checkCoinAndNetwork(text))) {
+        setErrorMessage('');
+        setSearchInput('');
+        const extractedAmount = ExtractUriAmount(data.data);
+        const addr = ExtractBitPayUriAddress(text);
+        context === 'selectInputs'
+          ? goToSelectInputsView({address: addr})
+          : addRecipient({
+              address: addr,
+              amount: extractedAmount ? Number(extractedAmount[1]) : undefined,
+            });
+      }
+    } else {
+      setErrorMessage(text.length > 15 ? 'Invalid Address' : '');
+    }
+  };
+
+  const addRecipient = (newRecipient: Recipient) => {
+    setRecipientAmountContext(newRecipient);
+  };
+
+  const onSearchInputChange = debounce((text: string) => {
+    validateData(text);
+  }, 300);
+
+  const onSendToWallet = async (selectedWallet: KeyWallet) => {
+    try {
+      const {
+        credentials,
+        id: walletId,
+        keyId,
+        walletName,
+        receiveAddress,
+      } = selectedWallet;
+
+      let address = receiveAddress;
+
+      if (!address) {
+        dispatch(startOnGoingProcessModal('GENERATING_ADDRESS'));
+        address = (await dispatch<any>(
+          createWalletAddress({wallet: selectedWallet, newAddress: false}),
+        )) as string;
+        dispatch(dismissOnGoingProcessModal());
+        await sleep(500);
+      }
+
+      const newRecipient = {
+        type: 'wallet',
+        name: walletName || credentials.walletName,
+        walletId,
+        keyId,
+        address,
+      };
+
+      context === 'selectInputs'
+        ? goToSelectInputsView(newRecipient)
+        : addRecipient(newRecipient);
+    } catch (err) {
+      const e = err instanceof Error ? err.message : JSON.stringify(err);
+      dispatch(LogActions.error('[SendToWallet] ', e));
+    }
+  };
+
+  const renderItem = useCallback(
+    ({item, index}) => {
+      return (
+        <RecipientList
+          recipient={item}
+          wallet={wallet}
+          deleteRecipient={() => setRecipientListContext(item, index, true)}
+          setAmount={() => setRecipientAmountContext(item, index, true)}
+          context={context}
+        />
+      );
+    },
+    [wallet, setRecipientListContext, setRecipientAmountContext],
+  );
+
   return (
     <SendToOptionsContext.Provider
       value={{
@@ -298,18 +535,98 @@ const SendToOptions = () => {
         goToConfirmView,
         goToSelectInputsView,
       }}>
-      <Tab.Navigator screenOptions={{...ScreenOptions(150)}}>
-        <Tab.Screen
-          name={t('Addresses')}
-          component={SendToAddress}
-          initialParams={params}
-        />
-        <Tab.Screen
-          name={t('Contacts')}
-          component={SendToContact}
-          initialParams={params}
-        />
-      </Tab.Navigator>
+      <RecipientListContainer>
+        <H5>
+          {recipientList?.length > 1
+            ? t('Recipients') + ` (${recipientList?.length})`
+            : t('Recipient')}
+        </H5>
+        {recipientList && recipientList.length ? (
+          <View>
+            <FlatList
+              data={recipientList}
+              keyExtractor={(_item, index) => index.toString()}
+              renderItem={({item, index}: {item: Recipient; index: number}) =>
+                renderItem({item, index})
+              }
+            />
+          </View>
+        ) : (
+          <>
+            <RecipientRowContainer>
+              <SubText>
+                {t(
+                  'To get started, you’ll need to enter a valid address or select an existing contact or wallet.',
+                )}
+              </SubText>
+            </RecipientRowContainer>
+            <Hr />
+          </>
+        )}
+      </RecipientListContainer>
+      <SendToAddressContainer>
+        <SearchContainer style={{marginBottom: 0}}>
+          <SearchInput
+            placeholder={t('Enter address or select wallet')}
+            placeholderTextColor={placeHolderTextColor}
+            value={searchInput}
+            onChangeText={(text: string) => {
+              setSearchInput(text);
+              onSearchInputChange(text);
+            }}
+          />
+        </SearchContainer>
+        {errorMessage ? <ErrorText>{errorMessage}</ErrorText> : null}
+      </SendToAddressContainer>
+      <ScrollViewContainer>
+        <View style={{marginTop: 10}}>
+          <KeyWalletsRow
+            keyWallets={keyWallets}
+            hideBalance={hideAllBalances}
+            onPress={(selectedWallet: KeyWallet) => {
+              onSendToWallet(selectedWallet);
+            }}
+          />
+          {contacts.length > 0 ? (
+            <ContactTitleContainer>
+              {ContactsSvg({})}
+              <ContactTitle>{'Contacts'}</ContactTitle>
+            </ContactTitleContainer>
+          ) : null}
+          {contacts.length > 0
+            ? contacts.map((item, index) => {
+                return (
+                  <View key={index}>
+                    <ContactRow
+                      contact={item}
+                      onPress={() => {
+                        context === 'selectInputs'
+                          ? goToSelectInputsView({...item, type: 'contact'})
+                          : setRecipientAmountContext({
+                              ...item,
+                              type: 'contact',
+                            });
+                      }}
+                    />
+                  </View>
+                );
+              })
+            : null}
+        </View>
+      </ScrollViewContainer>
+
+      {context !== 'selectInputs' ? (
+        <CtaContainer>
+          <Button
+            buttonStyle={'primary'}
+            onPress={() => {
+              goToConfirmView();
+            }}
+            disabled={!recipientList[0]}>
+            {t('Continue')}
+          </Button>
+        </CtaContainer>
+      ) : null}
 
       <AmountModal
         modalTitle={params.title}
