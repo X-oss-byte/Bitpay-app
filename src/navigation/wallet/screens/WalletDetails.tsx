@@ -13,13 +13,7 @@ import React, {
   useState,
 } from 'react';
 import {useTranslation} from 'react-i18next';
-import {
-  DeviceEventEmitter,
-  FlatList,
-  Linking,
-  RefreshControl,
-  SectionList,
-} from 'react-native';
+import {DeviceEventEmitter, FlatList, Linking, SectionList} from 'react-native';
 import styled from 'styled-components/native';
 import Settings from '../../../components/settings/Settings';
 import {
@@ -151,9 +145,10 @@ const TouchableRow = styled.TouchableOpacity`
   margin-top: 10px;
 `;
 
-const BalanceContainer = styled.View`
+const BalanceContainer = styled.Pressable`
   padding: 0 15px 40px;
   flex-direction: column;
+  cursor: pointer;
 `;
 
 const TransactionSectionHeaderContainer = styled.View`
@@ -271,7 +266,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
   const theme = useTheme();
   const {t} = useTranslation();
   const [showWalletOptions, setShowWalletOptions] = useState(false);
-  const [refreshing, setRefreshing] = useState(false);
   const {walletId, skipInitializeHistory} = route.params;
   const {keys} = useAppSelector(({WALLET}) => WALLET);
   const {rates} = useAppSelector(({RATE}) => RATE);
@@ -322,10 +316,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
     key.keyName,
   ]);
 
-  useEffect(() => {
-    setRefreshing(!!fullWalletObj.isRefreshing);
-  }, [fullWalletObj.isRefreshing]);
-
   const assetOptions: Array<Option> = _.compact([
     {
       img: <Icons.RequestAmount />,
@@ -369,25 +359,20 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
   ]);
 
   const onRefresh = async () => {
-    setRefreshing(true);
-    await sleep(1000);
-
     try {
-      dispatch(getPriceHistory(defaultAltCurrency.isoCode));
+      await dispatch(getPriceHistory(defaultAltCurrency.isoCode));
       await dispatch(startGetRates({force: true}));
       await Promise.all([
         await dispatch(
           startUpdateWalletStatus({key, wallet: fullWalletObj, force: true}),
         ),
         await loadHistory(true),
-        sleep(1000),
       ]);
       dispatch(updatePortfolioBalance());
       setNeedActionTxps(fullWalletObj.pendingTxps);
     } catch (err) {
       dispatch(showBottomNotificationModal(BalanceUpdateError()));
     }
-    setRefreshing(false);
   };
 
   const {
@@ -860,37 +845,29 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
   return (
     <WalletDetailsContainer>
       <SectionList
-        refreshControl={
-          <RefreshControl
-            tintColor={theme.dark ? White : SlateDark}
-            refreshing={refreshing}
-            onRefresh={onRefresh}
-          />
-        }
         ListHeaderComponent={() => {
           return (
             <>
               <HeaderContainer>
-                <BalanceContainer>
-                  <TouchableOpacity
-                    onLongPress={() => {
-                      dispatch(toggleHideAllBalances());
-                    }}>
-                    <Row>
-                      {!hideAllBalances ? (
-                        <Balance scale={shouldScale(cryptoBalance)}>
-                          {cryptoBalance} {currencyAbbreviation}
-                        </Balance>
-                      ) : (
-                        <H2>****</H2>
-                      )}
-                    </Row>
-                    <Row>
-                      {showFiatBalance && !hideAllBalances && (
-                        <Paragraph>{fiatBalance}</Paragraph>
-                      )}
-                    </Row>
-                  </TouchableOpacity>
+                <BalanceContainer
+                  onPress={onRefresh}
+                  onLongPress={() => {
+                    dispatch(toggleHideAllBalances());
+                  }}>
+                  <Row>
+                    {!hideAllBalances ? (
+                      <Balance scale={shouldScale(cryptoBalance)}>
+                        {cryptoBalance} {currencyAbbreviation}
+                      </Balance>
+                    ) : (
+                      <H2>****</H2>
+                    )}
+                  </Row>
+                  <Row>
+                    {showFiatBalance && !hideAllBalances && (
+                      <Paragraph>{fiatBalance}</Paragraph>
+                    )}
+                  </Row>
                   {!hideAllBalances && showBalanceDetailsButton() && (
                     <TouchableRow
                       onPress={() => setShowBalanceDetailsModal(true)}>

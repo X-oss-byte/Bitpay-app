@@ -11,7 +11,13 @@ import {
   useRoute,
   useTheme,
 } from '@react-navigation/native';
-import {FlatList, LogBox, RefreshControl, TouchableOpacity} from 'react-native';
+import {
+  DeviceEventEmitter,
+  FlatList,
+  LogBox,
+  RefreshControl,
+  TouchableOpacity,
+} from 'react-native';
 import styled from 'styled-components/native';
 import WalletRow, {WalletRowProps} from '../../../components/list/WalletRow';
 import {
@@ -68,6 +74,8 @@ import EncryptPasswordDarkModeImg from '../../../../assets/img/tinyicon-encrypt-
 import {useTranslation} from 'react-i18next';
 import {toFiat} from '../../../store/wallet/utils/wallet';
 import {each} from 'lodash';
+import debounce from 'lodash.debounce';
+import {DeviceEmitterEvents} from '../../../constants/device-emitter-events';
 
 LogBox.ignoreLogs([
   'Non-serializable values were found in the navigation state',
@@ -83,10 +91,11 @@ const OverviewContainer = styled.View`
   flex: 1;
 `;
 
-const BalanceContainer = styled.View`
+const BalanceContainer = styled.Pressable`
   height: 15%;
   margin-top: 20px;
   padding: 10px 15px;
+  cursor: pointer;
 `;
 
 const Balance = styled(BaseText)<{scale: boolean}>`
@@ -601,25 +610,32 @@ const KeyOverview = () => {
     [key, navigation, hideAllBalances],
   );
 
+  const updateBalanceDebounce = debounce(
+    () => {
+      DeviceEventEmitter.emit(DeviceEmitterEvents.WALLET_UPDATE_BALANCE, true);
+    },
+    10000,
+    {leading: true, trailing: false},
+  );
+
   return (
     <OverviewContainer>
-      <BalanceContainer>
-        <TouchableOpacity
-          onLongPress={() => {
-            dispatch(toggleHideAllBalances());
-          }}>
-          <Row>
-            {!hideAllBalances ? (
-              <Balance scale={shouldScale(totalBalance)}>
-                {formatFiatAmount(totalBalance, defaultAltCurrency.isoCode, {
-                  currencyDisplay: 'symbol',
-                })}
-              </Balance>
-            ) : (
-              <H2>****</H2>
-            )}
-          </Row>
-        </TouchableOpacity>
+      <BalanceContainer
+        onPress={updateBalanceDebounce}
+        onLongPress={() => {
+          dispatch(toggleHideAllBalances());
+        }}>
+        <Row>
+          {!hideAllBalances ? (
+            <Balance scale={shouldScale(totalBalance)}>
+              {formatFiatAmount(totalBalance, defaultAltCurrency.isoCode, {
+                currencyDisplay: 'symbol',
+              })}
+            </Balance>
+          ) : (
+            <H2>****</H2>
+          )}
+        </Row>
       </BalanceContainer>
 
       <Hr />
