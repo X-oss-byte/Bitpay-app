@@ -36,7 +36,7 @@
 		1B429C7284741DFD0AC3376C /* Pods-bitpay-macOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpay-macOS.release.xcconfig"; path = "Target Support Files/Pods-bitpay-macOS/Pods-bitpay-macOS.release.xcconfig"; sourceTree = "<group>"; };
 		2380D3A3A3AAF4A35DF7E760 /* Pods-bitpay-iOS.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-bitpay-iOS.release.xcconfig"; path = "Target Support Files/Pods-bitpay-iOS/Pods-bitpay-iOS.release.xcconfig"; sourceTree = "<group>"; };
 		38423A3E24576CBC00BC2EAC /* main.jsbundle */ = {isa = PBXFileReference; lastKnownFileType = text; path = main.jsbundle; sourceTree = "<group>"; };
-		514201492437B4B30078DB4F /* bitpay.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = bitpay.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		514201492437B4B30078DB4F /* BitPay Wallet.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = "BitPay Wallet.app"; sourceTree = BUILT_PRODUCTS_DIR; };
 		5142014B2437B4B30078DB4F /* AppDelegate.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = AppDelegate.h; sourceTree = "<group>"; };
 		5142014C2437B4B30078DB4F /* AppDelegate.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = AppDelegate.m; sourceTree = "<group>"; };
 		5142014E2437B4B30078DB4F /* ViewController.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = ViewController.h; sourceTree = "<group>"; };
@@ -160,7 +160,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07F961A680F5B00A75B9A /* bitpay.app */,
-				514201492437B4B30078DB4F /* bitpay.app */,
+				514201492437B4B30078DB4F /* BitPay Wallet.app */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -208,7 +208,7 @@
 			);
 			name = "bitpay-macOS";
 			productName = bitpay;
-			productReference = 514201492437B4B30078DB4F /* bitpay.app */;
+			productReference = 514201492437B4B30078DB4F /* BitPay Wallet.app */;
 			productType = "com.apple.product-type.application";
 		};
 /* End PBXNativeTarget section */
@@ -225,7 +225,8 @@
 					};
 					514201482437B4B30078DB4F = {
 						CreatedOnToolsVersion = 11.4;
-						ProvisioningStyle = Automatic;
+						DevelopmentTeam = 884JRH5R93;
+						ProvisioningStyle = Manual;
 					};
 				};
 			};
@@ -537,18 +538,27 @@
 			baseConfigurationReference = BFFEE8E63AC71838C13F989D /* Pods-bitpay-macOS.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "Mac Developer";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
 				DEAD_CODE_STRIPPING = NO;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 884JRH5R93;
 				INFOPLIST_FILE = "bitpay-macos/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitPay Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = bitpay;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bitpay.wallet.macos;
+				PRODUCT_NAME = "BitPay Wallet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "BitPay Wallet for macOS";
 				SDKROOT = macosx;
 			};
 			name = Debug;
@@ -558,17 +568,26 @@
 			baseConfigurationReference = 1B429C7284741DFD0AC3376C /* Pods-bitpay-macOS.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				"CODE_SIGN_IDENTITY[sdk=macosx*]" = "3rd Party Mac Developer Application";
+				CODE_SIGN_STYLE = Manual;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = "";
+				"DEVELOPMENT_TEAM[sdk=macosx*]" = 884JRH5R93;
 				INFOPLIST_FILE = "bitpay-macos/Info.plist";
+				INFOPLIST_KEY_CFBundleDisplayName = "BitPay Wallet";
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.finance";
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 10.15;
+				MARKETING_VERSION = 1;
 				OTHER_LDFLAGS = (
 					"$(inherited)",
 					"-ObjC",
 					"-lc++",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = "org.reactjs.native.$(PRODUCT_NAME:rfc1034identifier)";
-				PRODUCT_NAME = bitpay;
+				PRODUCT_BUNDLE_IDENTIFIER = com.bitpay.wallet.macos;
+				PRODUCT_NAME = "BitPay Wallet";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				"PROVISIONING_PROFILE_SPECIFIER[sdk=macosx*]" = "BitPay Wallet for macOS Production";
 				SDKROOT = macosx;
 			};
 			name = Release;
