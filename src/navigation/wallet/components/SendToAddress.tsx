@@ -2,6 +2,7 @@ import React, {useCallback, useContext, useState} from 'react';
 import {
   CtaContainer as _CtaContainer,
   Hr,
+  ScreenGutter,
   SearchContainer,
   SearchInput,
 } from '../../../components/styled/Containers';
@@ -68,7 +69,7 @@ const SendToAddressContainer = styled.View`
 `;
 
 const ScrollViewContainer = styled.ScrollView`
-  margin: 20px 15px 0 15px;
+  margin-left: ${ScreenGutter};
 `;
 
 const ErrorText = styled(BaseText)`

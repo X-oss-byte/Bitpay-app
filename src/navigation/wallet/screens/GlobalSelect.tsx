@@ -76,7 +76,7 @@ export const WalletSelectMenuHeaderContainer = styled.View<WalletSelectMenuHeade
 `;
 
 export const WalletSelectMenuHeaderIconContainer = styled.View`
-  padding-right: 0px;
+  padding-right: 0;
 `;
 
 export const WalletSelectMenuBodyContainer = styled.ScrollView`
@@ -541,7 +541,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
       <SheetModal
         placement={'bottom'}
         isVisible={walletSelectModalVisible}
-        useMaxHeight={'70%'}
+        useMaxHeight={'60%'}
         onBackdropPress={() => setWalletSelectModalVisible(false)}>
         <WalletSelectMenuContainer>
           <WalletSelectMenuBodyContainer>

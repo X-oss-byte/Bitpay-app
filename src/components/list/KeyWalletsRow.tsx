@@ -22,10 +22,6 @@ interface KeyNameContainerProps {
   noBorder?: boolean;
 }
 
-const KeyWalletsScrollView = styled.ScrollView`
-  padding: 0 5px;
-`;
-
 const KeyNameContainer = styled.View<KeyNameContainerProps>`
   flex-direction: row;
   align-items: center;

@@ -15,7 +15,11 @@ import {
   Wallet,
 } from '../../../store/wallet/wallet.models';
 import {CurrencyImage} from '../../../components/currency-image/CurrencyImage';
-import {ActiveOpacity, Hr} from '../../../components/styled/Containers';
+import {
+  ActiveOpacity,
+  Hr,
+  ScreenGutter,
+} from '../../../components/styled/Containers';
 import {TouchableOpacity} from 'react-native';
 import WalletIcons from '../components/WalletIcons';
 import _ from 'lodash';
@@ -31,6 +35,13 @@ import {
 } from '../../../store/app/app.actions';
 import {useAppDispatch} from '../../../utils/hooks';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
+import Back from '../../../components/back/Back';
+import Button from '../../../components/button/Button';
+
+const CloseButton = styled.Pressable`
+  margin-left: ${ScreenGutter};
+  cursor: pointer;
+`;
 
 export type SendToOptionsParamList = {
   title: string;
@@ -129,11 +140,6 @@ export const RecipientList: React.FC<RecipientListProps> = ({
     </>
   );
 };
-
-const ImportContainer = styled.SafeAreaView`
-  flex: 1;
-  margin-top: 10px;
-`;
 
 interface SendToOptionsContextProps {
   recipientList: Recipient[];
@@ -258,8 +264,20 @@ const SendToOptions = () => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{params.title}</HeaderTitle>,
       headerTitleAlign: 'center',
+      headerLeft: () => (
+        <CloseButton
+          onPress={() => {
+            if (recipientAmount.showModal) {
+              setRecipientAmount({showModal: false});
+            } else {
+              navigation.goBack();
+            }
+          }}>
+          <Back opacity={1} />
+        </CloseButton>
+      ),
     });
-  }, [navigation, t, params.title]);
+  }, [navigation, t, params.title, recipientAmount.showModal]);
 
   const goToSelectInputsView = (recipient: Recipient) => {
     navigation.navigate('Wallet', {
@@ -280,22 +298,21 @@ const SendToOptions = () => {
         goToConfirmView,
         goToSelectInputsView,
       }}>
-      <ImportContainer>
-        <Tab.Navigator screenOptions={{...ScreenOptions(150)}}>
-          <Tab.Screen
-            name={t('Addresses')}
-            component={SendToAddress}
-            initialParams={params}
-          />
-          <Tab.Screen
-            name={t('Contacts')}
-            component={SendToContact}
-            initialParams={params}
-          />
-        </Tab.Navigator>
-      </ImportContainer>
+      <Tab.Navigator screenOptions={{...ScreenOptions(150)}}>
+        <Tab.Screen
+          name={t('Addresses')}
+          component={SendToAddress}
+          initialParams={params}
+        />
+        <Tab.Screen
+          name={t('Contacts')}
+          component={SendToContact}
+          initialParams={params}
+        />
+      </Tab.Navigator>
 
       <AmountModal
+        modalTitle={params.title}
         isVisible={recipientAmount.showModal}
         cryptoCurrencyAbbreviation={params.wallet.currencyAbbreviation.toUpperCase()}
         chain={params.wallet.chain}

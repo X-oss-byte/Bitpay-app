@@ -28,8 +28,7 @@ import {Recipient} from '../../../store/wallet/wallet.models';
 import ContactRow from '../../../components/list/ContactRow';
 
 const ScrollViewContainer = styled.ScrollView`
-  margin-top: 20px;
-  margin: 20px ${ScreenGutter} 20px;
+  margin-left: ${ScreenGutter};
 `;
 
 const SendToContactContainer = styled.View`
@@ -122,9 +121,9 @@ const SendToContact = () => {
           )}
         </View>
       </SendToContactContainer>
-      <ScrollViewContainer>
-        {contacts.length > 0 ? (
-          <>
+      {contacts.length > 0 ? (
+        <ScrollViewContainer>
+          <View style={{marginTop: 20}}>
             <ContactTitleContainer>
               {ContactsSvg({})}
               <ContactTitle>{'Contacts'}</ContactTitle>
@@ -146,9 +145,9 @@ const SendToContact = () => {
                 </View>
               );
             })}
-          </>
-        ) : null}
-      </ScrollViewContainer>
+          </View>
+        </ScrollViewContainer>
+      ) : null}
       {context !== 'selectInputs' ? (
         <CtaContainer>
           <Button

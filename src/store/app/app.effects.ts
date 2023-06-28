@@ -57,8 +57,9 @@ export const startAppInit = (): Effect => async (dispatch, getState) => {
 
     await dispatch(startWalletStoreInit());
 
-    dispatch(walletConnectInit());
-    dispatch(walletConnectV2Init());
+    // TODO: enable WC after testing
+    // dispatch(walletConnectInit());
+    // dispatch(walletConnectV2Init());
 
     dispatch(AppActions.successAppInit());
     DeviceEventEmitter.emit(DeviceEmitterEvents.APP_DATA_INITIALIZED);

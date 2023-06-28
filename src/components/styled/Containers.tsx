@@ -55,7 +55,7 @@ export const CtaContainer = styled.View`
   padding: 10px ${ScreenGutter};
   align-self: stretch;
   flex-direction: column;
-  margin-top: 30px;
+  margin-top: 10px;
 `;
 
 export const CtaContainerAbsolute = styled.View<{background?: boolean}>`
