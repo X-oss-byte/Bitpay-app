@@ -1,14 +1,13 @@
 import React, {useLayoutEffect} from 'react';
 import styled from 'styled-components/native';
-import {createMaterialTopTabNavigator} from '@react-navigation/material-top-tabs';
 import RecoveryPhrase from '../components/RecoveryPhrase';
 import FileOrText from '../components/FileOrText';
-import {ScreenOptions} from '../../../styles/tabNavigator';
 import {HeaderTitle} from '../../../components/styled/Text';
 import {useNavigation} from '@react-navigation/native';
 import {WalletStackParamList} from '../WalletStack';
 import {StackScreenProps} from '@react-navigation/stack';
 import {useTranslation} from 'react-i18next';
+import Button from '../../../components/button/Button';
 
 type ImportScreenProps = StackScreenProps<WalletStackParamList, 'Import'>;
 
@@ -23,10 +22,15 @@ const ImportContainer = styled.SafeAreaView`
   margin-top: 10px;
 `;
 
-const Import: React.FC<ImportScreenProps> = ({route}) => {
+const ButtonsContainer = styled.View`
+  flex-direction: row;
+  justify-content: space-around;
+`;
+
+const Import: React.FC<ImportScreenProps> = () => {
   const {t} = useTranslation();
-  const Tab = createMaterialTopTabNavigator();
   const navigation = useNavigation();
+  const [importType, setImportType] = React.useState<string>('phrase');
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -37,18 +41,21 @@ const Import: React.FC<ImportScreenProps> = ({route}) => {
 
   return (
     <ImportContainer accessibilityLabel="import-view">
-      <Tab.Navigator screenOptions={{...ScreenOptions(150)}}>
-        <Tab.Screen
-          name={t('Phrase')}
-          component={RecoveryPhrase}
-          initialParams={route.params}
-        />
-        <Tab.Screen
-          name={t('Plain Text')}
-          component={FileOrText}
-          initialParams={route.params}
-        />
-      </Tab.Navigator>
+      <ButtonsContainer>
+        <Button
+          buttonStyle={importType === 'phrase' ? 'cancel' : 'primary'}
+          buttonType={'pill'}
+          onPress={() => setImportType('phrase')}>
+          Import Recovery Phrase
+        </Button>
+        <Button
+          buttonStyle={importType === 'file' ? 'cancel' : 'primary'}
+          buttonType={'pill'}
+          onPress={() => setImportType('file')}>
+          Import Recovery Phrase
+        </Button>
+      </ButtonsContainer>
+      {importType === 'phrase' ? <RecoveryPhrase /> : <FileOrText />}
     </ImportContainer>
   );
 };
