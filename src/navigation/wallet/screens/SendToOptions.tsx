@@ -92,7 +92,9 @@ export const RecipientList: React.FC<RecipientListProps> = ({
     <>
       <RecipientRowContainer>
         <RecipientContainer>
-          <CurrencyImage img={recipientData.img} size={20} />
+          {recipientData.img && (
+            <CurrencyImage img={recipientData.img} size={20} />
+          )}
           <H7
             numberOfLines={1}
             ellipsizeMode={'tail'}

@@ -1,6 +1,5 @@
 import React, {useCallback, useContext, useState} from 'react';
 import {
-  ActiveOpacity,
   CtaContainer as _CtaContainer,
   Hr,
   SearchContainer,
@@ -10,7 +9,7 @@ import Button from '../../../components/button/Button';
 import styled, {useTheme} from 'styled-components/native';
 import {BaseText, H5, SubText} from '../../../components/styled/Text';
 import {Caution, NeutralSlate} from '../../../styles/colors';
-import {useNavigation, useRoute} from '@react-navigation/native';
+import {useRoute} from '@react-navigation/native';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../WalletStack';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
@@ -21,8 +20,7 @@ import {
   CheckIfLegacyBCH,
   ValidateURI,
 } from '../../../store/wallet/utils/validations';
-import {FlatList, TouchableOpacity, View} from 'react-native';
-import ScanSvg from '../../../../assets/img/onboarding/scan.svg';
+import {FlatList, View} from 'react-native';
 import {
   createWalletAddress,
   GetCoinAndNetwork,
@@ -101,7 +99,6 @@ const SendToAddress = () => {
     goToConfirmView,
     goToSelectInputsView,
   } = useContext(SendToOptionsContext);
-  const navigation = useNavigation();
   const route = useRoute<RouteProp<WalletStackParamList, 'SendToOptions'>>();
   const {wallet, context} = route.params;
   const {currencyAbbreviation, id, network, chain} = wallet;
@@ -276,7 +273,7 @@ const SendToAddress = () => {
           </H5>
           <Hr />
           {recipientList && recipientList.length ? (
-            <View style={{maxHeight: '20%'}}>
+            <View>
               <FlatList
                 data={recipientList}
                 keyExtractor={(_item, index) => index.toString()}

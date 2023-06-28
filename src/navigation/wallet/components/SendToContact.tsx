@@ -2,6 +2,7 @@ import React, {useCallback, useContext, useMemo, useState} from 'react';
 import {
   CtaContainer as _CtaContainer,
   Hr,
+  ScreenGutter,
   SearchContainer,
   SearchInput,
 } from '../../../components/styled/Containers';
@@ -28,12 +29,11 @@ import ContactRow from '../../../components/list/ContactRow';
 
 const ScrollViewContainer = styled.ScrollView`
   margin-top: 20px;
-  padding: 0 15px;
+  margin: 20px ${ScreenGutter} 20px;
 `;
 
 const SendToContactContainer = styled.View`
-  margin-top: 20px;
-  padding: 0 15px;
+  padding: 20px ${ScreenGutter} 20px;
 `;
 
 const CtaContainer = styled(_CtaContainer)`
@@ -85,7 +85,7 @@ const SendToContact = () => {
   return (
     <>
       <SendToContactContainer>
-        <SearchContainer style={{height: 54}}>
+        <SearchContainer>
           <SearchInput
             placeholder={t('Search contact')}
             placeholderTextColor={placeHolderTextColor}
