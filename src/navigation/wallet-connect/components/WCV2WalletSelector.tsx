@@ -14,7 +14,7 @@ import {
   WalletSelectMenuHeaderContainer,
 } from '../../wallet/screens/GlobalSelect';
 import {useTranslation} from 'react-i18next';
-import {Platform, View} from 'react-native';
+import {View} from 'react-native';
 import {WalletConnectCtaContainer} from '../styled/WalletConnectContainers';
 import WCV2KeyWalletsRow from './WCV2KeyWalletsRow';
 import {
@@ -198,7 +198,6 @@ export default ({
                       navigation.navigate('WalletConnect', {
                         screen: 'WalletConnectStart',
                         params: {
-                          version: 2,
                           proposal,
                           selectedWallets: getSelectedWallets(),
                         },
@@ -227,7 +226,7 @@ export default ({
             </DescriptionText>
 
             <BottomNotificationHr />
-            <WalletConnectCtaContainer platform={Platform.OS}>
+            <WalletConnectCtaContainer>
               <BottomNotificationCta
                 suppressHighlighting={true}
                 primary={true}

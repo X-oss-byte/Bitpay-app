@@ -117,7 +117,7 @@ export const WCV2KeyWalletsRow = ({
   );
 
   return (
-    <View style={{marginBottom: 210}}>
+    <View style={{marginBottom: 100, maxHeight: 400}}>
       {keys ? (
         <FlatList
           data={keys}
