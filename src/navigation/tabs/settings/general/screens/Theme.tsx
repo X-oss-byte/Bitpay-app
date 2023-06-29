@@ -26,8 +26,6 @@ import {
   networkChanged,
   showBottomNotificationModal,
 } from '../../../../../store/app/app.actions';
-import {sleep} from '../../../../../utils/helper-methods';
-import RNRestart from 'react-native-restart';
 
 const ThemeSettings: React.FC = () => {
   const {t} = useTranslation();
@@ -59,8 +57,6 @@ const ThemeSettings: React.FC = () => {
               primary: true,
               action: async () => {
                 dispatch(networkChanged(changeNetwork));
-                await sleep(200);
-                RNRestart.Restart();
               },
             },
             {

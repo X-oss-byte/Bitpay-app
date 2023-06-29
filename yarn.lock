@@ -13987,11 +13987,6 @@ react-native-rate@1.2.12:
   resolved "https://registry.yarnpkg.com/react-native-rate/-/react-native-rate-1.2.12.tgz#d4307b2994f9c849b987eb65599ec467db4aee04"
   integrity sha512-A/z3s7Zth08aXcJnru6S4p71NG8acx2w5LhIfItwTJUbQruNJugk8WrN51dLBCSDv8W33kbS5YoUT4M9jOP5gA==
 
-react-native-restart@0.0.27:
-  version "0.0.27"
-  resolved "https://registry.yarnpkg.com/react-native-restart/-/react-native-restart-0.0.27.tgz#43aa8210312c9dfa5ec7bd4b2f35238ad7972b19"
-  integrity sha512-8KScVICrXwcTSJ1rjWkqVTHyEKQIttm5AIMGSK1QG1+RS5owYlE4z/1DykOTdWfVl9l16FIk0w9Xzk9ZO6jxlA==
-
 react-native-rounded-checkbox@0.3.3:
   version "0.3.3"
   resolved "https://registry.yarnpkg.com/react-native-rounded-checkbox/-/react-native-rounded-checkbox-0.3.3.tgz#05a753180604db61a074b2ef1ae7446347c3df8c"
