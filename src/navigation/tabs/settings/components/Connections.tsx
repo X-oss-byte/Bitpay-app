@@ -38,7 +38,7 @@ const Connections: React.VFC<ConnectionsProps> = props => {
     } else {
       navigation.navigate('WalletConnect', {
         screen: 'Root',
-        params: {}
+        params: {},
       });
     }
   }, [dispatch, sessions, navigation]);

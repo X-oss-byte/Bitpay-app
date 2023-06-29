@@ -128,9 +128,7 @@ const WCV2WalletRow = ({
 
       <CurrencyImageContainer>
         <CurrencyImage img={img} badgeUri={badgeImg} size={45} />
-        {(requests && requests.length) ? (
-          <Badge />
-        ) : null}
+        {requests && requests.length ? <Badge /> : null}
       </CurrencyImageContainer>
       <CurrencyColumn>
         <Row>

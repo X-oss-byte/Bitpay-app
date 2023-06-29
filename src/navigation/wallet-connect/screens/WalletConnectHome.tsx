@@ -113,9 +113,9 @@ const WalletConnectHome = () => {
           wallet.chain,
     ),
   );
-  
+
   const {peer} = sessionV2 || {};
-  const {name: peerName,icons,url: peerUrl} = peer?.metadata || {};
+  const {name: peerName, icons, url: peerUrl} = peer?.metadata || {};
   const peerIcon = icons && icons[0];
 
   const {chain, currencyAbbreviation, receiveAddress} = wallet;
@@ -439,12 +439,10 @@ const WalletConnectHome = () => {
         <PRContainer>
           <HeaderTitle>{t('Pending Requests')}</HeaderTitle>
           <Hr />
-          {(requestsV2 && requestsV2.length) ? (
+          {requestsV2 && requestsV2.length ? (
             <FlatList
               data={
-                 requestsV2 && requestsV2.length
-                  ? requestsV2
-                  : ([] as any[])
+                requestsV2 && requestsV2.length ? requestsV2 : ([] as any[])
               }
               keyExtractor={(_item, index) => index.toString()}
               renderItem={({

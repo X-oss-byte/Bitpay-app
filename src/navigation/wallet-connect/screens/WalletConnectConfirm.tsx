@@ -68,12 +68,7 @@ const WalletConnectConfirm = () => {
   const navigation = useNavigation();
   const route =
     useRoute<RouteProp<WalletConnectStackParamList, 'WalletConnectConfirm'>>();
-  const {
-    wallet,
-    txDetails,
-    request,
-    peerName,
-  } = route.params;
+  const {wallet, txDetails, request, peerName} = route.params;
   const [resetSwipeButton, setResetSwipeButton] = useState(false);
 
   const {

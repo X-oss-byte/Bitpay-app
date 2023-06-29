@@ -55,7 +55,7 @@ const WalletConnectIntro = () => {
   } = useForm<{uri: string}>({resolver: yupResolver(schema)});
 
   const route = useRoute<RouteProp<{params: WalletConnectIntroParamList}>>();
-  
+
   // version 2
   const {proposal} = route.params || {};
   const [dappProposal, setDappProposal] = useState<any>();

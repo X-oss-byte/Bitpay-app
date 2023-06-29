@@ -36,7 +36,8 @@ import WCV2WalletSelector from '../components/WCV2WalletSelector';
 import {WCV2SessionType} from '../../../store/wallet-connect-v2/wallet-connect-v2.models';
 import PlusIcon from '../../../components/plus/Plus';
 import {ScreenGutter} from '../../../components/styled/Containers';
-import { AddButton } from '../../wallet/screens/CreateMultisig';
+import {AddButton} from '../../wallet/screens/CreateMultisig';
+import GhostSvg from '../../../../assets/img/ghost-straight-face.svg';
 
 const ConnectionsContainer = styled.View`
   flex: 1;
@@ -60,6 +61,11 @@ const AddConnectionContainer = styled.TouchableOpacity`
   margin-right: 15px;
 `;
 
+const EmptyListContainer = styled.View`
+  justify-content: space-between;
+  align-items: center;
+  margin-top: 50px;
+`;
 
 const WalletConnectConnections = () => {
   const {t} = useTranslation();
@@ -220,6 +226,13 @@ const WalletConnectConnections = () => {
               );
             })
           : null}
+
+        {!sessions.length ? (
+          <EmptyListContainer>
+            <H5>{t("It's a ghost town in here")}</H5>
+            <GhostSvg style={{marginTop: 20}} />
+          </EmptyListContainer>
+        ) : null}
 
         {dappProposal || sessionToUpdate ? (
           <WCV2WalletSelector
