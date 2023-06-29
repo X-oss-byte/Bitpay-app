@@ -13,7 +13,7 @@ import styled from 'styled-components/native';
 import {ScreenGutter} from '../../../../components/styled/Containers';
 import CopySvg from '../../../../../assets/img/copy.svg';
 import CopiedSvg from '../../../../../assets/img/copied-success.svg';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import QRCode from 'react-native-qrcode-svg';
 import {LightBlack, White} from '../../../../styles/colors';
 import GhostSvg from '../../../../../assets/img/ghost-straight-face.svg';

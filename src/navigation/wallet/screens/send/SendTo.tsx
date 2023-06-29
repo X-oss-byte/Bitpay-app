@@ -2,7 +2,7 @@ import React, {useEffect, useLayoutEffect, useMemo, useState} from 'react';
 import {BaseText, HeaderTitle, Link} from '../../../../components/styled/Text';
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import styled from 'styled-components/native';
-import Clipboard from '@react-native-community/clipboard';
+import Clipboard from '@react-native-clipboard/clipboard';
 import {ScreenGutter} from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
 import {
