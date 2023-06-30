@@ -18,7 +18,6 @@ import {
   removeTxp,
   startSendPayment,
 } from '../../../../../store/wallet/effects/send/send';
-import PaymentSent from '../../../components/PaymentSent';
 import {sleep} from '../../../../../utils/helper-methods';
 import {startOnGoingProcessModal} from '../../../../../store/app/app.effects';
 import {dismissOnGoingProcessModal} from '../../../../../store/app/app.actions';
@@ -40,6 +39,9 @@ import {CustomErrorMessage} from '../../../components/ErrorMessages';
 import {PayProOptions} from '../../../../../store/wallet/effects/paypro/paypro';
 import {GetFeeOptions} from '../../../../../store/wallet/effects/fee/fee';
 import {Memo} from './Memo';
+import styled from 'styled-components/native';
+import {ScreenGutter} from '../../../../../components/styled/Containers';
+import Button from '../../../../../components/button/Button';
 
 export interface InvoiceMinerFee {
   satoshisPerByte: number;
@@ -80,6 +82,11 @@ export interface PayProConfirmParamList {
   payProOptions: PayProOptions;
   invoice: Invoice;
 }
+
+const ButtonContainer = styled.View`
+  padding: 0 ${ScreenGutter};
+  margin: 15px 0;
+`;
 
 const PayProConfirm = () => {
   const {t} = useTranslation();
@@ -336,22 +343,21 @@ const PayProConfirm = () => {
         />
       </ConfirmScrollView>
       {wallet ? (
-        <>
-          <SwipeButton
+        <ButtonContainer>
+          <Button
+            buttonStyle={'primary'}
             disabled={disableSwipeSendButton}
-            title={'Slide to send'}
-            forceReset={resetSwipeButton}
-            onSwipeComplete={async () => {
+            onPress={async () => {
               try {
                 await sendPayment();
               } catch (err: any) {
                 dispatch(dismissOnGoingProcessModal());
-                await sleep(400);
                 await handlePaymentFailure(err);
               }
-            }}
-          />
-        </>
+            }}>
+            {t('Click to send')}
+          </Button>
+        </ButtonContainer>
       ) : null}
     </ConfirmContainer>
   );
