@@ -345,8 +345,6 @@ PODS:
     - React-Core
   - react-native-randombytes (3.6.1):
     - React-Core
-  - react-native-restart (0.0.27):
-    - React-Core
   - react-native-safe-area-context (4.5.0):
     - RCT-Folly
     - RCTRequired
@@ -357,8 +355,6 @@ PODS:
     - React-Core
   - react-native-user-agent (2.3.1):
     - React
-  - react-native-webview (11.26.1):
-    - React-Core
   - React-perflogger (0.71.15)
   - React-RCTActionSheet (0.71.15):
     - React-Core/RCTActionSheetHeaders (= 0.71.15)
@@ -444,7 +440,7 @@ PODS:
     - React-Core
   - RNCAsyncStorage (1.17.10):
     - React-Core
-  - RNCClipboard (1.5.1):
+  - RNCClipboard (1.11.2):
     - React-Core
   - RNCMaskedView (0.2.6):
     - React-Core
@@ -464,10 +460,6 @@ PODS:
     - React
   - RNRate (1.2.12):
     - React-Core
-  - RNShare (8.2.0):
-    - React-Core
-  - RNSharedElement (0.8.8):
-    - React-Core
   - RNSVG (13.9.0):
     - React-Core
   - SDWebImage (5.11.1):
@@ -476,14 +468,7 @@ PODS:
   - SDWebImageWebPCoder (0.8.5):
     - libwebp (~> 1.0)
     - SDWebImage/Core (~> 5.10)
-  - segment-analytics-react-native (2.7.1):
-    - React-Core
-    - sovran-react-native
-  - segment-analytics-react-native-plugin-idfa (0.4.1):
-    - React-Core
   - SocketRocket (0.6.0)
-  - sovran-react-native (0.4.4):
-    - React-Core
   - TouchID (5.0.1):
     - React
   - Yoga (1.14.0)
@@ -541,11 +526,9 @@ DEPENDENCIES:
   - react-native-pager-view (from `../node_modules/react-native-pager-view`)
   - react-native-print (from `../node_modules/react-native-print`)
   - react-native-randombytes (from `../node_modules/react-native-randombytes`)
-  - react-native-restart (from `../node_modules/react-native-restart`)
   - react-native-safe-area-context (from `../node_modules/react-native-safe-area-context`)
   - "react-native-slider (from `../node_modules/@react-native-community/slider`)"
   - react-native-user-agent (from `../node_modules/react-native-user-agent`)
-  - react-native-webview (from `../node_modules/react-native-webview`)
   - React-perflogger (from `../node_modules/react-native-macos/ReactCommon/reactperflogger`)
   - React-RCTActionSheet (from `../node_modules/react-native-macos/Libraries/ActionSheetIOS`)
   - React-RCTAnimation (from `../node_modules/react-native-macos/Libraries/NativeAnimation`)
@@ -561,7 +544,7 @@ DEPENDENCIES:
   - ReactCommon/turbomodule/core (from `../node_modules/react-native-macos/ReactCommon`)
   - RNBootSplash (from `../node_modules/react-native-bootsplash`)
   - "RNCAsyncStorage (from `../node_modules/@react-native-async-storage/async-storage`)"
-  - "RNCClipboard (from `../node_modules/@react-native-community/clipboard`)"
+  - "RNCClipboard (from `../node_modules/@react-native-clipboard/clipboard`)"
   - "RNCMaskedView (from `../node_modules/@react-native-masked-view/masked-view`)"
   - RNFastImage (from `../node_modules/react-native-fast-image`)
   - RNFS (from `../node_modules/react-native-fs`)
@@ -570,12 +553,7 @@ DEPENDENCIES:
   - RNOS (from `../node_modules/react-native-os`)
   - RNQuickAction (from `../node_modules/react-native-quick-actions`)
   - RNRate (from `../node_modules/react-native-rate`)
-  - RNShare (from `../node_modules/react-native-share`)
-  - RNSharedElement (from `../node_modules/react-native-shared-element`)
   - RNSVG (from `../node_modules/react-native-svg`)
-  - "segment-analytics-react-native (from `../node_modules/@segment/analytics-react-native`)"
-  - "segment-analytics-react-native-plugin-idfa (from `../node_modules/@segment/analytics-react-native-plugin-idfa`)"
-  - "sovran-react-native (from `../node_modules/@segment/sovran-react-native`)"
   - TouchID (from `../node_modules/react-native-touch-id-ng`)
   - Yoga (from `../node_modules/react-native-macos/ReactCommon/yoga`)
 
@@ -655,16 +633,12 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-print"
   react-native-randombytes:
     :path: "../node_modules/react-native-randombytes"
-  react-native-restart:
-    :path: "../node_modules/react-native-restart"
   react-native-safe-area-context:
     :path: "../node_modules/react-native-safe-area-context"
   react-native-slider:
     :path: "../node_modules/@react-native-community/slider"
   react-native-user-agent:
     :path: "../node_modules/react-native-user-agent"
-  react-native-webview:
-    :path: "../node_modules/react-native-webview"
   React-perflogger:
     :path: "../node_modules/react-native-macos/ReactCommon/reactperflogger"
   React-RCTActionSheet:
@@ -696,7 +670,7 @@ EXTERNAL SOURCES:
   RNCAsyncStorage:
     :path: "../node_modules/@react-native-async-storage/async-storage"
   RNCClipboard:
-    :path: "../node_modules/@react-native-community/clipboard"
+    :path: "../node_modules/@react-native-clipboard/clipboard"
   RNCMaskedView:
     :path: "../node_modules/@react-native-masked-view/masked-view"
   RNFastImage:
@@ -713,18 +687,8 @@ EXTERNAL SOURCES:
     :path: "../node_modules/react-native-quick-actions"
   RNRate:
     :path: "../node_modules/react-native-rate"
-  RNShare:
-    :path: "../node_modules/react-native-share"
-  RNSharedElement:
-    :path: "../node_modules/react-native-shared-element"
   RNSVG:
     :path: "../node_modules/react-native-svg"
-  segment-analytics-react-native:
-    :path: "../node_modules/@segment/analytics-react-native"
-  segment-analytics-react-native-plugin-idfa:
-    :path: "../node_modules/@segment/analytics-react-native-plugin-idfa"
-  sovran-react-native:
-    :path: "../node_modules/@segment/sovran-react-native"
   TouchID:
     :path: "../node_modules/react-native-touch-id-ng"
   Yoga:
@@ -771,12 +735,10 @@ SPEC CHECKSUMS:
   react-native-in-app-review: ae45cc55e168a3b78eea9eea031ca57dccd7eb5a
   react-native-pager-view: b58cb9e9f42f64e50cab3040815772c1d119a2e2
   react-native-print: f704aef52d931bfce6d1d84351dbb5232d7ecb89
-  react-native-randombytes: 6c0bc12b09ad7579aed7a09d23085d875a44a73d
-  react-native-restart: 7595693413fe3ca15893702f2c8306c62a708162
+  react-native-randombytes: 421f1c7d48c0af8dbcd471b0324393ebf8fe7846
   react-native-safe-area-context: 39c2d8be3328df5d437ac1700f4f3a4f75716acc
   react-native-slider: cecabb58ecffad671d2ad3ccc58c7f4d2d029e95
   react-native-user-agent: a90a1e839b99801baad67a73dd6f361a52aa3cf1
-  react-native-webview: 9f111dfbcfc826084d6c507f569e5e03342ee1c1
   React-perflogger: 7fbdbc8c33a1622863978eedbdb8b908ea07fa1a
   React-RCTActionSheet: a1542c0fd48ff20f1d4c4decc0bc6e459830d200
   React-RCTAnimation: e3400ef7c1d55cab06bc6cc1dadd0057d1ac4fc2
@@ -792,7 +754,7 @@ SPEC CHECKSUMS:
   ReactCommon: ccfd0e44e5da2024a8e420b09d1800f86d3b3ad3
   RNBootSplash: 51eef7e143faeab63f81ddbb7c1de38b8fba66ed
   RNCAsyncStorage: 0c357f3156fcb16c8589ede67cc036330b6698ca
-  RNCClipboard: 41d8d918092ae8e676f18adada19104fa3e68495
+  RNCClipboard: 3f0451a8100393908bea5c5c5b16f96d45f30bfc
   RNCMaskedView: c298b644a10c0c142055b3ae24d83879ecb13ccd
   RNFastImage: 5c9c9fed9c076e521b3f509fe79e790418a544e8
   RNFS: 3ab21fa6c56d65566d1fb26c2228e2b6132e5e32
@@ -801,15 +763,10 @@ SPEC CHECKSUMS:
   RNOS: 6f2f9a70895bbbfbdad7196abd952e7b01d45027
   RNQuickAction: 6d404a869dc872cde841ad3147416a670d13fa93
   RNRate: ef3bcff84f39bb1d1e41c5593d3eea4aab2bd73a
-  RNShare: b089c33619bbfb0a32bc4069c858b9274e694187
-  RNSharedElement: 504fa28a235b12505b6daedbb452a9ec96809bd0
   RNSVG: 53c661b76829783cdaf9b7a57258f3d3b4c28315
   SDWebImage: a7f831e1a65eb5e285e3fb046a23fcfbf08e696d
   SDWebImageWebPCoder: 908b83b6adda48effe7667cd2b7f78c897e5111d
-  segment-analytics-react-native: d3600ae853119d465d7f5b5884ef1c776796138a
-  segment-analytics-react-native-plugin-idfa: 68fbc668f277eaf2e1e2673c6a5543ea857a1671
   SocketRocket: fccef3f9c5cedea1353a9ef6ada904fde10d6608
-  sovran-react-native: 5f9715a62b50008d72c0cf904cb08c8377777b62
   TouchID: 175fa9c0b2b2651f25aaef4aa6bb42ce4d580c6e
   Yoga: 875ddaa286b8331a5aab5de0088c6023209169df
   YogaKit: f782866e155069a2cca2517aafea43200b01fd5a

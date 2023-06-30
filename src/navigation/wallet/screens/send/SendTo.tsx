@@ -497,16 +497,16 @@ const SendTo = () => {
       dispatch(dismissOnGoingProcessModal());
     }
   };
-
-  useEffect(() => {
-    const getString = async () => {
-      const clipboardData = await Clipboard.getString();
+  const getString = async () => {
+    const clipboardData = await Clipboard.getString();
+    console.log('GETTTINGGG STRINGGGG', clipboardData);
+    if (clipboardData) {
       setClipboardData(clipboardData);
-    };
-    getString();
-  }, []);
+    }
+  };
 
   useEffect(() => {
+    getString();
     return navigation.addListener('blur', () =>
       setTimeout(() => setSearchInput(''), 300),
     );
