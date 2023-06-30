@@ -1,7 +1,7 @@
 import React from 'react';
 import Color, {Rect, Svg, Ellipse, Circle} from 'react-native-svg';
 import {useTheme} from 'styled-components/native';
-import {LightBlack, NeutralSlate, SlateDark, White} from '../../styles/colors';
+import {SlateDark, White} from '../../styles/colors';
 import {HeaderRightContainer} from '../styled/Containers';
 interface SettingsSvgProps {
   color: Color | undefined;

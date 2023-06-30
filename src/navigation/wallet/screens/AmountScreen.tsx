@@ -59,6 +59,7 @@ const AmountScreen: React.FC = () => {
   useLayoutEffect(() => {
     if (sendMaxEnabled) {
       navigation.setOptions({
+        headerTitle: t('Amount'),
         headerRight: () => (
           <HeaderContainer>
             <Button
