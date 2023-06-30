@@ -8,10 +8,10 @@ interface SettingsSvgProps {
   background: Color | undefined;
 }
 
-const SettingsSvg: React.FC<SettingsSvgProps> = ({color, background}) => {
+const SettingsSvg: React.FC<SettingsSvgProps> = ({color}) => {
   return (
     <Svg width="40" height="40" viewBox="0 0 40 40" fill="none">
-      <Rect width="40" height="40" rx="20" fill={background} />
+      <Rect width="40" height="40" rx="20" />
       <Ellipse cx="12" cy="20" rx="2" ry="2" fill={color} />
       <Circle cx="20" cy="20" r="2" fill={color} />
       <Ellipse cx="28" cy="20" rx="2" ry="2" fill={color} />
@@ -22,11 +22,10 @@ const SettingsSvg: React.FC<SettingsSvgProps> = ({color, background}) => {
 const Settings = ({onPress}: {onPress: () => void}) => {
   const theme = useTheme();
   const color = theme.dark ? White : SlateDark;
-  const background = theme.dark ? LightBlack : NeutralSlate;
 
   return (
     <HeaderRightContainer onPress={onPress}>
-      <SettingsSvg color={color} background={background} />
+      <SettingsSvg color={color} />
     </HeaderRightContainer>
   );
 };

@@ -4,13 +4,7 @@ import React, {useMemo} from 'react';
 import {useTranslation} from 'react-i18next';
 import {ScrollView} from 'react-native';
 import {SupportedCoinsOptions} from '../../../constants/SupportedCurrencyOptions';
-import {showBottomNotificationModal} from '../../../store/app/app.actions';
-import {getPriceHistory, startGetRates} from '../../../store/wallet/effects';
-import {startUpdateAllKeyAndWalletStatus} from '../../../store/wallet/effects/status/status';
-import {updatePortfolioBalance} from '../../../store/wallet/wallet.actions';
-import {sleep} from '../../../utils/helper-methods';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
-import {BalanceUpdateError} from '../../wallet/components/ErrorMessages';
 import Crypto from './components/Crypto';
 import ExchangeRatesList, {
   ExchangeRateItemProps,

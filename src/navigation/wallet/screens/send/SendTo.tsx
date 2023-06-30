@@ -3,10 +3,7 @@ import {BaseText, HeaderTitle, Link} from '../../../../components/styled/Text';
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {
-  ActiveOpacity,
-  ScreenGutter,
-} from '../../../../components/styled/Containers';
+import {ScreenGutter} from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
 import {LightBlack, Slate30, SlateDark, White} from '../../../../styles/colors';
 import {RouteProp} from '@react-navigation/core';
@@ -50,7 +47,6 @@ import {
   CoinNetwork,
   createWalletAddress,
   GetCoinAndNetwork,
-  TranslateToBchCashAddress,
 } from '../../../../store/wallet/effects/address/address';
 import {IsUtxoCoin} from '../../../../store/wallet/utils/currency';
 import {goToAmount, incomingData} from '../../../../store/scan/scan.effects';
@@ -62,8 +58,7 @@ import Icons from '../../components/WalletIcons';
 import ContactRow from '../../../../components/list/ContactRow';
 import {getCurrencyCodeFromCoinAndChain} from '../../../bitpay-id/utils/bitpay-id-utils';
 import BoxInput from '../../../../components/form/BoxInput';
-import {AppState, AppStateStatus, TouchableOpacity} from 'react-native';
-import Back from '../../../../components/back/Back';
+import {AppState, AppStateStatus} from 'react-native';
 import CopySvg from '../../../../../assets/img/copy.svg';
 
 const ValidDataTypes: string[] = [
@@ -271,16 +266,6 @@ const SendTo = () => {
             }}
           />
         ) : null,
-      headerLeft: () => (
-        <TouchableOpacity
-          style={{marginLeft: 10}}
-          activeOpacity={ActiveOpacity}
-          onPress={() => {
-            navigation.goBack();
-          }}>
-          <Back opacity={1} />
-        </TouchableOpacity>
-      ),
     });
   }, [navigation, showWalletOptions]);
 
