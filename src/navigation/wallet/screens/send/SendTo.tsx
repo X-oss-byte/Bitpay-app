@@ -3,7 +3,10 @@ import {BaseText, HeaderTitle, Link} from '../../../../components/styled/Text';
 import {useNavigation, useRoute, useTheme} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {ScreenGutter} from '../../../../components/styled/Containers';
+import {
+  ActiveOpacity,
+  ScreenGutter,
+} from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
 import {
   LightBlack,
@@ -73,6 +76,8 @@ import Icons from '../../components/WalletIcons';
 import ContactRow from '../../../../components/list/ContactRow';
 import {getCurrencyCodeFromCoinAndChain} from '../../../bitpay-id/utils/bitpay-id-utils';
 import BoxInput from '../../../../components/form/BoxInput';
+import {TouchableOpacity} from 'react-native';
+import Back from '../../../../components/back/Back';
 
 const ValidDataTypes: string[] = [
   'BitcoinAddress',
@@ -278,6 +283,16 @@ const SendTo = () => {
             }}
           />
         ) : null,
+      headerLeft: () => (
+        <TouchableOpacity
+          style={{marginLeft: 10}}
+          activeOpacity={ActiveOpacity}
+          onPress={() => {
+            navigation.goBack();
+          }}>
+          <Back opacity={1} />
+        </TouchableOpacity>
+      ),
     });
   }, [navigation, showWalletOptions]);
 
