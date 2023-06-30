@@ -8,12 +8,7 @@ import {
   ScreenGutter,
 } from '../../../../components/styled/Containers';
 import ContactsSvg from '../../../../../assets/img/tab-icons/contacts.svg';
-import {
-  LightBlack,
-  NeutralSlate,
-  SlateDark,
-  White,
-} from '../../../../styles/colors';
+import {LightBlack, Slate30, SlateDark, White} from '../../../../styles/colors';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../../WalletStack';
 import {Effect, RootState} from '../../../../store';
@@ -21,15 +16,11 @@ import {
   convertToFiat,
   formatFiatAmount,
   getErrorString,
-  sleep,
 } from '../../../../utils/helper-methods';
 import {Key} from '../../../../store/wallet/wallet.models';
 import {Rates} from '../../../../store/rate/rate.models';
 import debounce from 'lodash.debounce';
-import {
-  CheckIfLegacyBCH,
-  ValidateURI,
-} from '../../../../store/wallet/utils/validations';
+import {ValidateURI} from '../../../../store/wallet/utils/validations';
 import merge from 'lodash.merge';
 import cloneDeep from 'lodash.clonedeep';
 import {GetPayProUrl} from '../../../../store/wallet/utils/decode-uri';
@@ -54,18 +45,13 @@ import {
   useAppSelector,
   useLogger,
 } from '../../../../utils/hooks';
-import {
-  BchLegacyAddressInfo,
-  CustomErrorMessage,
-  Mismatch,
-} from '../../components/ErrorMessages';
+import {Mismatch} from '../../components/ErrorMessages';
 import {
   CoinNetwork,
   createWalletAddress,
   GetCoinAndNetwork,
   TranslateToBchCashAddress,
 } from '../../../../store/wallet/effects/address/address';
-import {APP_NAME_UPPERCASE} from '../../../../constants/config';
 import {IsUtxoCoin} from '../../../../store/wallet/utils/currency';
 import {goToAmount, incomingData} from '../../../../store/scan/scan.effects';
 import {useTranslation} from 'react-i18next';
@@ -76,8 +62,9 @@ import Icons from '../../components/WalletIcons';
 import ContactRow from '../../../../components/list/ContactRow';
 import {getCurrencyCodeFromCoinAndChain} from '../../../bitpay-id/utils/bitpay-id-utils';
 import BoxInput from '../../../../components/form/BoxInput';
-import {TouchableOpacity} from 'react-native';
+import {AppState, AppStateStatus, TouchableOpacity} from 'react-native';
 import Back from '../../../../components/back/Back';
+import CopySvg from '../../../../../assets/img/copy.svg';
 
 const ValidDataTypes: string[] = [
   'BitcoinAddress',
@@ -116,11 +103,12 @@ const SearchBox = styled(BoxInput)`
   position: relative;
 `;
 
-const PasteClipboardContainer = styled.TouchableOpacity`
+const PasteClipboardContainer = styled.Pressable`
   display: flex;
   flex-direction: row;
-  justify-content: center;
-  margin-top: 10px;
+  align-items: center;
+  margin: 10px auto;
+  cursor: pointer;
 `;
 
 export const ContactTitleContainer = styled.View`
@@ -226,7 +214,7 @@ const SendTo = () => {
   const allContacts = useAppSelector(({CONTACT}: RootState) => CONTACT.list);
   const {defaultAltCurrency, hideAllBalances} = useAppSelector(({APP}) => APP);
   const theme = useTheme();
-  const placeHolderTextColor = theme.dark ? NeutralSlate : '#6F7782';
+  const placeHolderTextColor = theme.dark ? LightBlack : Slate30;
   const [searchInput, setSearchInput] = useState('');
   const [clipboardData, setClipboardData] = useState('');
   const [showWalletOptions, setShowWalletOptions] = useState(false);
@@ -323,21 +311,9 @@ const SendTo = () => {
     setSearchInput('');
   };
 
-  const BchLegacyAddressInfoDismiss = (searchText: string) => {
-    try {
-      const cashAddr = TranslateToBchCashAddress(
-        searchText.replace(/^(bitcoincash:|bchtest:)/, ''),
-      );
-      setSearchInput(cashAddr);
-      validateAndNavigateToConfirm(cashAddr);
-    } catch (error) {
-      dispatch(showBottomNotificationModal(Mismatch(onErrorMessageDismiss)));
-    }
-  };
-
   const checkCoinAndNetwork =
     (data: any, isPayPro?: boolean): Effect<boolean> =>
-    dispatch => {
+    () => {
       let isValid, addrData: CoinNetwork | null;
       if (isPayPro) {
         isValid =
@@ -349,37 +325,52 @@ const SendTo = () => {
           chain === addrData?.coin.toLowerCase() &&
           network === addrData?.network;
       }
-
-      if (isValid) {
-        return true;
-      } else {
-        // @ts-ignore
-        let addrNetwork = isPayPro ? data.network : addrData?.network;
-        if (currencyAbbreviation === 'bch' && network === addrNetwork) {
-          const isLegacy = CheckIfLegacyBCH(data);
-          if (isLegacy) {
-            const appName = APP_NAME_UPPERCASE;
-
-            dispatch(
-              showBottomNotificationModal(
-                BchLegacyAddressInfo(appName, () => {
-                  BchLegacyAddressInfoDismiss(data);
-                }),
-              ),
-            );
-          } else {
-            dispatch(
-              showBottomNotificationModal(Mismatch(onErrorMessageDismiss)),
-            );
-          }
-        } else {
-          dispatch(
-            showBottomNotificationModal(Mismatch(onErrorMessageDismiss)),
-          );
-        }
-      }
-      return false;
+      return isValid;
     };
+
+  const validateAddress = async (text: string): Promise<boolean> => {
+    return new Promise(async resolve => {
+      const data = ValidateURI(text);
+      if (data?.type === 'PayPro' || data?.type === 'InvoiceUri') {
+        try {
+          const invoiceUrl = GetPayProUrl(text);
+          dispatch(startOnGoingProcessModal('FETCHING_PAYMENT_OPTIONS'));
+
+          const payProOptions = await GetPayProOptions(invoiceUrl);
+          dispatch(dismissOnGoingProcessModal());
+          const invoiceCurrency = getCurrencyCodeFromCoinAndChain(
+            GetInvoiceCurrency(currencyAbbreviation).toLowerCase(),
+            chain,
+          );
+          const selected = payProOptions.paymentOptions.find(
+            (option: PayProPaymentOption) =>
+              option.selected && invoiceCurrency === option.currency,
+          );
+          if (selected) {
+            const isValid = dispatch(checkCoinAndNetwork(selected, true));
+            if (isValid) {
+              return resolve(true);
+            }
+          } else {
+            return resolve(false);
+          }
+        } catch (err) {
+          const formattedErrMsg = BWCErrorMessage(err);
+          dispatch(dismissOnGoingProcessModal());
+          logger.warn(formattedErrMsg);
+          return resolve(false);
+        }
+      } else if (ValidDataTypes.includes(data?.type)) {
+        if (dispatch(checkCoinAndNetwork(text))) {
+          return resolve(true);
+        } else {
+          return resolve(false);
+        }
+      } else {
+        return resolve(false);
+      }
+    });
+  };
 
   const validateAndNavigateToConfirm = async (
     text: string,
@@ -388,69 +379,23 @@ const SendTo = () => {
       name?: string;
       email?: string;
       destinationTag?: number;
+      searching?: boolean;
     } = {},
   ) => {
-    const {context, name, email, destinationTag} = opts;
-    const data = ValidateURI(text);
-    if (data?.type === 'PayPro' || data?.type === 'InvoiceUri') {
-      try {
-        const invoiceUrl = GetPayProUrl(text);
-        dispatch(startOnGoingProcessModal('FETCHING_PAYMENT_OPTIONS'));
-
-        const payProOptions = await GetPayProOptions(invoiceUrl);
-        dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
-        const invoiceCurrency = getCurrencyCodeFromCoinAndChain(
-          GetInvoiceCurrency(currencyAbbreviation).toLowerCase(),
-          chain,
-        );
-        const selected = payProOptions.paymentOptions.find(
-          (option: PayProPaymentOption) =>
-            option.selected && invoiceCurrency === option.currency,
-        );
-        if (selected) {
-          const isValid = dispatch(checkCoinAndNetwork(selected, true));
-          if (isValid) {
-            await sleep(0);
-            dispatch(
-              incomingData(text, {
-                wallet,
-                context,
-                name,
-                email,
-                destinationTag,
-              }),
-            );
-          }
-        } else {
-          dispatch(
-            showBottomNotificationModal(Mismatch(onErrorMessageDismiss)),
-          );
-        }
-      } catch (err) {
-        const formattedErrMsg = BWCErrorMessage(err);
-        dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
-        logger.warn(formattedErrMsg);
-        dispatch(
-          showBottomNotificationModal(
-            CustomErrorMessage({errMsg: formattedErrMsg, title: 'Error'}),
-          ),
-        );
-      }
-    } else if (ValidDataTypes.includes(data?.type)) {
-      if (dispatch(checkCoinAndNetwork(text))) {
-        setSearchInput(text);
-        await sleep(0);
-        dispatch(
-          incomingData(text, {wallet, context, name, email, destinationTag}),
-        );
-      }
+    const {context, name, email, destinationTag, searching} = opts;
+    const isValid = await validateAddress(text);
+    if (isValid) {
+      clearClipboard();
+      dispatch(
+        incomingData(text, {wallet, context, name, email, destinationTag}),
+      );
+    } else if (!searching) {
+      dispatch(showBottomNotificationModal(Mismatch(onErrorMessageDismiss)));
     }
   };
 
   const onSearchInputChange = debounce((text: string) => {
-    validateAndNavigateToConfirm(text);
+    validateAndNavigateToConfirm(text, {searching: true});
   }, 300);
 
   const onSendToWallet = async (selectedWallet: KeyWallet) => {
@@ -497,11 +442,18 @@ const SendTo = () => {
       dispatch(dismissOnGoingProcessModal());
     }
   };
+
+  const clearClipboard = () => {
+    Clipboard.setString('');
+    setClipboardData('');
+  };
   const getString = async () => {
-    const clipboardData = await Clipboard.getString();
-    console.log('GETTTINGGG STRINGGGG', clipboardData);
-    if (clipboardData) {
-      setClipboardData(clipboardData);
+    const _clipboardData = await Clipboard.getString();
+    if (_clipboardData) {
+      const isValid = await validateAddress(_clipboardData);
+      if (isValid) {
+        setClipboardData(_clipboardData);
+      }
     }
   };
 
@@ -511,6 +463,21 @@ const SendTo = () => {
       setTimeout(() => setSearchInput(''), 300),
     );
   }, [navigation]);
+
+  useEffect(() => {
+    function onAppStateChange(status: AppStateStatus) {
+      if (status === 'active') {
+        getString();
+      }
+    }
+
+    const subscriptionAppStateChange = AppState.addEventListener(
+      'change',
+      onAppStateChange,
+    );
+
+    return () => subscriptionAppStateChange.remove();
+  }, []);
 
   return (
     <SafeAreaView>
@@ -528,11 +495,11 @@ const SendTo = () => {
 
         {clipboardData ? (
           <PasteClipboardContainer
-            activeOpacity={0.75}
             onPress={() => {
               setSearchInput(clipboardData);
               validateAndNavigateToConfirm(clipboardData);
             }}>
+            <CopySvg style={{marginRight: 10}} />
             <Link>{t('Paste from clipboard')}</Link>
           </PasteClipboardContainer>
         ) : null}
