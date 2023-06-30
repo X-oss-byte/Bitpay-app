@@ -9,16 +9,6 @@ jest.mock('react-native/Libraries/Utilities/Platform', () => ({
   select: () => null,
 }));
 
-jest.mock('@segment/analytics-react-native', () => ({
-  setup: () => null,
-  identify: () => null,
-  reset: () => null,
-}));
-
-jest.mock('react-native-permissions', () =>
-  require('react-native-permissions/mock'),
-);
-
 jest.mock('react-native-fs', () => {
   return {
     mkdir: jest.fn(),
