@@ -202,12 +202,8 @@ const LinkText = styled(ButtonBaseText)<ButtonOptionProps>`
       return DisabledDark;
     }
 
-    if (theme?.dark) {
-      return theme.colors.text;
-    }
-
     if (danger) {
-      return Caution;
+      return theme.dark ? '#8B1C1C' : '#FFCDCD';
     }
 
     return Action;

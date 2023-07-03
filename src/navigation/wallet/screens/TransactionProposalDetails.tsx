@@ -21,8 +21,13 @@ import {
   RejectTxProposal,
 } from '../../../store/wallet/effects/transactions/transactions';
 import {createWalletAddress} from '../../../store/wallet/effects/address/address';
-import styled from 'styled-components/native';
-import {Hr, ScreenGutter} from '../../../components/styled/Containers';
+import styled, {useTheme} from 'styled-components/native';
+import {
+  Hr,
+  ScreenGutter,
+  SheetContainer,
+  SheetParams,
+} from '../../../components/styled/Containers';
 import {IsCustomERCToken} from '../../../store/wallet/utils/currency';
 import {TransactionIcons} from '../../../constants/TransactionIcons';
 import Button from '../../../components/button/Button';
@@ -33,6 +38,7 @@ import {
   LightBlack,
   NeutralSlate,
   SlateDark,
+  Warning,
   White,
 } from '../../../styles/colors';
 import Banner from '../../../components/banner/Banner';
@@ -47,14 +53,12 @@ import {
   showBottomNotificationModal,
   showOnGoingProcessModal,
 } from '../../../store/app/app.actions';
-import SwipeButton from '../../../components/swipe-button/SwipeButton';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {dismissOnGoingProcessModal} from '../../../store/app/app.actions';
 import {
   broadcastTx,
   publishAndSign,
 } from '../../../store/wallet/effects/send/send';
-import PaymentSent from '../components/PaymentSent';
 import {
   CustomErrorMessage,
   WrongPasswordError,
@@ -81,13 +85,19 @@ import {
 import {LogActions} from '../../../store/log';
 import {GetPayProDetails} from '../../../store/wallet/effects/paypro/paypro';
 import {AppActions} from '../../../store/app';
+import DeleteIconWhite from '../../../../assets/img/delete-icon-white.svg';
+import DeleteIcon from '../../../../assets/img/delete-icon.svg';
+import RejectIcon from '../../../../assets/img/reject.svg';
+import RejectIconWhite from '../../../../assets/img/close.svg';
+import SheetModal from '../../../components/modal/base/sheet/SheetModal';
+import Settings from '../../../components/settings/Settings';
 
 const TxpDetailsContainer = styled.SafeAreaView`
   flex: 1;
 `;
 
 const ScrollView = styled.ScrollView`
-  padding: 0 8px;
+  padding: 0 5px;
   margin-left: ${ScreenGutter};
 `;
 
@@ -151,6 +161,33 @@ const ButtonContainer = styled.View`
   margin: 15px 0;
 `;
 
+const OptionContainer = styled.TouchableOpacity<SheetParams>`
+  padding: 15px 5px;
+  flex-direction: row;
+  align-items: stretch;
+  cursor: pointer;
+`;
+
+const OptionTextContainer = styled.View`
+  align-items: flex-start;
+  justify-content: space-around;
+  flex-direction: column;
+  margin: 0 20px;
+`;
+
+const OptionTitleText = styled(BaseText)<{isReject: boolean}>`
+  font-style: normal;
+  font-weight: 500;
+  font-size: 14px;
+  line-height: 19px;
+  color: ${({isReject}) => (isReject ? Warning : Caution)};
+`;
+
+const OptionIconContainer = styled.View`
+  justify-content: center;
+  width: 20px;
+`;
+
 const TimelineList = ({actions}: {actions: TxActions[]}) => {
   return (
     <>
@@ -206,6 +243,7 @@ let countDown: NodeJS.Timer | undefined;
 
 const TransactionProposalDetails = () => {
   const {t} = useTranslation();
+  const theme = useTheme();
   const dispatch = useAppDispatch();
   const logger = useLogger();
   const navigation = useNavigation();
@@ -222,10 +260,13 @@ const TransactionProposalDetails = () => {
   const [remainingTimeStr, setRemainingTimeStr] = useState<string>('');
   const [isLoading, setIsLoading] = useState(true);
   const [payproIsLoading, setPayproIsLoading] = useState(true);
-  const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [lastSigner, setLastSigner] = useState(false);
+  const [showOptions, setShowOptions] = useState(false);
+  const [showRejectButton, setShowRejectButton] = useState(false);
+  const [showRemoveButton, setShowRemoveButton] = useState(false);
 
-  const title = getDetailsTitle(transaction, wallet);
+  const title =
+    getDetailsTitle(transaction, wallet) || t('Transaction Details');
   let {currencyAbbreviation, chain, network} = wallet;
   currencyAbbreviation = currencyAbbreviation.toLowerCase();
   const isTestnet = network === 'testnet';
@@ -233,8 +274,12 @@ const TransactionProposalDetails = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{title}</HeaderTitle>,
+      headerRight: () =>
+        showRejectButton || showRemoveButton ? (
+          <Settings onPress={() => setShowOptions(!showOptions)} />
+        ) : null,
     });
-  }, [navigation, title]);
+  }, [navigation, title, showOptions, showRejectButton, showRemoveButton]);
 
   const init = async () => {
     try {
@@ -398,6 +443,7 @@ const TransactionProposalDetails = () => {
 
   const removePaymentProposal = async () => {
     try {
+      setShowOptions(false);
       dispatch(
         showBottomNotificationModal({
           type: 'warning',
@@ -429,6 +475,7 @@ const TransactionProposalDetails = () => {
 
   const rejectPaymentProposal = async () => {
     try {
+      setShowOptions(false);
       dispatch(
         showBottomNotificationModal({
           type: 'warning',
@@ -469,23 +516,36 @@ const TransactionProposalDetails = () => {
   }, [txp]);
 
   useEffect(() => {
-    if (!resetSwipeButton) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      setResetSwipeButton(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [resetSwipeButton]);
-
-  useEffect(() => {
     return () => {
       if (countDown) {
         clearInterval(countDown);
       }
     };
   }, []);
+
+  useEffect(() => {
+    if (
+      txp &&
+      !txp.removed &&
+      txp.pendingForUs &&
+      !paymentExpired &&
+      !txp.multisigContractAddress &&
+      wallet.credentials.n > 1
+    ) {
+      setShowRejectButton(true);
+    } else {
+      setShowRejectButton(false);
+    }
+
+    if (
+      (txp && !txp.removed && txp.canBeRemoved) ||
+      (txp && txp.status === 'accepted' && !txp.broadcastedOn)
+    ) {
+      setShowRemoveButton(true);
+    } else {
+      setShowRemoveButton(false);
+    }
+  }, [txp, paymentExpired, wallet.credentials.n]);
 
   const showErrorMessage = useCallback(
     async (msg: BottomNotificationConfig) => {
@@ -584,27 +644,7 @@ const TransactionProposalDetails = () => {
                   )}
                 />
               ) : null}
-              <Button
-                style={{marginTop: 10}}
-                onPress={removePaymentProposal}
-                buttonType={'link'}
-                buttonStyle={'danger'}>
-                {t('Delete payment proposal')}
-              </Button>
             </>
-          ) : null}
-
-          {!txp.removed &&
-          txp.pendingForUs &&
-          !paymentExpired &&
-          !txp.multisigContractAddress &&
-          wallet.credentials.n > 1 ? (
-            <Button
-              onPress={rejectPaymentProposal}
-              buttonType={'link'}
-              buttonStyle={'danger'}>
-              {t('Reject Payment Proposal')}
-            </Button>
           ) : null}
 
           <DetailContainer>
@@ -776,16 +816,11 @@ const TransactionProposalDetails = () => {
               } catch (err) {
                 await sleep(500);
                 dispatch(dismissOnGoingProcessModal());
-                await sleep(500);
-                setResetSwipeButton(true);
                 switch (err) {
                   case 'invalid password':
                     dispatch(showBottomNotificationModal(WrongPasswordError()));
                     break;
                   case 'password canceled':
-                    break;
-                  case 'biometric check failed':
-                    setResetSwipeButton(true);
                     break;
                   default:
                     await showErrorMessage(
@@ -801,6 +836,45 @@ const TransactionProposalDetails = () => {
           </Button>
         </ButtonContainer>
       ) : null}
+      <SheetModal
+        placement={'top'}
+        isVisible={showOptions}
+        onBackdropPress={() => setShowOptions(false)}>
+        <SheetContainer placement={'top'}>
+          {showRejectButton ? (
+            <OptionContainer placement={'top'} onPress={rejectPaymentProposal}>
+              <OptionIconContainer>
+                {theme.dark ? (
+                  <RejectIconWhite width={22} />
+                ) : (
+                  <RejectIcon width={22} />
+                )}
+              </OptionIconContainer>
+              <OptionTextContainer>
+                <OptionTitleText isReject={true}>
+                  {t('Reject Payment Proposal')}
+                </OptionTitleText>
+              </OptionTextContainer>
+            </OptionContainer>
+          ) : null}
+          {showRemoveButton ? (
+            <OptionContainer placement={'top'} onPress={removePaymentProposal}>
+              <OptionIconContainer>
+                {theme.dark ? (
+                  <DeleteIconWhite width={22} />
+                ) : (
+                  <DeleteIcon color={Caution} width={22} />
+                )}
+              </OptionIconContainer>
+              <OptionTextContainer>
+                <OptionTitleText isReject={false}>
+                  {t('Delete payment proposal')}
+                </OptionTitleText>
+              </OptionTextContainer>
+            </OptionContainer>
+          ) : null}
+        </SheetContainer>
+      </SheetModal>
     </TxpDetailsContainer>
   );
 };

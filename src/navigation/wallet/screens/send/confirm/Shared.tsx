@@ -21,7 +21,7 @@ import React, {
   useState,
 } from 'react';
 import styled from 'styled-components/native';
-import {Pressable, ScrollView, View} from 'react-native';
+import {Pressable, View} from 'react-native';
 import {CurrencyImage} from '../../../../../components/currency-image/CurrencyImage';
 import ChevronRightSvg from '../../../../../../assets/img/angle-right.svg';
 import {

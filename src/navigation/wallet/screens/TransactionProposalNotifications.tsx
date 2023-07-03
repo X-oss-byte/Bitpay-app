@@ -44,6 +44,7 @@ import {
 import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
+  showOnGoingProcessModal,
 } from '../../../store/app/app.actions';
 import {
   BalanceUpdateError,
@@ -58,6 +59,7 @@ import {publishAndSignMultipleProposals} from '../../../store/wallet/effects/sen
 import {TransactionIcons} from '../../../constants/TransactionIcons';
 import {AppActions} from '../../../store/app';
 import Button from '../../../components/button/Button';
+import RefreshSvg from '../../../../assets/img/refresh.svg';
 
 const NotificationsContainer = styled.SafeAreaView`
   flex: 1;
@@ -82,6 +84,7 @@ const BorderBottom = styled.View`
 const ProposalsContainer = styled.TouchableOpacity`
   flex-direction: row;
   align-items: center;
+  cursor: pointer;
 `;
 
 const ProposalsInfoContainer = styled.View`
@@ -149,6 +152,15 @@ const TransactionProposalNotifications = () => {
   useLayoutEffect(() => {
     navigation.setOptions({
       headerTitle: () => <HeaderTitle>{t('Notifications')}</HeaderTitle>,
+      headerRight: () => (
+        <Button
+          buttonType={'link'}
+          height={30}
+          style={{marginRight: 5}}
+          onPress={onRefresh}>
+          <RefreshSvg width={18} height={18} />
+        </Button>
+      ),
     });
   }, [navigation, t]);
 
@@ -490,17 +502,16 @@ const TransactionProposalNotifications = () => {
     ]);
   };
 
-  // TODO: create click to refresh
   const onRefresh = async () => {
     setRefreshing(true);
-    await sleep(1000);
     try {
       await dispatch(startGetRates({force: true}));
       await updateWalletsWithProposals();
+      setRefreshing(false);
     } catch (err) {
+      setRefreshing(false);
       dispatch(showBottomNotificationModal(BalanceUpdateError()));
     }
-    setRefreshing(false);
   };
 
   const countSuccessAndFailed = (
@@ -518,8 +529,13 @@ const TransactionProposalNotifications = () => {
   };
 
   useEffect(() => {
-    updatePendingProposals();
-  }, [keys]);
+    if (refreshing) {
+      dispatch(showOnGoingProcessModal('LOADING'));
+    } else {
+      dispatch(dismissOnGoingProcessModal());
+      updatePendingProposals();
+    }
+  }, [keys, refreshing]);
 
   return (
     <NotificationsContainer>

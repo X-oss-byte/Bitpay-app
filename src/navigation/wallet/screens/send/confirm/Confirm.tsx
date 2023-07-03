@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useCallback, useLayoutEffect} from 'react';
+import React, {useState, useCallback, useLayoutEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import {RouteProp, StackActions} from '@react-navigation/core';
 import {WalletStackParamList} from '../../../WalletStack';
@@ -141,7 +141,6 @@ const Confirm = () => {
   const {isoCode} = useAppSelector(({APP}) => APP.defaultAltCurrency);
 
   const key = allKeys[wallet?.keyId!];
-  const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [showTransactionLevel, setShowTransactionLevel] = useState(false);
   const [enableRBF, setEnableRBF] = useState(enableReplaceByFee);
   const [showSendingERC20Modal, setShowSendingERC20Modal] = useState(true);
@@ -296,17 +295,6 @@ const Confirm = () => {
       );
     }
   };
-
-  useEffect(() => {
-    if (!resetSwipeButton) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      setResetSwipeButton(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [resetSwipeButton]);
 
   const showErrorMessage = useCallback(
     async (msg: BottomNotificationConfig) => {
@@ -503,9 +491,6 @@ const Confirm = () => {
                   dispatch(showBottomNotificationModal(WrongPasswordError()));
                   break;
                 case 'password canceled':
-                  break;
-                case 'biometric check failed':
-                  setResetSwipeButton(true);
                   break;
                 default:
                   await showErrorMessage(

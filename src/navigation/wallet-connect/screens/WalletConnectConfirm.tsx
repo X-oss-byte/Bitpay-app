@@ -1,15 +1,14 @@
-import React, {useCallback, useLayoutEffect, useState, useEffect} from 'react';
+import React, {useCallback, useLayoutEffect} from 'react';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import styled from 'styled-components/native';
 import {RouteProp} from '@react-navigation/core';
-import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
+import {useAppDispatch} from '../../../utils/hooks';
 import {
   Recipient,
   TransactionProposal,
   TxDetails,
   Wallet,
 } from '../../../store/wallet/wallet.models';
-import SwipeButton from '../../../components/swipe-button/SwipeButton';
 import {sleep} from '../../../utils/helper-methods';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {
@@ -17,7 +16,6 @@ import {
   showBottomNotificationModal,
 } from '../../../store/app/app.actions';
 import {WalletConnectStackParamList} from '../WalletConnectStack';
-import PaymentSent from '../../wallet/components/PaymentSent';
 import Button from '../../../components/button/Button';
 import {
   CustomErrorMessage,
@@ -28,7 +26,7 @@ import {BottomNotificationConfig} from '../../../components/modal/bottom-notific
 import {
   Amount,
   ConfirmContainer,
-  DetailsList,
+  ConfirmScrollView,
   ExchangeRate,
   Fee,
   Header,
@@ -40,7 +38,7 @@ import {GetFeeOptions} from '../../../store/wallet/effects/fee/fee';
 import {Trans, useTranslation} from 'react-i18next';
 import Banner from '../../../components/banner/Banner';
 import {BaseText} from '../../../components/styled/Text';
-import {Hr} from '../../../components/styled/Containers';
+import {Hr, ScreenGutter} from '../../../components/styled/Containers';
 import {
   walletConnectV2ApproveCallRequest,
   walletConnectV2RejectCallRequest,
@@ -49,6 +47,11 @@ import {AppActions} from '../../../store/app';
 
 const HeaderRightContainer = styled.View`
   margin-right: 15px;
+`;
+
+const ButtonContainer = styled.View`
+  padding: 0 ${ScreenGutter};
+  margin: 15px 0;
 `;
 
 export interface WalletConnectConfirmParamList {
@@ -69,7 +72,6 @@ const WalletConnectConfirm = () => {
   const route =
     useRoute<RouteProp<WalletConnectStackParamList, 'WalletConnectConfirm'>>();
   const {wallet, txDetails, request, peerName} = route.params;
-  const [resetSwipeButton, setResetSwipeButton] = useState(false);
 
   const {
     fee,
@@ -100,16 +102,11 @@ const WalletConnectConfirm = () => {
       );
     } catch (err) {
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
-      setResetSwipeButton(true);
       switch (err) {
         case 'invalid password':
           dispatch(showBottomNotificationModal(WrongPasswordError()));
           break;
         case 'password canceled':
-          break;
-        case 'biometric check failed':
-          setResetSwipeButton(true);
           break;
         default:
           await showErrorMessage(
@@ -159,20 +156,9 @@ const WalletConnectConfirm = () => {
     });
   }, [navigation, rejectCallRequest, t]);
 
-  useEffect(() => {
-    if (!resetSwipeButton) {
-      return;
-    }
-    const timer = setTimeout(() => {
-      setResetSwipeButton(false);
-    }, 500);
-
-    return () => clearTimeout(timer);
-  }, [resetSwipeButton]);
-
   return (
     <ConfirmContainer>
-      <DetailsList>
+      <ConfirmScrollView>
         <Header>Summary</Header>
         <Banner
           type={'warning'}
@@ -207,12 +193,10 @@ const WalletConnectConfirm = () => {
         ) : null}
         <Amount description={t('SubTotal')} amount={subTotal} />
         <Amount description={t('Total')} amount={total} />
-      </DetailsList>
-      <SwipeButton
-        title={t('Slide to approve')}
-        onSwipeComplete={approveCallRequest}
-        forceReset={resetSwipeButton}
-      />
+      </ConfirmScrollView>
+      <ButtonContainer>
+        <Button onPress={approveCallRequest}>{t('Click to approve')}</Button>
+      </ButtonContainer>
     </ConfirmContainer>
   );
 };

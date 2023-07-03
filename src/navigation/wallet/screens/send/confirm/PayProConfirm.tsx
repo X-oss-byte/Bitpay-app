@@ -11,7 +11,6 @@ import {
   TxDetails,
   Wallet,
 } from '../../../../../store/wallet/wallet.models';
-import SwipeButton from '../../../../../components/swipe-button/SwipeButton';
 import {
   createPayProTxProposal,
   handleCreateTxProposalError,
@@ -113,7 +112,6 @@ const PayProConfirm = () => {
   const [txDetails, updateTxDetails] = useState(_txDetails);
   const [txp, updateTxp] = useState(_txp);
   const {fee, sendingFrom, subTotal, total} = txDetails || {};
-  const [resetSwipeButton, setResetSwipeButton] = useState(false);
   const [disableSwipeSendButton, setDisableSwipeSendButton] = useState(false);
   const payProHost = payProOptions.payProUrl
     .replace('https://', '')
@@ -188,25 +186,6 @@ const PayProConfirm = () => {
     setWalletSelectorVisible(true);
   };
 
-  const handleCreateGiftCardInvoiceOrTxpError = async (err: any) => {
-    await sleep(400);
-    dispatch(dismissOnGoingProcessModal());
-    const [errorConfig] = await Promise.all([
-      dispatch(handleCreateTxProposalError(err)),
-      sleep(500),
-    ]);
-    dispatch(
-      AppActions.showBottomNotificationModal(
-        CustomErrorMessage({
-          title: t('Error'),
-          errMsg:
-            err.response?.data?.message || err.message || errorConfig.message,
-          action: () => reshowWalletSelector(),
-        }),
-      ),
-    );
-  };
-
   const onWalletSelect = async (selectedWallet: Wallet) => {
     setWalletSelectorVisible(false);
     // not ideal - will dive into why the timeout has to be this long
@@ -272,8 +251,6 @@ const PayProConfirm = () => {
       defaultErrorMessage: t('Could not send transaction'),
       onDismiss: () => reshowWalletSelector(),
     });
-    await sleep(400);
-    setResetSwipeButton(true);
   };
 
   return (
