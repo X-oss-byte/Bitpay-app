@@ -57,9 +57,11 @@ const AmountScreen: React.FC = () => {
   onSendMaxPressedRef.current = onSendMaxPressed;
 
   useLayoutEffect(() => {
+    navigation.setOptions({
+      headerTitle: t('Enter Amount'),
+    });
     if (sendMaxEnabled) {
       navigation.setOptions({
-        headerTitle: t('Amount'),
         headerRight: () => (
           <HeaderContainer>
             <Button
