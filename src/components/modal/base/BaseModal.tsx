@@ -15,7 +15,7 @@ type ModalProps = {
   children: React.ReactNode;
   placement: 'top' | 'bottom' | 'center' | undefined;
   fullScreen?: boolean;
-  useMaxHeight?: string;
+  useMaxHeight?: string | number;
 };
 
 const BaseModal: React.FC<ModalProps> = props => {

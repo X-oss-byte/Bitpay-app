@@ -541,7 +541,7 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
       <SheetModal
         placement={'bottom'}
         isVisible={walletSelectModalVisible}
-        useMaxHeight={'60%'}
+        useMaxHeight={500}
         onBackdropPress={() => setWalletSelectModalVisible(false)}>
         <WalletSelectMenuContainer>
           <WalletSelectMenuBodyContainer>
