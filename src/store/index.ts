@@ -56,6 +56,13 @@ import {
   WalletConnectV2State,
 } from './wallet-connect-v2/wallet-connect-v2.reducer';
 import {WalletConnectV2ActionType} from './wallet-connect-v2/wallet-connect-v2.types';
+import createSensitiveStorage from 'redux-persist-sensitive-storage';
+
+const sensitiveStorage = createSensitiveStorage({
+  keychainService: 'com.bitpay.wallet.macos',
+  sharedPreferencesName: 'BitPayWalletSharedPrefs',
+  encrypt: true,
+});
 
 const basePersistConfig = {
   storage: AsyncStorage,
@@ -106,7 +113,7 @@ const reducers = {
   ),
   WALLET: persistReducer<WalletState, WalletActionType>(
     {
-      storage: AsyncStorage,
+      storage: sensitiveStorage,
       transforms: [bindWalletClient, bindWalletKeys],
       key: 'WALLET',
       blacklist: walletReduxPersistBlackList,
@@ -115,7 +122,7 @@ const reducers = {
   ),
   WALLET_BACKUP: persistReducer<WalletState, WalletBackupActionType>(
     {
-      storage: AsyncStorage,
+      storage: sensitiveStorage,
       key: 'WALLET_BACKUP',
       blacklist: walletReduxPersistBlackList,
     },
@@ -189,7 +196,7 @@ const getStore = () => {
   }
 
   const rootPersistConfig = {
-    ...basePersistConfig,
+    storage: sensitiveStorage,
     key: 'root',
     transforms: [
       createTransform(
@@ -206,16 +213,6 @@ const getStore = () => {
           return inboundState;
         },
       ),
-      // encryptTransform({
-      //   secretKey: getUniqueId(),
-      //   onError: err => {
-      //     const errStr =
-      //       err instanceof Error ? err.message : JSON.stringify(err);
-      //     LogActions.persistLog(
-      //       LogActions.error(`Encrypt transform failed - ${errStr}`),
-      //     );
-      //   },
-      // }),
     ],
   };
 
