@@ -22,6 +22,8 @@ export enum AppActionTypes {
   DISMISS_ONGOING_PROCESS_MODAL = 'APP/DISMISS_ONGOING_PROCESS_MODAL',
   SHOW_BOTTOM_NOTIFICATION_MODAL = 'APP/SHOW_BOTTOM_NOTIFICATION_MODAL',
   DISMISS_BOTTOM_NOTIFICATION_MODAL = 'APP/DISMISS_BOTTOM_NOTIFICATION_MODAL',
+  SHOW_TRANSACT_MENU = 'APP/SHOW_TRANSACT_MENU',
+  DISMISS_TRANSACT_MENU = 'APP/DISMISS_TRANSACT_MENU',
   RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG = 'APP/RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG',
   SET_COLOR_SCHEME = 'APP/SET_COLOR_SCHEME',
   SUCCESS_GENERATE_APP_IDENTITY = 'APP/SUCCESS_GENERATE_APP_IDENTITY',
@@ -112,6 +114,14 @@ interface ShowBottomNotificationModal {
 
 interface DismissBottomNotificationModal {
   type: typeof AppActionTypes.DISMISS_BOTTOM_NOTIFICATION_MODAL;
+}
+
+interface ShowTransactMenu {
+  type: typeof AppActionTypes.SHOW_TRANSACT_MENU;
+}
+
+interface DismissTransactMenu {
+  type: typeof AppActionTypes.DISMISS_TRANSACT_MENU;
 }
 
 interface ResetBottomNotificationModalConfig {
@@ -278,6 +288,8 @@ export type AppActionType =
   | DismissOnGoingProcessModal
   | ShowBottomNotificationModal
   | DismissBottomNotificationModal
+  | ShowTransactMenu
+  | DismissTransactMenu
   | ResetBottomNotificationModalConfig
   | SetColorScheme
   | SuccessGenerateAppIdentity

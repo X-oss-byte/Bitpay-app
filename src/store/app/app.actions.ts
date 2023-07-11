@@ -58,6 +58,14 @@ export const dismissBottomNotificationModal = (): AppActionType => ({
   type: AppActionTypes.DISMISS_BOTTOM_NOTIFICATION_MODAL,
 });
 
+export const showTransactMenu = (): AppActionType => ({
+  type: AppActionTypes.SHOW_TRANSACT_MENU,
+});
+
+export const dismissTransactMenu = (): AppActionType => ({
+  type: AppActionTypes.DISMISS_TRANSACT_MENU,
+});
+
 export const resetBottomNotificationModalConfig = (): AppActionType => ({
   type: AppActionTypes.RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG,
 });

@@ -29,6 +29,7 @@ export const appReduxPersistBlackList: Array<keyof AppState> = [
   'showDecryptPasswordModal',
   'showPinModal',
   'showBottomNotificationModal',
+  'showTransactMenu',
   'showBiometricModal',
   'activeModalId',
   'failedAppInit',
@@ -74,6 +75,7 @@ export interface AppState {
   showOnGoingProcessModal: boolean;
   onGoingProcessModalMessage: string | undefined;
   showBottomNotificationModal: boolean;
+  showTransactMenu: boolean;
   bottomNotificationModalConfig: BottomNotificationConfig | undefined;
   notificationsAccepted: boolean;
   confirmedTxAccepted: boolean;
@@ -144,6 +146,7 @@ const initialState: AppState = {
   showOnGoingProcessModal: false,
   onGoingProcessModalMessage: undefined,
   showBottomNotificationModal: false,
+  showTransactMenu: false,
   bottomNotificationModalConfig: undefined,
   notificationsAccepted: false,
   confirmedTxAccepted: false,
@@ -267,6 +270,18 @@ export const appReducer = (
       return {
         ...state,
         showBottomNotificationModal: false,
+      };
+
+    case AppActionTypes.SHOW_TRANSACT_MENU:
+      return {
+        ...state,
+        showTransactMenu: true,
+      };
+
+    case AppActionTypes.DISMISS_TRANSACT_MENU:
+      return {
+        ...state,
+        showTransactMenu: false,
       };
 
     case AppActionTypes.RESET_BOTTOM_NOTIFICATION_MODAL_CONFIG:
