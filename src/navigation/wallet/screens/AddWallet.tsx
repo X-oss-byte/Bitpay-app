@@ -58,11 +58,7 @@ import {
 } from '../../../constants/SupportedCurrencyOptions';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 import WalletRow, {WalletRowProps} from '../../../components/list/WalletRow';
-import {
-  getProtocolName,
-  keyExtractor,
-  sleep,
-} from '../../../utils/helper-methods';
+import {getProtocolName, keyExtractor} from '../../../utils/helper-methods';
 import Icons from '../components/WalletIcons';
 import ChevronUpSvg from '../../../../assets/img/chevron-up.svg';
 import ChevronDownSvg from '../../../../assets/img/chevron-down.svg';
@@ -280,7 +276,6 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
   };
 
   const showMissingWalletMsg = async () => {
-    await sleep(500);
     dispatch(
       showBottomNotificationModal({
         type: 'info',
@@ -291,8 +286,7 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
             primary: true,
             action: async () => {
               dispatch(dismissBottomNotificationModal());
-              await sleep(500);
-              addAssociatedWallet();
+              await addAssociatedWallet();
             },
             text: t('Create Wallet'),
           },
@@ -405,7 +399,6 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
         // new wallet might have funds
         await dispatch(startGetRates({}));
         await dispatch(startUpdateAllWalletStatusForKey({key, force: true}));
-        await sleep(1000);
         dispatch(updatePortfolioBalance());
 
         dispatch(dismissOnGoingProcessModal());
@@ -415,7 +408,6 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
           dispatch(showBottomNotificationModal(WrongPasswordError()));
         } else {
           dispatch(dismissOnGoingProcessModal());
-          await sleep(500);
           showErrorModal(err.message);
           reject(err);
         }
@@ -588,7 +580,6 @@ const AddWallet: React.FC<AddWalletScreenProps> = ({navigation, route}) => {
     } catch (error) {
       Keyboard.dismiss();
       setCustomTokenAddress(undefined);
-      await sleep(200);
       const err = t(
         'Could not find any ERC20 contract attached to the provided address. Recheck the contract address and network of the associated wallet.',
       );

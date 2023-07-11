@@ -25,7 +25,7 @@ import {
   dismissDecryptPasswordModal,
   showDecryptPasswordModal,
 } from '../../../app/app.actions';
-import {addTokenChainSuffix, sleep} from '../../../../utils/helper-methods';
+import {addTokenChainSuffix} from '../../../../utils/helper-methods';
 import {t} from 'i18next';
 import {LogActions} from '../../../log';
 export interface CreateOptions {
@@ -555,7 +555,6 @@ export const getDecryptPassword =
         showDecryptPasswordModal({
           onSubmitHandler: async (_password: string) => {
             dispatch(dismissDecryptPasswordModal());
-            await sleep(500);
             if (checkEncryptPassword(key, _password)) {
               return resolve(_password);
             } else {

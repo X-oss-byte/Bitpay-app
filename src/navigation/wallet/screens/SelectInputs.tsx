@@ -33,7 +33,6 @@ import {
   createProposalAndBuildTxDetails,
   handleCreateTxProposalError,
 } from '../../../store/wallet/effects/send/send';
-import {sleep} from '../../../utils/helper-methods';
 import {GetMinFee} from '../../../store/wallet/effects/fee/fee';
 import _ from 'lodash';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
@@ -202,7 +201,6 @@ const SelectInputs = () => {
         createProposalAndBuildTxDetails(tx),
       )) as any;
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       navigation.navigate('Wallet', {
         screen: 'Confirm',
         params: {
@@ -216,14 +214,10 @@ const SelectInputs = () => {
         },
       });
     } catch (err: any) {
-      const errorMessageConfig = (
-        await Promise.all([
-          dispatch(handleCreateTxProposalError(err)),
-          sleep(500),
-        ])
-      )[0];
+      const [errorMessageConfig] = await dispatch(
+        handleCreateTxProposalError(err),
+      );
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       dispatch(
         showBottomNotificationModal({
           ...errorMessageConfig,

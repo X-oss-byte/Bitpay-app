@@ -41,7 +41,7 @@ import {
 } from '../../../store/app/app.actions';
 import {Key, Token} from '../../../store/wallet/wallet.models';
 import {StackScreenProps} from '@react-navigation/stack';
-import {addTokenChainSuffix, sleep} from '../../../utils/helper-methods';
+import {addTokenChainSuffix} from '../../../utils/helper-methods';
 import {useLogger} from '../../../utils/hooks/useLogger';
 import {useAppSelector, useAppDispatch} from '../../../utils/hooks';
 import {BitpaySupportedTokenOpts} from '../../../constants/tokens';
@@ -396,7 +396,6 @@ const CurrencySelection: React.FC<CurrencySelectionScreenProps> = ({route}) => {
             } catch (e: any) {
               logger.error(e.message);
               dispatch(dismissOnGoingProcessModal());
-              await sleep(500);
               showErrorModal(e.message);
             }
           },

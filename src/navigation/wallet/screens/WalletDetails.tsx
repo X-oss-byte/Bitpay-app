@@ -332,7 +332,6 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
             chain: fullWalletObj.chain,
             onAmountSelected: async (amount, setButtonState) => {
               setButtonState('success');
-              await sleep(500);
               navigation.navigate('Wallet', {
                 screen: 'RequestSpecificAmountQR',
                 params: {wallet: fullWalletObj, requestAmount: Number(amount)},
@@ -625,10 +624,9 @@ const WalletDetails: React.FC<WalletDetailsScreenProps> = ({route}) => {
         },
       });
     } catch (err: any) {
-      const [errorMessageConfig] = await Promise.all([
-        dispatch(handleCreateTxProposalError(err)),
-        sleep(400),
-      ]);
+      const [errorMessageConfig] = await dispatch(
+        handleCreateTxProposalError(err),
+      );
       dispatch(
         showBottomNotificationModal({
           ...errorMessageConfig,

@@ -50,7 +50,7 @@ import {
 } from '../../../styles/colors';
 import Banner from '../../../components/banner/Banner';
 import Info from '../../../components/icons/info/Info';
-import {getContactObj, sleep} from '../../../utils/helper-methods';
+import {getContactObj} from '../../../utils/helper-methods';
 import {GetAmFormatDate} from '../../../store/wallet/utils/time';
 import {
   createProposalAndBuildTxDetails,
@@ -326,7 +326,6 @@ const TransactionDetails = () => {
     } catch (err: any) {
       const [errorMessageConfig] = await Promise.all([
         dispatch(handleCreateTxProposalError(err)),
-        sleep(400),
       ]);
       dispatch(
         showBottomNotificationModal({

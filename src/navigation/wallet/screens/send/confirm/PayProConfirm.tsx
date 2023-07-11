@@ -17,7 +17,6 @@ import {
   removeTxp,
   startSendPayment,
 } from '../../../../../store/wallet/effects/send/send';
-import {sleep} from '../../../../../utils/helper-methods';
 import {startOnGoingProcessModal} from '../../../../../store/app/app.effects';
 import {dismissOnGoingProcessModal} from '../../../../../store/app/app.actions';
 import {BuildPayProWalletSelectorList} from '../../../../../store/wallet/utils/wallet';
@@ -131,7 +130,6 @@ const PayProConfirm = () => {
   );
 
   const reshowWalletSelector = async () => {
-    await sleep(400);
     setWalletSelectorVisible(true);
   };
 
@@ -149,7 +147,6 @@ const PayProConfirm = () => {
       );
       setWallet(selectedWallet);
       setKey(keys[selectedWallet.keyId]);
-      await sleep(400);
       dispatch(dismissOnGoingProcessModal());
       updateTxDetails(newTxDetails);
       updateTxp(newTxp);
@@ -157,11 +154,9 @@ const PayProConfirm = () => {
         address: string;
       });
     } catch (err: any) {
-      await sleep(400);
       dispatch(dismissOnGoingProcessModal());
       const [errorConfig] = await Promise.all([
         dispatch(handleCreateTxProposalError(err)),
-        sleep(500),
       ]);
       dispatch(
         AppActions.showBottomNotificationModal(
@@ -188,18 +183,15 @@ const PayProConfirm = () => {
 
   const onWalletSelect = async (selectedWallet: Wallet) => {
     setWalletSelectorVisible(false);
-    // not ideal - will dive into why the timeout has to be this long
-    await sleep(400);
-    createTxp(selectedWallet);
+    await createTxp(selectedWallet);
   };
 
-  const sendPayment = async (twoFactorCode?: string) => {
-    dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
+  const sendPayment = async () => {
+    await dispatch(startOnGoingProcessModal('SENDING_PAYMENT'));
     txp && wallet && recipient
       ? await dispatch(startSendPayment({txp, key, wallet, recipient}))
       : null;
     dispatch(dismissOnGoingProcessModal());
-    await sleep(400);
     dispatch(
       AppActions.showPaymentSentModal({
         onDismissModal: async () => {
@@ -313,7 +305,6 @@ const PayProConfirm = () => {
           onBackdropPress={async () => {
             setWalletSelectorVisible(false);
             if (!wallet) {
-              await sleep(100);
               navigation.goBack();
             }
           }}

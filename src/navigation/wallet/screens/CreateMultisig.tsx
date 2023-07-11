@@ -54,7 +54,6 @@ import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import InfoSvg from '../../../../assets/img/info.svg';
 import PlusIcon from '../../../components/plus/Plus';
 import MinusIcon from '../../../components/minus/Minus';
-import {sleep} from '../../../utils/helper-methods';
 import {Key, Wallet} from '../../../store/wallet/wallet.models';
 import {WrongPasswordError} from '../components/ErrorMessages';
 import {URL} from '../../../constants';
@@ -320,7 +319,6 @@ const CreateMultisig = () => {
         dispatch(showBottomNotificationModal(WrongPasswordError()));
       } else {
         dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
         showErrorModal(e.message);
         return;
       }

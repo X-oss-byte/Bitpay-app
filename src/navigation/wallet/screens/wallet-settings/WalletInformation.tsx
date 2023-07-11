@@ -18,7 +18,6 @@ import {
   IsUtxoCoin,
 } from '../../../../store/wallet/utils/currency';
 import {View} from 'react-native';
-import {sleep} from '../../../../utils/helper-methods';
 import {useAppDispatch, useLogger} from '../../../../utils/hooks';
 import {useTranslation} from 'react-i18next';
 import CopiedSvg from '../../../../../assets/img/copied-success.svg';
@@ -179,7 +178,6 @@ const WalletInformation = () => {
         } else if (status) {
           setCopayers(status.wallet.copayers);
           setBalanceByAddress(status.balance.byAddress);
-          await sleep(500);
           setIsLoading(false);
         }
       },

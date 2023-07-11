@@ -19,7 +19,6 @@ import {SlateDark, White} from '../../../../styles/colors';
 import Button, {ButtonState} from '../../../../components/button/Button';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../../WalletStack';
-import {sleep} from '../../../../utils/helper-methods';
 import {useAppSelector} from '../../../../utils/hooks/useAppSelector';
 import {GetMainAddresses} from '../../../../store/wallet/effects/address/address';
 import {useAppDispatch} from '../../../../utils/hooks';
@@ -126,7 +125,6 @@ const Addresses = () => {
     });
 
     return navigation.addListener('blur', async () => {
-      await sleep(300);
       setButtonState(undefined);
     });
   }, [navigation, t]);
@@ -270,7 +268,6 @@ const Addresses = () => {
 
       if (!wallet.isComplete()) {
         setButtonState('failed');
-        await sleep(1000);
         setButtonState(null);
         return;
       }
@@ -283,7 +280,6 @@ const Addresses = () => {
           if (err) {
             console.log(err);
             setButtonState('failed');
-            await sleep(1000);
             setButtonState(null);
             return;
           }

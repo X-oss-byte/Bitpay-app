@@ -31,7 +31,6 @@ import {
 import {SectionList, View} from 'react-native';
 import TransactionProposalRow from '../../../components/list/TransactionProposalRow';
 import {Air, LightBlack} from '../../../styles/colors';
-import {sleep} from '../../../utils/helper-methods';
 import {TRANSACTION_ROW_HEIGHT} from '../../../components/list/TransactionRow';
 import {findWalletById} from '../../../store/wallet/utils/wallet';
 import {useTranslation} from 'react-i18next';
@@ -376,8 +375,7 @@ const TransactionProposalNotifications = () => {
   );
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],
@@ -596,7 +594,6 @@ const TransactionProposalNotifications = () => {
                       ? t('proposals signed', {sucess: count.success})
                       : t('Proposal signed');
                   setPaymentSendModalTitle(title);
-                  await sleep(400);
                   dispatch(
                     AppActions.showPaymentSentModal({
                       onDismissModal: async () => {},

@@ -16,7 +16,6 @@ import {Dispatch} from 'redux';
 import {
   calculatePercentageDifference,
   getMnemonic,
-  sleep,
 } from '../../../../utils/helper-methods';
 import {sortBy} from 'lodash';
 import {useAppSelector} from '../../../../utils/hooks';
@@ -67,14 +66,12 @@ export const keyBackupRequired = (
         text: t('Back up Key'),
         action: async () => {
           if (key.properties!.mnemonicEncrypted) {
-            await sleep(500);
             dispatch(
               showDecryptPasswordModal({
                 onSubmitHandler: async (encryptPassword: string) => {
                   try {
                     const decryptedKey = key.methods!.get(encryptPassword);
                     await dispatch(dismissDecryptPasswordModal());
-                    await sleep(300);
                     navigation.navigate('Wallet', {
                       screen: 'RecoveryPhrase',
                       params: {
@@ -87,7 +84,6 @@ export const keyBackupRequired = (
                   } catch (e) {
                     console.log(`Decrypt Error: ${e}`);
                     await dispatch(dismissDecryptPasswordModal());
-                    await sleep(1000); // Wait to close Decrypt Password modal
                     dispatch(showBottomNotificationModal(WrongPasswordError()));
                   }
                 },

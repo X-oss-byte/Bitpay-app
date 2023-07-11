@@ -19,7 +19,6 @@ import ClearSvg from '../../../../../../assets/img/clear.svg';
 import ClearDarkSvg from '../../../../../../assets/img/clear-dark.svg';
 import PencilSvg from '../../../../../../assets/img/pencil.svg';
 import PencilDarkSvg from '../../../../../../assets/img/pencil-dark.svg';
-import {sleep} from '../../../../../utils/helper-methods';
 
 const memoBorderRadius = 4;
 const memoBorderWidth = 1;
@@ -246,9 +245,6 @@ export const Memo = ({
                 <MemoOuterButton
                   onPress={async () => {
                     save();
-                    // Prevent refocus after delayed autocorrect
-                    await sleep(300);
-                    save();
                   }}>
                   <CheckSvg width={14} />
                 </MemoOuterButton>
@@ -256,7 +252,6 @@ export const Memo = ({
                 <MemoOuterButton
                   onPress={async () => {
                     setIsEditMode(true);
-                    await sleep(0);
                     inputRef.current?.focus();
                   }}>
                   {theme.dark ? <PencilDarkSvg /> : <PencilSvg />}

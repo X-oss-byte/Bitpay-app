@@ -1,6 +1,5 @@
 import {t} from 'i18next';
 import {Effect} from '../../..';
-import {sleep} from '../../../../utils/helper-methods';
 import {
   dismissBottomNotificationModal,
   showBottomNotificationModal,
@@ -56,7 +55,6 @@ export const showWalletError =
         message = t('Unknown Error');
         break;
     }
-    await sleep(1000);
     dispatch(
       showBottomNotificationModal({
         type: 'error',

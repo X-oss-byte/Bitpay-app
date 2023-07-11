@@ -24,11 +24,7 @@ import {
 import CopySvg from '../../../../assets/img/copy.svg';
 import CopiedSvg from '../../../../assets/img/copied-success.svg';
 import GhostSvg from '../../../../assets/img/ghost-straight-face.svg';
-import {
-  sleep,
-  getProtocolName,
-  titleCasing,
-} from '../../../utils/helper-methods';
+import {getProtocolName, titleCasing} from '../../../utils/helper-methods';
 import {Status, Wallet} from '../../../store/wallet/wallet.models';
 import ReceiveAddressHeader, {
   HeaderContextHandler,
@@ -213,7 +209,6 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
 
   const showErrorMessage = async (msg: BottomNotificationConfig) => {
     closeModal();
-    await sleep(500);
     dispatch(showBottomNotificationModal(msg));
   };
 

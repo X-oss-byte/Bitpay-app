@@ -36,7 +36,6 @@ import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
 } from '../app/app.actions';
-import {sleep} from '../../utils/helper-methods';
 import {BwcProvider} from '../../lib/bwc';
 import {
   createProposalAndBuildTxDetails,
@@ -71,7 +70,6 @@ export const incomingData =
   ): Effect<Promise<boolean>> =>
   async dispatch => {
     // wait to close blur
-    await sleep(200);
     const coin = opts?.wallet?.currencyAbbreviation?.toLowerCase();
     const chain = opts?.wallet?.credentials?.chain.toLowerCase();
     let handled = true;
@@ -148,7 +146,6 @@ export const incomingData =
       }
     } catch (err) {
       dispatch(dismissOnGoingProcessModal());
-      await sleep(300);
       throw err;
     }
 
@@ -222,7 +219,6 @@ const goToPayPro =
       });
     } catch (e: any) {
       dispatch(dismissOnGoingProcessModal());
-      await sleep(400);
 
       dispatch(
         showBottomNotificationModal({

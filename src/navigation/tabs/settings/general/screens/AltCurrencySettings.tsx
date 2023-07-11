@@ -37,7 +37,6 @@ import {updatePortfolioBalance} from '../../../../../store/wallet/wallet.actions
 import {getPriceHistory} from '../../../../../store/wallet/effects';
 import {useTranslation} from 'react-i18next';
 import {startOnGoingProcessModal} from '../../../../../store/app/app.effects';
-import {sleep} from '../../../../../utils/helper-methods';
 
 const AltCurrencySettingsContainer = styled.SafeAreaView`
   margin-top: 20px;
@@ -165,7 +164,6 @@ const AltCurrencySettings = () => {
             onPress={async () => {
               Keyboard.dismiss();
               await dispatch(startOnGoingProcessModal('LOADING'));
-              await sleep(500);
               InteractionManager.runAfterInteractions(() => {
                 dispatch(setDefaultAltCurrency(item));
                 dispatch(FormatKeyBalances());
@@ -173,7 +171,6 @@ const AltCurrencySettings = () => {
                 dispatch(getPriceHistory(item.isoCode));
               });
               dispatch(dismissOnGoingProcessModal());
-              await sleep(500);
               navigation.goBack();
             }}
           />

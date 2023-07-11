@@ -27,7 +27,6 @@ import ChevronRightSvg from '../../../../../../assets/img/angle-right.svg';
 import {
   getBadgeImg,
   getCurrencyAbbreviation,
-  sleep,
 } from '../../../../../utils/helper-methods';
 import {WalletsAndAccounts} from '../../../../../store/wallet/utils/wallet';
 import {
@@ -494,13 +493,9 @@ export const WalletSelector = ({
   );
 
   const selectOption = useCallback(
-    async (onSelect: () => void, waitForClose?: boolean) => {
+    async (onSelect: () => void) => {
       setWalletSelectorVisible(false);
       setAutoSelectSingleWallet(false);
-      if (waitForClose) {
-        // not ideal - will dive into why the timeout has to be this long
-        await sleep(600);
-      }
       onSelect();
     },
     [setWalletSelectorVisible],
@@ -515,7 +510,6 @@ export const WalletSelector = ({
             return selectOption(() => onWalletSelect(keyWallets[0].wallets[0]));
           }
         }
-        await sleep(10);
         setSelectorVisible(true);
       } else {
         dispatch(showNoWalletsModal({navigation}));
@@ -575,7 +569,7 @@ export const WalletSelector = ({
             currency={currency}
             keyWallets={walletsAndAccounts.keyWallets}
             hideBalance={hideAllBalances}
-            onPress={wallet => selectOption(() => onWalletSelect(wallet), true)}
+            onPress={wallet => selectOption(() => onWalletSelect(wallet))}
           />
         </WalletSelectMenuBodyContainer>
       </WalletSelectMenuContainer>

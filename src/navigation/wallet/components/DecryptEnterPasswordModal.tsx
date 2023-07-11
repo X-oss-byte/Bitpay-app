@@ -11,8 +11,6 @@ import {Controller, useForm} from 'react-hook-form';
 import BoxInput from '../../../components/form/BoxInput';
 import Button from '../../../components/button/Button';
 import {HeaderTitle, Paragraph} from '../../../components/styled/Text';
-import {Keyboard} from 'react-native';
-import {sleep} from '../../../utils/helper-methods';
 import {useTranslation} from 'react-i18next';
 import SheetModal from '../../../components/modal/base/sheet/SheetModal';
 import {useAppDispatch} from '../../../utils/hooks';
@@ -88,8 +86,6 @@ const DecryptEnterPasswordModal = () => {
   };
 
   const onSubmit = async ({password}: {password: string}) => {
-    Keyboard.dismiss();
-    await sleep(0);
     onSubmitHandler && onSubmitHandler(password);
   };
 

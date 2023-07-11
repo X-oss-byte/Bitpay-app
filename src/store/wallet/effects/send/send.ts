@@ -24,7 +24,6 @@ import {
   formatFiatAmount,
   getCWCChain,
   getRateByCurrencyName,
-  sleep,
 } from '../../../../utils/helper-methods';
 import {toFiat, checkEncryptPassword} from '../../utils/wallet';
 import {startGetRates} from '../rates/rates';
@@ -952,7 +951,6 @@ export const publishAndSign =
               showDecryptPasswordModal({
                 onSubmitHandler: async (_password: string) => {
                   dispatch(dismissDecryptPasswordModal());
-                  await sleep(500);
                   checkEncryptPassword(key, _password)
                     ? _resolve(_password)
                     : _reject('invalid password');
@@ -1081,7 +1079,6 @@ export const publishAndSignMultipleProposals =
                 showDecryptPasswordModal({
                   onSubmitHandler: async (_password: string) => {
                     dispatch(dismissDecryptPasswordModal());
-                    await sleep(500);
                     checkEncryptPassword(key, _password)
                       ? _resolve(_password)
                       : _reject('invalid password');

@@ -16,7 +16,6 @@ import {GetPrecision} from '../../../../store/wallet/utils/currency';
 import RNFS from 'react-native-fs';
 import Papa from 'papaparse';
 import {BottomNotificationConfig} from '../../../../components/modal/bottom-notification/BottomNotification';
-import {sleep} from '../../../../utils/helper-methods';
 import {
   dismissBottomNotificationModal,
   dismissOnGoingProcessModal,
@@ -207,8 +206,7 @@ const ExportTransactionHistory = () => {
   };
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],

@@ -9,7 +9,6 @@ import {
 } from '../../../components/styled/Containers';
 import {Platform, Image, ImageSourcePropType} from 'react-native';
 import {Action, Black, Slate, White} from '../../../styles/colors';
-import {sleep} from '../../../utils/helper-methods';
 
 const OptionsTitleContainer = styled.View`
   margin-bottom: 5px;
@@ -100,7 +99,6 @@ const OptionsSheet = ({
                 activeOpacity={ActiveOpacity}
                 onPress={async () => {
                   closeModal();
-                  await sleep(500);
                   onPress();
                 }}>
                 {img && <OptionIconContainer>{img}</OptionIconContainer>}

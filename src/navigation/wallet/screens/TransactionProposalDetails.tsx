@@ -43,7 +43,6 @@ import {
 } from '../../../styles/colors';
 import Banner from '../../../components/banner/Banner';
 import Info from '../../../components/icons/info/Info';
-import {sleep} from '../../../utils/helper-methods';
 import {GetAmFormatDate, GetAmTimeAgo} from '../../../store/wallet/utils/time';
 import SendToPill from '../components/SendToPill';
 import {SUPPORTED_CURRENCIES} from '../../../constants/currencies';
@@ -313,8 +312,7 @@ const TransactionProposalDetails = () => {
   const checkPayPro = async () => {
     try {
       setPayproIsLoading(true);
-      await sleep(400);
-      dispatch(startOnGoingProcessModal('FETCHING_PAYMENT_INFO'));
+      await dispatch(startOnGoingProcessModal('FETCHING_PAYMENT_INFO'));
       const address = (await dispatch<Promise<string>>(
         createWalletAddress({wallet: wallet, newAddress: false}),
       )) as string;
@@ -329,15 +327,12 @@ const TransactionProposalDetails = () => {
       });
       paymentTimeControl(_payProDetails.expires);
       setPayProDetails(_payProDetails);
-      await sleep(500);
       setPayproIsLoading(false);
       dispatch(dismissOnGoingProcessModal());
     } catch (err) {
       setPayproIsLoading(false);
-      await sleep(1000);
       dispatch(dismissOnGoingProcessModal());
       logger.warn('Error fetching this invoice: ' + BWCErrorMessage(err));
-      await sleep(600);
       await dispatch(
         showBottomNotificationModal(
           CustomErrorMessage({
@@ -408,9 +403,7 @@ const TransactionProposalDetails = () => {
           targetAmount,
         }),
       );
-      await sleep(1000);
       dispatch(dismissOnGoingProcessModal());
-      await sleep(600);
       dispatch(
         AppActions.showPaymentSentModal({
           onDismissModal: async () => {
@@ -427,9 +420,7 @@ const TransactionProposalDetails = () => {
       if (typeof err?.message === 'string') {
         msg = msg + `: ${err.message}`;
       }
-      await sleep(1000);
       dispatch(dismissOnGoingProcessModal());
-      await sleep(600);
       await dispatch(
         showBottomNotificationModal(
           CustomErrorMessage({
@@ -548,8 +539,7 @@ const TransactionProposalDetails = () => {
   }, [txp, paymentExpired, wallet.credentials.n]);
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],
@@ -799,10 +789,8 @@ const TransactionProposalDetails = () => {
                     lastSigner ? 'SENDING_PAYMENT' : 'ACCEPTING_PAYMENT',
                   ),
                 );
-                await sleep(400);
                 await dispatch(publishAndSign({txp, key, wallet}));
                 dispatch(dismissOnGoingProcessModal());
-                await sleep(400);
                 dispatch(
                   AppActions.showPaymentSentModal({
                     onDismissModal: async () => {
@@ -814,7 +802,6 @@ const TransactionProposalDetails = () => {
                   }),
                 );
               } catch (err) {
-                await sleep(500);
                 dispatch(dismissOnGoingProcessModal());
                 switch (err) {
                   case 'invalid password':

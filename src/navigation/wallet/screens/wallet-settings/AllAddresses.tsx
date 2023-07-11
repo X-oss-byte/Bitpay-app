@@ -17,7 +17,6 @@ import {SlateDark, White} from '../../../../styles/colors';
 import Clipboard from '@react-native-clipboard/clipboard';
 import Button, {ButtonState} from '../../../../components/button/Button';
 import {FormatAmountStr} from '../../../../store/wallet/effects/amount/amount';
-import {sleep} from '../../../../utils/helper-methods';
 import {APP_NAME} from '../../../../constants/config';
 import {useAppDispatch} from '../../../../utils/hooks';
 import {useTranslation} from 'react-i18next';
@@ -130,13 +129,11 @@ const AllAddresses = () => {
       // Works only on device
       await Linking.openURL(`mailto:?subject=${subject}&body=${body}`);
       setButtonState('success');
-      await sleep(200);
       setButtonState(undefined);
     } catch (err) {
       const e = err instanceof Error ? err.message : JSON.stringify(err);
       dispatch(LogActions.error('[SendAddresses] ', e));
       setButtonState('failed');
-      await sleep(500);
       setButtonState(undefined);
     }
   };

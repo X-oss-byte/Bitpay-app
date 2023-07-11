@@ -9,7 +9,6 @@ import Button from '../../../components/button/Button';
 import DeleteConfirmationModal from '../components/DeleteConfirmationModal';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
 import {AppActions} from '../../../store/app';
-import {sleep} from '../../../utils/helper-methods';
 import {
   deleteKey,
   updatePortfolioBalance,
@@ -55,16 +54,13 @@ const DeleteKey = () => {
   const [isVisible, setIsVisible] = useState(false);
   const startDeleteKey = async () => {
     setIsVisible(false);
-    await sleep(500);
     await dispatch(startOnGoingProcessModal('DELETING_KEY'));
 
-    await sleep(300);
     const previousKeysLength = Object.keys(keys).length;
     const numNewKeys = Object.keys(keys).length - 1;
     const lengthChange = previousKeysLength - numNewKeys;
     dispatch(deleteKey({keyId, lengthChange}));
 
-    await sleep(1000);
     dispatch(updatePortfolioBalance());
     dispatch(AppActions.dismissOnGoingProcessModal());
     navigation.navigate('Tabs', {screen: 'Home'});

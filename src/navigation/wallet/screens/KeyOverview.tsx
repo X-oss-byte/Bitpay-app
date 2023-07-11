@@ -53,7 +53,6 @@ import {
   convertToFiat,
   formatFiatAmount,
   shouldScale,
-  sleep,
 } from '../../../utils/helper-methods';
 import {BalanceUpdateError} from '../components/ErrorMessages';
 import OptionsSheet, {Option} from '../components/OptionsSheet';
@@ -543,10 +542,7 @@ const KeyOverview = () => {
     try {
       dispatch(getPriceHistory(defaultAltCurrency.isoCode));
       await dispatch(startGetRates({force: true}));
-      await Promise.all([
-        dispatch(startUpdateAllWalletStatusForKey({key, force: true})),
-        sleep(1000),
-      ]);
+      await dispatch(startUpdateAllWalletStatusForKey({key, force: true}));
       dispatch(updatePortfolioBalance());
     } catch (err) {
       dispatch(showBottomNotificationModal(BalanceUpdateError()));

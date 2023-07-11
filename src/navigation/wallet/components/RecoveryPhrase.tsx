@@ -63,7 +63,6 @@ import {
   isValidDerivationPathCoin,
   keyExtractor,
   parsePath,
-  sleep,
 } from '../../../utils/helper-methods';
 import {DefaultDerivationPath} from '../../../constants/defaultDerivationPath';
 import {startUpdateAllWalletStatusForKey} from '../../../store/wallet/effects/status/status';
@@ -217,8 +216,7 @@ const RecoveryPhrase = () => {
           actions: [
             {
               text: t('Continue'),
-              action: async () => {
-                await sleep(500);
+              action: () => {
                 if (derivationPathEnabled) {
                   const {text} = getValues();
                   setOptsAndCreate(text, advancedOptions);
@@ -402,8 +400,7 @@ const RecoveryPhrase = () => {
     opts: Partial<KeyOptions>,
   ): Promise<void> => {
     try {
-      dispatch(startOnGoingProcessModal('IMPORTING'));
-      await sleep(1000);
+      await dispatch(startOnGoingProcessModal('IMPORTING'));
       const key = !derivationPathEnabled
         ? ((await dispatch<any>(startImportMnemonic(importData, opts))) as Key)
         : ((await dispatch<any>(
@@ -422,7 +419,6 @@ const RecoveryPhrase = () => {
     } catch (e: any) {
       logger.error(e.message);
       dispatch(dismissOnGoingProcessModal());
-      await sleep(600);
       showErrorModal(e);
       return;
     }
@@ -469,7 +465,6 @@ const RecoveryPhrase = () => {
       const key = (await dispatch<any>(startCreateKeyWithOpts(keyOpts))) as Key;
       await dispatch(startGetRates({}));
       await dispatch(startUpdateAllWalletStatusForKey({key, force: true}));
-      await sleep(1000);
       await dispatch(updatePortfolioBalance());
 
       backupRedirect({
@@ -483,7 +478,6 @@ const RecoveryPhrase = () => {
     } catch (e: any) {
       logger.error(e.message);
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       showErrorModal(e);
       setRecreateWallet(false);
       return;

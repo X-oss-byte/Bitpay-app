@@ -25,7 +25,6 @@ import {
   getDecryptPassword,
 } from '../../../store/wallet/effects';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
-import {sleep} from '../../../utils/helper-methods';
 import {Key, Wallet} from '../../../store/wallet/wallet.models';
 import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../WalletStack';
@@ -80,8 +79,7 @@ const JoinMultisig = () => {
   } = useForm({resolver: yupResolver(schema)});
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],
@@ -203,7 +201,6 @@ const JoinMultisig = () => {
       if (e.message === 'invalid password') {
         dispatch(showBottomNotificationModal(WrongPasswordError()));
       } else {
-        await sleep(500);
         await showErrorMessage(
           CustomErrorMessage({
             errMsg: BWCErrorMessage(e),

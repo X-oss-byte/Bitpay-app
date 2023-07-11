@@ -15,7 +15,6 @@ import {
   formatFiatAmount,
   getCurrencyAbbreviation,
   keyExtractor,
-  sleep,
 } from '../../../utils/helper-methods';
 import {FlatList, View} from 'react-native';
 import GlobalSelectRow from '../../../components/list/GlobalSelectRow';
@@ -424,7 +423,6 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
         } else {
           dispatch(dismissOnGoingProcessModal());
         }
-        await sleep(300);
         navigation.navigate('Wallet', {
           screen: 'Confirm',
           params: {
@@ -446,7 +444,6 @@ const GlobalSelect: React.FC<GlobalSelectProps> = ({
         }
         const [errorMessageConfig] = await Promise.all([
           dispatch(handleCreateTxProposalError(err)),
-          sleep(400),
         ]);
         dispatch(
           showBottomNotificationModal({

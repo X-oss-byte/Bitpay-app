@@ -25,7 +25,6 @@ import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../WalletStack';
 import {backupRedirect} from '../screens/Backup';
 import {RootState} from '../../../store';
-import {sleep} from '../../../utils/helper-methods';
 import {startUpdateAllWalletStatusForKey} from '../../../store/wallet/effects/status/status';
 import {updatePortfolioBalance} from '../../../store/wallet/wallet.actions';
 import {useTranslation} from 'react-i18next';
@@ -88,7 +87,6 @@ const FileOrText = () => {
 
       await dispatch(startGetRates({}));
       await dispatch(startUpdateAllWalletStatusForKey({key, force: true}));
-      await sleep(1000);
       await dispatch(updatePortfolioBalance());
 
       backupRedirect({
@@ -101,7 +99,6 @@ const FileOrText = () => {
     } catch (e: any) {
       logger.error(e.message);
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       showErrorModal(e.message);
       return;
     }

@@ -37,7 +37,6 @@ import {URL} from '../../../constants';
 import {getMnemonic} from '../../../utils/helper-methods';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {AppActions} from '../../../store/app';
-import {sleep} from '../../../utils/helper-methods';
 import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
@@ -159,12 +158,10 @@ const KeySettings = () => {
         try {
           const decryptedKey = key.methods!.get(encryptPassword);
           dispatch(AppActions.dismissDecryptPasswordModal());
-          await sleep(300);
           cta(decryptedKey);
         } catch (e) {
           console.log(`Decrypt Error: ${e}`);
           await dispatch(AppActions.dismissDecryptPasswordModal());
-          await sleep(500); // Wait to close Decrypt Password modal
           dispatch(showBottomNotificationModal(WrongPasswordError()));
         }
       },
@@ -182,10 +179,6 @@ const KeySettings = () => {
   });
 
   const startSyncWallets = async (mnemonic: string) => {
-    if (_key.isPrivKeyEncrypted) {
-      // To close decrypt modal
-      await sleep(500);
-    }
     await dispatch(startOnGoingProcessModal('SYNCING_WALLETS'));
     const opts = {
       words: normalizeMnemonic(mnemonic),
@@ -236,7 +229,6 @@ const KeySettings = () => {
         }
 
         dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
         dispatch(
           showBottomNotificationModal({
             type: 'error',
@@ -254,7 +246,6 @@ const KeySettings = () => {
         );
       } else {
         dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
         await dispatch(
           showBottomNotificationModal(
             CustomErrorMessage({
@@ -265,7 +256,6 @@ const KeySettings = () => {
       }
     } catch (e) {
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       await dispatch(
         showBottomNotificationModal(
           CustomErrorMessage({

@@ -33,7 +33,6 @@ import {
   createProposalAndBuildTxDetails,
   handleCreateTxProposalError,
 } from '../../../store/wallet/effects/send/send';
-import {sleep} from '../../../utils/helper-methods';
 import {
   dismissOnGoingProcessModal,
   showBottomNotificationModal,
@@ -327,7 +326,6 @@ const SendToOptions = () => {
         createProposalAndBuildTxDetails(tx),
       )) as any;
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       navigation.navigate('Wallet', {
         screen: 'Confirm',
         params: {
@@ -340,14 +338,10 @@ const SendToOptions = () => {
         },
       });
     } catch (err: any) {
-      const errorMessageConfig = (
-        await Promise.all([
-          dispatch(handleCreateTxProposalError(err)),
-          sleep(500),
-        ])
-      )[0];
+      const [errorMessageConfig] = await dispatch(
+        handleCreateTxProposalError(err),
+      );
       dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
       dispatch(
         showBottomNotificationModal({
           ...errorMessageConfig,
@@ -491,7 +485,6 @@ const SendToOptions = () => {
           createWalletAddress({wallet: selectedWallet, newAddress: false}),
         )) as string;
         dispatch(dismissOnGoingProcessModal());
-        await sleep(500);
       }
 
       const newRecipient = {

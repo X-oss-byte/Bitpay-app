@@ -23,7 +23,6 @@ import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import {findWalletById} from '../../../store/wallet/utils/wallet';
 import {Wallet} from '../../../store/wallet/wallet.models';
 import {AppActions} from '../../../store/app';
-import {sleep} from '../../../utils/helper-methods';
 import {
   showBottomNotificationModal,
   showDecryptPasswordModal,
@@ -104,12 +103,10 @@ const WalletSettings = () => {
         try {
           const decryptedKey = key.methods!.get(encryptPassword);
           dispatch(AppActions.dismissDecryptPasswordModal());
-          await sleep(300);
           cta(decryptedKey);
         } catch (e) {
           console.log(`Decrypt Error: ${e}`);
           await dispatch(AppActions.dismissDecryptPasswordModal());
-          await sleep(500); // Wait to close Decrypt Password modal
           dispatch(showBottomNotificationModal(WrongPasswordError()));
         }
       },
@@ -160,7 +157,6 @@ const WalletSettings = () => {
             onChange={async () => {
               dispatch(toggleHideWallet({wallet}));
               dispatch(startUpdateWalletStatus({key, wallet, force: true}));
-              await sleep(1000);
               dispatch(updatePortfolioBalance());
             }}
             isEnabled={!!hideWallet}

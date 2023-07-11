@@ -6,7 +6,7 @@ import {StackScreenProps} from '@react-navigation/stack';
 import Clipboard from '@react-native-clipboard/clipboard';
 import {useDispatch} from 'react-redux';
 import {ContactsStackParamList} from '../ContactsStack';
-import {getCurrencyAbbreviation, sleep} from '../../../../utils/helper-methods';
+import {getCurrencyAbbreviation} from '../../../../utils/helper-methods';
 import {BaseText, TextAlign} from '../../../../components/styled/Text';
 import {Hr, ScreenGutter} from '../../../../components/styled/Containers';
 import {
@@ -208,7 +208,6 @@ const ContactsDetails = ({
     title: t('Delete Contact'),
     onPress: async () => {
       setShowIconOptions(false);
-      await sleep(500);
       deleteModal();
     },
   });
@@ -242,7 +241,6 @@ const ContactsDetails = ({
   };
 
   const deleteContactView = async () => {
-    await sleep(500);
     dispatch(
       deleteContact(
         contact.address,

@@ -17,7 +17,7 @@ import {Controller, useForm} from 'react-hook-form';
 import BoxInput from '../../../../components/form/BoxInput';
 import Button, {ButtonState} from '../../../../components/button/Button';
 import {yupResolver} from '@hookform/resolvers/yup';
-import {useAppDispatch, useAppSelector} from '../../../../utils/hooks';
+import {useAppSelector} from '../../../../utils/hooks';
 import ChevronUpSvg from '../../../../../assets/img/chevron-up.svg';
 import ChevronDownSvg from '../../../../../assets/img/chevron-down.svg';
 import Checkbox from '../../../../components/checkbox/Checkbox';
@@ -25,10 +25,7 @@ import {RouteProp} from '@react-navigation/core';
 import {WalletStackParamList} from '../../WalletStack';
 import {BwcProvider} from '../../../../lib/bwc';
 import Clipboard from '@react-native-clipboard/clipboard';
-import {sleep} from '../../../../utils/helper-methods';
-import {Linking} from 'react-native';
 import {useTranslation} from 'react-i18next';
-import {LogActions} from '../../../../store/log';
 
 const BWC = BwcProvider.getInstance();
 
@@ -92,7 +89,6 @@ const ExportWallet = () => {
 
   const {network} = wallet;
 
-  const dispatch = useAppDispatch();
   const navigation = useNavigation();
   const [showOptions, setShowOptions] = useState(false);
   const [dontIncludePrivateKey, setDontIncludePrivateKey] = useState(false);
@@ -100,7 +96,6 @@ const ExportWallet = () => {
     CONTACT.list.filter(c => c.network === network),
   );
   const [copyButtonState, setCopyButtonState] = useState<ButtonState>();
-  const [sendButtonState, setSendButtonState] = useState<ButtonState>();
 
   useLayoutEffect(() => {
     navigation.setOptions({
@@ -159,53 +154,14 @@ const ExportWallet = () => {
 
   const onCopyToClipboard = async ({password}: {password: string}) => {
     setCopyButtonState('loading');
-    await sleep(1000);
     try {
       const _copyWallet = walletExport(password);
       Clipboard.setString(_copyWallet);
       setCopyButtonState('success');
-      await sleep(500);
       setCopyButtonState(undefined);
     } catch (e) {
       setCopyButtonState('failed');
-      await sleep(500);
       setCopyButtonState(undefined);
-    }
-  };
-
-  const onSendByEmail = async ({password}: {password: string}) => {
-    try {
-      setSendButtonState('loading');
-      const _sendWallet = walletExport(password);
-      const {
-        credentials: {walletName: cWalletName, walletId},
-        walletName,
-      } = wallet;
-      let name = walletName || cWalletName || walletId;
-
-      if (dontIncludePrivateKey) {
-        name = name + t(' (No Private Key)');
-      }
-
-      // TODO: Update app name
-      const subject = t('BitPay Wallet Backup: ') + name;
-      const body = t(
-        'Here is the encrypted backup of the wallet : \n\n \n\nTo import this backup, copy all text between {...}, including the symbols {}',
-        {name, sendWallet: _sendWallet},
-      );
-
-      // Works only on device
-      await Linking.openURL(`mailto:?subject=${subject}&body=${body}`);
-
-      setSendButtonState('success');
-      await sleep(200);
-      setSendButtonState(undefined);
-    } catch (err) {
-      const e = err instanceof Error ? err.message : JSON.stringify(err);
-      dispatch(LogActions.error('[onSendByEmail] ', e));
-      setSendButtonState('failed');
-      await sleep(500);
-      setSendButtonState(undefined);
     }
   };
 
@@ -312,15 +268,6 @@ const ExportWallet = () => {
               {t('Copy to Clipboard')}
             </Button>
           </PasswordActionContainer>
-
-          {/* <PasswordActionContainer>
-            <Button
-              onPress={handleSubmit(onSendByEmail)}
-              state={sendButtonState}
-              buttonStyle={'secondary'}>
-              {t('Send by Email')}
-            </Button>
-          </PasswordActionContainer> */}
         </PasswordFormContainer>
       </ScrollView>
     </ExportWalletContainer>

@@ -15,7 +15,7 @@ import {
   handleCreateTxProposalError,
   startSendPayment,
 } from '../../../../../store/wallet/effects/send/send';
-import {formatFiatAmount, sleep} from '../../../../../utils/helper-methods';
+import {formatFiatAmount} from '../../../../../utils/helper-methods';
 import {
   openUrlWithInAppBrowser,
   startOnGoingProcessModal,
@@ -273,13 +273,11 @@ const Confirm = () => {
       setGasLimit(_txDetails.gasLimit);
       setNonce(_txDetails.nonce);
       setDestinationTag(_txDetails.destinationTag);
-      await sleep(500);
       dispatch(dismissOnGoingProcessModal());
     } catch (err: any) {
       dispatch(dismissOnGoingProcessModal());
       const [errorMessageConfig] = await Promise.all([
         dispatch(handleCreateTxProposalError(err)),
-        sleep(400),
       ]);
       dispatch(
         showBottomNotificationModal({
@@ -297,8 +295,7 @@ const Confirm = () => {
   };
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],

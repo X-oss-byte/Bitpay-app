@@ -4,7 +4,6 @@ import ToggleSwitch from '../../../../components/toggle-switch/ToggleSwitch';
 import {AppActions} from '../../../../store/app';
 import {showBottomNotificationModal} from '../../../../store/app/app.actions';
 import {resetAllSettings} from '../../../../store/app/app.effects';
-import {sleep} from '../../../../utils/helper-methods';
 import {useNavigation} from '@react-navigation/native';
 import {useAppSelector} from '../../../../utils/hooks/useAppSelector';
 import {RootState} from '../../../../store';
@@ -134,8 +133,7 @@ const General = () => {
                 {
                   text: t('RESET'),
                   action: async () => {
-                    dispatch(resetAllSettings());
-                    await sleep(400);
+                    await dispatch(resetAllSettings());
                     dispatch(
                       showBottomNotificationModal({
                         type: 'success',

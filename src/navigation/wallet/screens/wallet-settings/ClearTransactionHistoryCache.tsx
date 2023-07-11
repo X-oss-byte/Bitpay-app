@@ -7,7 +7,6 @@ import {ScreenGutter} from '../../../../components/styled/Containers';
 import {useAppDispatch} from '../../../../utils/hooks';
 import {WalletStackParamList} from '../../WalletStack';
 import {BottomNotificationConfig} from '../../../../components/modal/bottom-notification/BottomNotification';
-import {sleep} from '../../../../utils/helper-methods';
 import {showBottomNotificationModal} from '../../../../store/app/app.actions';
 import {CustomErrorMessage} from '../../components/ErrorMessages';
 import {BWCErrorMessage} from '../../../../constants/BWCError';
@@ -86,8 +85,7 @@ const ClearTransactionHistoryCache: React.FC<
   };
 
   const showErrorMessage = useCallback(
-    async (msg: BottomNotificationConfig) => {
-      await sleep(500);
+    (msg: BottomNotificationConfig) => {
       dispatch(showBottomNotificationModal(msg));
     },
     [dispatch],
