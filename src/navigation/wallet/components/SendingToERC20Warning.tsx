@@ -156,7 +156,7 @@ const SendingToERC20Warning = ({
       isVisible={isVisible}
       onBackdropPress={closeModal}
       placement={placement}
-      useMaxHeight={'80%'}>
+      useMaxHeight={'100%'}>
       <SheetContainer>
         <SendingInfoContainerScroll>
           <SendingInfoContainer>

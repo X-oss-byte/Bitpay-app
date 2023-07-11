@@ -780,7 +780,7 @@ const RecoveryPhrase = () => {
       <SheetModal
         isVisible={currencyModalVisible}
         placement={'bottom'}
-        useMaxHeight={'60%'}
+        useMaxHeight={'100%'}
         onBackdropPress={() => setCurrencyModalVisible(false)}>
         <CurrencySelectionModalContainer>
           <TextAlign align={'center'}>

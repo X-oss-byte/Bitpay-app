@@ -685,36 +685,38 @@ const KeyOverview = () => {
         />
       ) : null}
 
-      <SheetModal
-        isVisible={showKeyDropdown}
-        useMaxHeight={'75%'}
-        placement={'top'}
-        onBackdropPress={() => setShowKeyDropdown(false)}>
-        <KeyDropdown>
-          <HeaderTitle style={{margin: 15}}>{t('Other Keys')}</HeaderTitle>
-          <KeyDropdownOptionsContainer>
-            {Object.values(keys)
-              .filter(_key => _key.backupComplete && _key.id !== id)
-              .map(_key => (
-                <KeyDropdownOption
-                  key={_key.id}
-                  keyId={_key.id}
-                  keyName={_key.keyName}
-                  wallets={_key.wallets}
-                  totalBalance={_key.totalBalance}
-                  onPress={keyId => {
-                    setShowKeyDropdown(false);
-                    navigation.setParams({
-                      id: keyId,
-                    } as any);
-                  }}
-                  defaultAltCurrencyIsoCode={defaultAltCurrency.isoCode}
-                  hideKeyBalance={hideAllBalances}
-                />
-              ))}
-          </KeyDropdownOptionsContainer>
-        </KeyDropdown>
-      </SheetModal>
+      {keyOptions.length > 0 ? (
+        <SheetModal
+          isVisible={showKeyDropdown}
+          useMaxHeight={'100%'}
+          placement={'top'}
+          onBackdropPress={() => setShowKeyDropdown(false)}>
+          <KeyDropdown>
+            <HeaderTitle style={{margin: 15}}>{t('Other Keys')}</HeaderTitle>
+            <KeyDropdownOptionsContainer>
+              {Object.values(keys)
+                .filter(_key => _key.backupComplete && _key.id !== id)
+                .map(_key => (
+                  <KeyDropdownOption
+                    key={_key.id}
+                    keyId={_key.id}
+                    keyName={_key.keyName}
+                    wallets={_key.wallets}
+                    totalBalance={_key.totalBalance}
+                    onPress={keyId => {
+                      setShowKeyDropdown(false);
+                      navigation.setParams({
+                        id: keyId,
+                      } as any);
+                    }}
+                    defaultAltCurrencyIsoCode={defaultAltCurrency.isoCode}
+                    hideKeyBalance={hideAllBalances}
+                  />
+                ))}
+            </KeyDropdownOptionsContainer>
+          </KeyDropdown>
+        </SheetModal>
+      ) : null}
     </OverviewContainer>
   );
 };

@@ -113,7 +113,7 @@ const BalanceDetailsModal = ({isVisible, closeModal, wallet}: Props) => {
       isVisible={isVisible}
       onBackdropPress={closeModal}
       fullScreen={false}
-      useMaxHeight={'50%'}>
+      useMaxHeight={'100%'}>
       <BalanceDetailsContainer>
         <SafeAreaView style={{height: '100%'}}>
           <ModalHeader>

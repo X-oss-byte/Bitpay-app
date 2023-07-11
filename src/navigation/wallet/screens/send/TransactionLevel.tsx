@@ -380,7 +380,7 @@ const TransactionLevel = ({
       onBackdropPress={onClose}
       placement={'bottom'}
       fullScreen={false}
-      useMaxHeight={'80%'}>
+      useMaxHeight={'100%'}>
       <TxSpeedContainer>
         <TxSpeedScroll>
           <SheetHeaderContainer>

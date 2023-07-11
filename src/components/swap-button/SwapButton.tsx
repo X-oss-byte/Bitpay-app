@@ -46,8 +46,8 @@ const SwapButton = ({swapList, onChange}: SwapButtonProps) => {
 
   return (
     <SwapButtonContainer onPress={() => swapText(text)}>
-        <SwapHorizontal />
-        <ButtonText>{text}</ButtonText>
+      <SwapHorizontal />
+      <ButtonText>{text}</ButtonText>
     </SwapButtonContainer>
   );
 };

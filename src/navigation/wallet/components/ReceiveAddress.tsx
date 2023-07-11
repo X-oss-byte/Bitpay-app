@@ -322,7 +322,7 @@ const ReceiveAddress = ({isVisible, closeModal, wallet}: Props) => {
       placement={'bottom'}
       useMaxHeight={
         IsERCToken(wallet.currencyAbbreviation, wallet.chain)
-          ? '80%'
+          ? '100%'
           : undefined
       }>
       <ReceiveAddressContainer>
