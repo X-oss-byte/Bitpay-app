@@ -685,7 +685,7 @@ const KeyOverview = () => {
         />
       ) : null}
 
-      {keyOptions.length > 0 ? (
+      {Object.values(keys).length > 0 ? (
         <SheetModal
           isVisible={showKeyDropdown}
           useMaxHeight={'100%'}
