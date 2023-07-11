@@ -406,7 +406,12 @@ const KeyOverview = () => {
               {pendingTxps.length ? (
                 <ProposalBadgeContainer
                   style={{marginRight: 10}}
-                  onPress={onPressTxpBadge}>
+                  onPress={() => {
+                    navigation.navigate('Wallet', {
+                      screen: 'TransactionProposalNotifications',
+                      params: {keyId: key.id},
+                    });
+                  }}>
                   <ProposalBadge>{pendingTxps.length}</ProposalBadge>
                 </ProposalBadgeContainer>
               ) : null}
@@ -526,16 +531,6 @@ const KeyOverview = () => {
       },
     });
   }
-
-  const onPressTxpBadge = useMemo(
-    () => () => {
-      navigation.navigate('Wallet', {
-        screen: 'TransactionProposalNotifications',
-        params: {keyId: key.id},
-      });
-    },
-    [],
-  );
 
   const onRefresh = async () => {
     setRefreshing(true);
