@@ -43,16 +43,16 @@ const Import: React.FC<ImportScreenProps> = () => {
     <ImportContainer accessibilityLabel="import-view">
       <ButtonsContainer>
         <Button
-          buttonStyle={importType === 'phrase' ? 'cancel' : 'primary'}
+          buttonStyle={importType === 'phrase' ? 'primary' : 'cancel'}
           buttonType={'pill'}
           onPress={() => setImportType('phrase')}>
-          Import Recovery Phrase
+          Recovery Phrase
         </Button>
         <Button
-          buttonStyle={importType === 'file' ? 'cancel' : 'primary'}
+          buttonStyle={importType === 'file' ? 'primary' : 'cancel'}
           buttonType={'pill'}
           onPress={() => setImportType('file')}>
-          Import Recovery Phrase
+          Plain Text
         </Button>
       </ButtonsContainer>
       {importType === 'phrase' ? <RecoveryPhrase /> : <FileOrText />}
