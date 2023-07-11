@@ -1,7 +1,7 @@
 import React from 'react';
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import {NavigatorScreenParams, useTheme} from '@react-navigation/native';
-import {TouchableOpacity, View} from 'react-native';
+import {TouchableOpacity} from 'react-native';
 
 import HomeRoot from './home/HomeStack';
 import TransactModal from '../../components/modal/transact-menu/TransactMenu';
@@ -92,9 +92,10 @@ const TabsStack = () => {
       <Tab.Screen name={TabsScreens.HOME} component={HomeRoot} />
       <Tab.Screen
         name={TabsScreens.TRANSACT_BUTTON}
-        component={TransactionButton}
+        component={TransactModal}
         options={{
           tabBarIcon: () => <TransactionButton />,
+          tabBarButton: () => <TransactionButton />,
         }}
       />
       <Tab.Screen name={TabsScreens.SETTINGS} component={SettingsRoot} />

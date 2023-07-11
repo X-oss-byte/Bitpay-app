@@ -128,8 +128,8 @@ const TransactModal = () => {
           transform: [{translateY: animate}],
           position: 'absolute',
           bottom: 0,
-          left: '10%',
-          width: '80%',
+          left: 0,
+          width: '100%',
           zIndex: 1000000,
         }}>
         <ModalContainer>
