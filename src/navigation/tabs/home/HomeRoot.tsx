@@ -80,7 +80,7 @@ const HomeRoot = () => {
     <HomeContainer>
       {appIsLoading ? null : (
         <ScrollView>
-          {pendingTxps.length ? (
+          {pendingTxps.length && showPortfolioValue ? (
             <HeaderContainer>
               <ProposalBadgeContainer onPress={onPressTxpBadge}>
                 <ProposalBadge>{pendingTxps.length}</ProposalBadge>
@@ -96,7 +96,7 @@ const HomeRoot = () => {
           ) : null}
 
           {/* ////////////////////////////// CTA BUY SWAP RECEIVE SEND BUTTONS */}
-          {hasKeys ? (
+          {hasKeys && showPortfolioValue ? (
             <HomeSection style={{marginBottom: 20}}>
               <LinkingButtons
                 receive={{

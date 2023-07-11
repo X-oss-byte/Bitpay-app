@@ -28,6 +28,10 @@ const PortfolioBalanceHeader = styled.View`
   align-items: center;
 `;
 
+const PortfolioBalanceContent = styled.Pressable`
+  cursor: pointer;
+`;
+
 const PortfolioBalanceTitle = styled(BaseText)`
   font-size: 14px;
   color: ${({theme: {dark}}) => (dark ? White : SlateDark)};
@@ -72,12 +76,9 @@ const PortfolioBalance = () => {
     <PortfolioContainer>
       <PortfolioBalanceHeader>
         <PortfolioBalanceTitle>{t('Portfolio Balance')}</PortfolioBalanceTitle>
-        <Button buttonType={'link'} height={28} onPress={onUpdateBalance}>
-          <RefreshSvg width={12} height={12} />
-        </Button>
       </PortfolioBalanceHeader>
       {!hideAllBalances ? (
-        <>
+        <PortfolioBalanceContent onPress={onUpdateBalance}>
           <PortfolioBalanceText>
             {formatFiatAmount(totalBalance, defaultAltCurrency.isoCode, {
               currencyDisplay: 'symbol',
@@ -89,7 +90,7 @@ const PortfolioBalance = () => {
               <PercentageText> {t('Last Day')}</PercentageText>
             </PercentageContainer>
           ) : null}
-        </>
+        </PortfolioBalanceContent>
       ) : (
         <H2>****</H2>
       )}
