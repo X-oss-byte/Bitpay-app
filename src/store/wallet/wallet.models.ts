@@ -209,7 +209,8 @@ export type TransactionOptionsContext =
   | 'selectInputs'
   | 'fromReplaceByFee'
   | 'speedupBtcReceive'
-  | 'speedupEth';
+  | 'speedupEth'
+  | 'walletConnect';
 
 export interface TransactionOptions {
   wallet: Wallet;

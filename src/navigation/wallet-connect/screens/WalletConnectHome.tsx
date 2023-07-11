@@ -28,11 +28,7 @@ import {
 } from '../../../store/app/app.actions';
 import Clipboard from '@react-native-clipboard/clipboard';
 import CopiedSvg from '../../../../assets/img/copied-success.svg';
-import {
-  FormatAmount,
-  FormatAmountStr,
-} from '../../../store/wallet/effects/amount/amount';
-import {createProposalAndBuildTxDetails} from '../../../store/wallet/effects/send/send';
+import {FormatAmountStr} from '../../../store/wallet/effects/amount/amount';
 import {Wallet} from '../../../store/wallet/wallet.models';
 import {useTranslation} from 'react-i18next';
 import {startOnGoingProcessModal} from '../../../store/app/app.effects';
@@ -195,75 +191,19 @@ const WalletConnectHome = () => {
   }, [navigation, disconnectAccount, t]);
 
   const goToConfirmView = async (request: any) => {
-    try {
-      let _wallet;
-      dispatch(dismissBottomNotificationModal());
-      await sleep(500);
-      dispatch(startOnGoingProcessModal('LOADING'));
-      const {
-        to: toAddress,
-        from,
-        gasPrice,
-        gasLimit,
-        value,
-        nonce,
-        data,
-      } = request.payload
-        ? request.payload.params[0]
-        : request.params.request.params[0];
-
-      const recipient = {
-        address: toAddress,
-      };
-
-      const amountStr = value
-        ? dispatch(
-            FormatAmount(currencyAbbreviation, chain, parseInt(value, 16)),
-          )
-        : 0;
-
-      const tx = {
-        wallet: _wallet || wallet,
+    const {to: toAddress} = request.params.request.params[0];
+    const recipient = {
+      address: toAddress,
+    };
+    navigation.navigate('WalletConnect', {
+      screen: 'WalletConnectConfirm',
+      params: {
+        wallet,
         recipient,
-        toAddress,
-        from,
-        amount: Number(amountStr),
-        gasPrice: parseInt(gasPrice, 16),
-        nonce: parseInt(nonce, 16),
-        gasLimit: parseInt(gasLimit, 16),
-        data,
-        customData: {
-          service: 'walletConnect',
-        },
-      };
-      const {txDetails, txp} = (await dispatch<any>(
-        createProposalAndBuildTxDetails(tx),
-      )) as any;
-      dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
-      navigation.navigate('WalletConnect', {
-        screen: 'WalletConnectConfirm',
-        params: {
-          wallet: _wallet || wallet,
-          recipient,
-          txp,
-          txDetails,
-          request,
-          amount: tx.amount,
-          data,
-          peerName,
-        },
-      });
-    } catch (error: any) {
-      dispatch(dismissOnGoingProcessModal());
-      await sleep(500);
-      await showErrorMessage(
-        CustomErrorMessage({
-          errMsg: BWCErrorMessage(error.err ? error.err : error),
-          title: t('Uh oh, something went wrong'),
-        }),
-      );
-    }
+        request,
+        peerName,
+      },
+    });
   };
 
   const copyToClipboard = (value: string, type: string) => {

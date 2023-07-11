@@ -1,5 +1,5 @@
 import {useNavigation} from '@react-navigation/native';
-import React, {useCallback, useLayoutEffect, useState} from 'react';
+import React, {useCallback, useEffect, useLayoutEffect, useState} from 'react';
 import {useAppDispatch, useAppSelector} from '../../../utils/hooks';
 import styled from 'styled-components/native';
 import {BaseText, H5} from '../../../components/styled/Text';
@@ -38,6 +38,7 @@ import PlusIcon from '../../../components/plus/Plus';
 import {ScreenGutter} from '../../../components/styled/Containers';
 import {AddButton} from '../../wallet/screens/CreateMultisig';
 import GhostSvg from '../../../../assets/img/ghost-straight-face.svg';
+import {SignClientTypes} from '@walletconnect/types';
 
 const ConnectionsContainer = styled.View`
   flex: 1;
@@ -75,6 +76,8 @@ const WalletConnectConnections = () => {
     ({WALLET_CONNECT_V2}) => WALLET_CONNECT_V2.sessions,
   );
 
+  const {proposal} = useAppSelector(({WALLET_CONNECT_V2}) => WALLET_CONNECT_V2);
+
   const [dappProposal, setDappProposal] = useState<any>();
   const [sessionToUpdate, setSessionToUpdate] = useState<WCV2SessionType>();
   const [walletSelectorV2ModalVisible, setWalletSelectorV2ModalVisible] =
@@ -84,6 +87,19 @@ const WalletConnectConnections = () => {
 
   const dispatch = useAppDispatch();
   const allKeys = useAppSelector(({WALLET}) => WALLET.keys);
+
+  const setProposal = async (
+    proposal?: SignClientTypes.EventArguments['session_proposal'],
+  ) => {
+    dispatch(dismissOnGoingProcessModal());
+    await sleep(500);
+    setDappProposal(proposal);
+    showWalletSelectorV2();
+  };
+
+  useEffect(() => {
+    setProposal(proposal);
+  }, [proposal]);
 
   const ConnectionItem = ({
     peerName,

@@ -33,7 +33,7 @@ import {
   walletConnectV2ApproveSessionProposal,
   walletConnectV2RejectSessionProposal,
 } from '../../../store/wallet-connect-v2/wallet-connect-v2.effects';
-import {Network} from '../../../constants';
+import {sessionProposal} from '../../../store/wallet-connect-v2/wallet-connect-v2.actions';
 
 export type WalletConnectStartParamList = {
   // version 2
@@ -66,17 +66,6 @@ const DescriptionItem = styled(Paragraph)`
   padding-top: 2px;
   color: ${props => props.theme.colors.text};
 `;
-
-const CHAIN_ID: {[key in string]: any} = {
-  eth: {
-    [Network.mainnet]: 1,
-    [Network.testnet]: 42,
-  },
-  matic: {
-    [Network.mainnet]: 137,
-    [Network.testnet]: 80001,
-  },
-};
 
 const WalletConnectStart = () => {
   const {t} = useTranslation();
@@ -142,6 +131,7 @@ const WalletConnectStart = () => {
             };
           });
         if (id && relays) {
+          dispatch(sessionProposal());
           await dispatch(
             walletConnectV2ApproveSessionProposal(
               id,
