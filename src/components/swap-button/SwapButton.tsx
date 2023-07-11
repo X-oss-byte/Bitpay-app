@@ -10,10 +10,10 @@ export const SwapButtonContainer = styled.TouchableOpacity`
   bottom: 0;
   flex-direction: row;
   align-items: center;
+  justify-content: center;
   width: 90px;
   background-color: ${({theme: {dark}}) => (dark ? LightBlack : '#edf1fe')};
   height: 39px;
-  padding: 0 15px;
   border-radius: 19.09px;
   cursor: pointer;
 `;
@@ -22,6 +22,7 @@ export const ButtonText = styled(BaseText)`
   margin-left: 10px;
   font-size: 18px;
   font-weight: 500;
+  top: 2px;
   color: ${({theme: {dark}}) => (dark ? White : NotificationPrimary)};
 `;
 
@@ -45,8 +46,8 @@ const SwapButton = ({swapList, onChange}: SwapButtonProps) => {
 
   return (
     <SwapButtonContainer onPress={() => swapText(text)}>
-      <SwapHorizontal />
-      <ButtonText>{text}</ButtonText>
+        <SwapHorizontal />
+        <ButtonText>{text}</ButtonText>
     </SwapButtonContainer>
   );
 };
