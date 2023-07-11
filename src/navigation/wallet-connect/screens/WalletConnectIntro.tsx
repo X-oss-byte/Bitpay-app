@@ -28,7 +28,7 @@ import {yupResolver} from '@hookform/resolvers/yup';
 import yup from '../../../lib/yup';
 import BoxInput from '../../../components/form/BoxInput';
 import {walletConnectV2OnSessionProposal} from '../../../store/wallet-connect-v2/wallet-connect-v2.effects';
-import { BWCErrorMessage } from '../../../constants/BWCError';
+import {BWCErrorMessage} from '../../../constants/BWCError';
 
 export type WalletConnectIntroParamList = {};
 
@@ -81,7 +81,7 @@ const WalletConnectIntro = () => {
   }, [proposal]);
 
   const validateWalletConnectUri = async (data: string) => {
-    try{
+    try {
       if (isValidWalletConnectUri(data)) {
         const {version} = parseUri(data);
         if (version === 1) {
@@ -93,7 +93,7 @@ const WalletConnectIntro = () => {
           dispatch(startOnGoingProcessModal('LOADING'));
           await dispatch(walletConnectV2OnSessionProposal(data));
         }
-      } 
+      }
     } catch (err) {
       dispatch(dismissOnGoingProcessModal());
       await sleep(500);

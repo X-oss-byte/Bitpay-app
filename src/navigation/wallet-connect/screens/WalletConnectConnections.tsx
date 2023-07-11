@@ -249,49 +249,48 @@ const WalletConnectConnections = () => {
             <GhostSvg style={{marginTop: 20}} />
           </EmptyListContainer>
         ) : null}
-
-        {dappProposal || sessionToUpdate ? (
-          <WCV2WalletSelector
-            isVisible={walletSelectorV2ModalVisible}
-            proposal={dappProposal}
-            session={sessionToUpdate}
-            onBackdropPress={async (
-              selectedWallets?: any,
-              session?: WCV2SessionType,
-            ) => {
-              hideWalletSelectorV2();
-              await sleep(500);
-              if (selectedWallets && session) {
-                try {
-                  dispatch(startOnGoingProcessModal('LOADING'));
-                  await sleep(500);
-                  await dispatch(
-                    walletConnectV2OnUpdateSession({
-                      session,
-                      selectedWallets,
-                      action: 'add_accounts',
-                    }),
-                  );
-                  dispatch(dismissOnGoingProcessModal());
-                  await sleep(500);
-                } catch (err) {
-                  dispatch(dismissOnGoingProcessModal());
-                  await sleep(500);
-                  await showErrorMessage(
-                    CustomErrorMessage({
-                      errMsg: BWCErrorMessage(err),
-                      title: t('Uh oh, something went wrong'),
-                    }),
-                  );
-                } finally {
-                  setDappProposal(undefined);
-                  setSessionToUpdate(undefined);
-                }
-              }
-            }}
-          />
-        ) : null}
       </ConnectiosScrollContainer>
+      {dappProposal || sessionToUpdate ? (
+        <WCV2WalletSelector
+          isVisible={walletSelectorV2ModalVisible}
+          proposal={dappProposal}
+          session={sessionToUpdate}
+          onBackdropPress={async (
+            selectedWallets?: any,
+            session?: WCV2SessionType,
+          ) => {
+            hideWalletSelectorV2();
+            await sleep(500);
+            if (selectedWallets && session) {
+              try {
+                dispatch(startOnGoingProcessModal('LOADING'));
+                await sleep(500);
+                await dispatch(
+                  walletConnectV2OnUpdateSession({
+                    session,
+                    selectedWallets,
+                    action: 'add_accounts',
+                  }),
+                );
+                dispatch(dismissOnGoingProcessModal());
+                await sleep(500);
+              } catch (err) {
+                dispatch(dismissOnGoingProcessModal());
+                await sleep(500);
+                await showErrorMessage(
+                  CustomErrorMessage({
+                    errMsg: BWCErrorMessage(err),
+                    title: t('Uh oh, something went wrong'),
+                  }),
+                );
+              } finally {
+                setDappProposal(undefined);
+                setSessionToUpdate(undefined);
+              }
+            }
+          }}
+        />
+      ) : null}
     </ConnectionsContainer>
   );
 };
