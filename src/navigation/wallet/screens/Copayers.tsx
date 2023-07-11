@@ -56,7 +56,8 @@ const QRCodeBackground = styled.View`
 `;
 
 const CopayersContainer = styled(RowContainer)`
-  padding: 18px;
+  margin-left: 0px;
+  margin-top: 20px;
   border-style: solid;
   border-top-width: 1px;
   border-top-color: ${({theme}) => (theme.dark ? '#434D5A' : '#E1E4E7')};
