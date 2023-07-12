@@ -26,20 +26,16 @@
 			<key>CFBundleTypeRole</key>
 			<string>Editor</string>
 			<key>CFBundleURLName</key>
-			<string>bitpay</string>
+			<string>com.bitpay.wallet.macos</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>bitpay:</string>
-			</array>
-		</dict>
-		<dict>
-			<key>CFBundleTypeRole</key>
-			<string>Editor</string>
-			<key>CFBundleURLName</key>
-			<string>bitcoin</string>
-			<key>CFBundleURLSchemes</key>
-			<array>
-				<string>bitcoin:</string>
+				<string>bitpay</string>
+				<string>bitcoin</string>
+				<string>bitcoincash</string>
+				<string>ethereum</string>
+				<string>matic</string>
+				<string>dogecoin</string>
+				<string>litecoin</string>
 			</array>
 		</dict>
 	</array>
