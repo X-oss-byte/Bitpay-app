@@ -14,18 +14,22 @@ import {
   AppIdentity,
   HomeCarouselConfig,
   HomeCarouselLayoutType,
+  InAppNotificationContextType,
 } from './app.models';
 import {AppActionType, AppActionTypes} from './app.types';
 import uniqBy from 'lodash.uniqby';
 import {FeedbackRateType} from '../../navigation/tabs/settings/about/screens/SendFeedback';
 import moment from 'moment';
 import {PaymentSentConfig} from '../../navigation/wallet/components/PaymentSent';
+import {SignClientTypes} from '@walletconnect/types';
 
 export const appReduxPersistBlackList: Array<keyof AppState> = [
   'appIsLoading',
   'appWasInit',
   'showOnGoingProcessModal',
   'onGoingProcessModalMessage',
+  'showInAppNotification',
+  'inAppNotificationData',
   'showDecryptPasswordModal',
   'showPinModal',
   'showBottomNotificationModal',
@@ -35,7 +39,11 @@ export const appReduxPersistBlackList: Array<keyof AppState> = [
   'failedAppInit',
 ];
 
-export type ModalId = 'sheetModal' | 'ongoingProcess' | 'pin';
+export type ModalId =
+  | 'sheetModal'
+  | 'ongoingProcess'
+  | 'pin'
+  | 'inAppNotification';
 
 export type FeedbackType = {
   time: number;
@@ -74,6 +82,14 @@ export interface AppState {
   onboardingCompleted: boolean;
   showOnGoingProcessModal: boolean;
   onGoingProcessModalMessage: string | undefined;
+  showInAppNotification: boolean;
+  inAppNotificationData:
+    | {
+        context: InAppNotificationContextType;
+        message: string;
+        request?: SignClientTypes.EventArguments['session_request'];
+      }
+    | undefined;
   showBottomNotificationModal: boolean;
   showTransactMenu: boolean;
   bottomNotificationModalConfig: BottomNotificationConfig | undefined;
@@ -144,6 +160,8 @@ const initialState: AppState = {
   },
   onboardingCompleted: false,
   showOnGoingProcessModal: false,
+  showInAppNotification: false,
+  inAppNotificationData: undefined,
   onGoingProcessModalMessage: undefined,
   showBottomNotificationModal: false,
   showTransactMenu: false,
@@ -257,6 +275,20 @@ export const appReducer = (
       return {
         ...state,
         showOnGoingProcessModal: false,
+      };
+      
+    case AppActionTypes.SHOW_IN_APP_NOTIFICATION:
+      return {
+        ...state,
+        showInAppNotification: true,
+        inAppNotificationData: action.payload,
+      };
+
+    case AppActionTypes.DISMISS_IN_APP_NOTIFICATION:
+      return {
+        ...state,
+        showInAppNotification: false,
+        inAppNotificationData: undefined,
       };
 
     case AppActionTypes.SHOW_BOTTOM_NOTIFICATION_MODAL:

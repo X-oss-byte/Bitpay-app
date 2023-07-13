@@ -615,3 +615,23 @@ export const findWalletByIdHashed = (
     });
   });
 };
+
+export const findWalletByAddress = (
+  address: string,
+  chain: string,
+  network: string,
+  keys: {[key in string]: Key},
+): Wallet | undefined => {
+  let wallet: Wallet | undefined;
+  for (let key of Object.values(keys)) {
+    wallet = key.wallets.find(
+      w =>
+        w.receiveAddress?.toLowerCase() === address.toLowerCase() &&
+        w.chain === chain &&
+        w.network === network,
+    );
+    if (wallet) {
+      return wallet;
+    }
+  }
+};

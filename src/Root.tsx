@@ -79,6 +79,7 @@ import {
 } from './store/app/app.actions';
 import {BalanceUpdateError} from './navigation/wallet/components/ErrorMessages';
 import TransactModal from './components/modal/transact-menu/TransactMenu';
+import InAppNotification from './components/modal/in-app-notification/InAppNotification';
 
 // ROOT NAVIGATION CONFIG
 export type RootStackParamList = {
@@ -455,6 +456,7 @@ export default () => {
           />
         </Root.Navigator>
         <OnGoingProcessModal />
+        <InAppNotification />
         <BottomNotificationModal />
         <DecryptEnterPasswordModal />
         <PaymentSent />

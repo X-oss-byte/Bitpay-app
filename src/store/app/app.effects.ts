@@ -34,6 +34,9 @@ import moment from 'moment';
 import {EmitterSubscription} from 'react-native';
 import {DeviceEmitterEvents} from '../../constants/device-emitter-events';
 import {walletConnectV2Init} from '../wallet-connect-v2/wallet-connect-v2.effects';
+import {InAppNotificationMessages} from '../../components/modal/in-app-notification/InAppNotification';
+import {SignClientTypes} from '@walletconnect/types';
+import {InAppNotificationContextType} from './app.models';
 
 export const startAppInit = (): Effect => async (dispatch, getState) => {
   try {
@@ -201,6 +204,30 @@ export const startOnGoingProcessModal =
 
     dispatch(AppActions.showOnGoingProcessModal(_message));
     return sleep(100);
+  };
+
+export const startInAppNotification =
+  (
+    key: InAppNotificationMessages,
+    request: SignClientTypes.EventArguments['session_request'],
+    context: InAppNotificationContextType,
+  ): Effect<Promise<void>> =>
+  async (dispatch, getState: () => RootState) => {
+    const store: RootState = getState();
+
+    const _InAppNotificationMessages = {
+      NEW_PENDING_REQUEST: i18n.t('New Pending Request'),
+    };
+
+    // if modal currently active dismiss and sleep to allow animation to complete before showing next
+    if (store.APP.showInAppNotification) {
+      dispatch(AppActions.dismissInAppNotification());
+    }
+
+    // Translate message before show message
+    const _message = _InAppNotificationMessages[key];
+
+    dispatch(AppActions.showInAppNotification(context, _message, request));
   };
 
 const _startUpdateAllKeyAndWalletStatus = debounce(

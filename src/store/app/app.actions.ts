@@ -7,6 +7,8 @@ import {DecryptPasswordConfig} from '../../navigation/wallet/components/DecryptE
 import {PaymentSentConfig} from '../../navigation/wallet/components/PaymentSent';
 import {ModalId, FeedbackType} from './app.reducer';
 import {AppActionType, AppActionTypes} from './app.types';
+import {SignClientTypes} from '@walletconnect/types';
+import {InAppNotificationContextType} from './app.models';
 
 export const networkChanged = (network: Network): AppActionType => ({
   type: AppActionTypes.NETWORK_CHANGED,
@@ -45,6 +47,19 @@ export const showOnGoingProcessModal = (message: string): AppActionType => ({
 
 export const dismissOnGoingProcessModal = (): AppActionType => ({
   type: AppActionTypes.DISMISS_ONGOING_PROCESS_MODAL,
+});
+
+export const showInAppNotification = (
+  context: InAppNotificationContextType,
+  message: string,
+  request: SignClientTypes.EventArguments['session_request'],
+): AppActionType => ({
+  type: AppActionTypes.SHOW_IN_APP_NOTIFICATION,
+  payload: {context, message, request},
+});
+
+export const dismissInAppNotification = (): AppActionType => ({
+  type: AppActionTypes.DISMISS_IN_APP_NOTIFICATION,
 });
 
 export const showBottomNotificationModal = (
